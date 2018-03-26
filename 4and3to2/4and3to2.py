@@ -1,72 +1,93 @@
 import pandas as pd
-import csv
-import numpy as np
 import re
 import jieba.posseg as pseg
 
+def get_data():
+    data = pd.read_csv("data_init.csv", delimiter="\t")    #用\t而不是,做分隔符
+    length = data.shape[0]
+    data.insert(2, "Type", None)
+    data.insert(4, "Effect", None)
 
-data = pd.read_csv("data_init.csv", delimiter="\t")    #用\t而不是,做分隔符
-length = data.shape[0]
-data.insert(2, "Usage", None)
-data.insert(4, "Effect", None)
+    #对性味部分数据进行处理，分为性味和归经两列
+    for i in range(length):
+        L = data["Taste"].loc[i].split("。")
+        data["Taste"].loc[i] = re.split("[，、]", L[0])
+        data["Type"].loc[i] = re.split("[，、]", L[1])
 
-#对性味部分数据进行处理，
-for i in range(length):
-    L = data["Taste"].loc[i].split("。")
-    data["Taste"].loc[i] = re.split("[，、]", L[0])
-    data["Usage"].loc[i] = re.split("[，、]", L[1])
-# print(data)
+    #对功用主治部分进行处理,分为功用和主治两列
+    for i in range(length):
+        L = data["Function"].loc[i].split("。")
+        data["Function"].loc[i] = re.split("[，、]", L[0])
+        data["Effect"].loc[i] = re.split("[，、]", L[1])
+        data["Effect"].loc[i] = re.split("[，、]", L[1])
 
-#对功用主治部分进行处理，仅留下功用部分数据
-for i in range(length):
-    L = data["Function"].loc[i].split("。")
-    data["Function"].loc[i] = re.split("[，、]", L[0])
-    data["Effect"].loc[i] = re.split("[，、]", L[1])
-    data["Effect"].loc[i] = re.split("[，、]", L[1])
+    return data, length
 
-#对功用部分进行分词处理
-set2 = set()
-set3 = set()
-set4 = set()
-for i in range(length):
-    listFunction = data["Function"].loc[i]
-    length2 = len(listFunction)
+#对功用和主治部分的数据进行分词处理
+def word_cut(data, length):
+    set2 = set()
+    set3 = set()
+    set4 = set()
 
-    for j in range(length2):
-        if len(listFunction[j]) == 2:
-            set_temp = {listFunction[j]}
-            temp = set2.isdisjoint(set_temp)
-            if temp:
-                pass
-            else:
-                set2.add(listFunction[j])
+    for i in range(length):
+        listFunction = data["Function"].loc[i]
+        length2 = len(listFunction)
 
-        elif len(listFunction[j]) == 3:
-            word_list = []
-            char_list = []
-            for s in listFunction[j]:
-                word = pseg.cut(s)
-                for w in word:
-                    word_list.append(w.word)
-                    char_list.append(w.flag)
-            # print(char_list)
-            if char_list == ['v', 'n', 'n']:
-                pass
-            else:
-                set3.add(listFunction[j])
+        #根据词长分别进行处理
+        for j in range(length2):
+            if len(listFunction[j]) == 2:
+                word_cut_2(set2, listFunction[j])
 
-        elif len(listFunction[j]) == 4:
-            words = re.findall('.{2}', listFunction[j])
-            set_temp = set(words)
-            temp = set4.isdisjoint(set_temp)
-            if temp:
-                listFunction[j] = '%s %s' % (words[0], words[1])
-                set2.add(words[0])
-                set2.add(words[1])
-            else:
-                set4.add(listFunction[j])
+            elif len(listFunction[j]) == 3:
+                word_cut_3(set3, listFunction[j])
 
-#最小编辑距离计算方法
+            elif len(listFunction[j]) == 4:
+                word1, word2 = word_cut_4(set4, listFunction[j])
+                listFunction[j] = '%s %s' % (word1, word2)
+
+    return data
+
+def word_cut_2(set2, word):
+    set_temp = {word}
+    temp = set2.isdisjoint(set_temp)
+    if temp:
+        pass
+    else:
+        set2.add(word)
+
+def word_cut_3(set3, word):
+    #用两个列表记录单字及其词性
+    word_list = []
+    char_list = []
+
+    for s in word:
+        #每个word_jieba是一个生成器，包含单字及其词性
+        word_jieba = pseg.cut(s)
+        for w in word_jieba:
+            word_list.append(w.word)
+            char_list.append(w.flag)
+
+    #根据三字词中每个字的词性进行进一步处理
+    if char_list == ['v', 'n', 'n']:
+        pass
+    else:
+        set3.add(word)
+
+def word_cut_4(set4, word):
+    set4 = set()
+    #按照长度2进行分割
+    word_list = re.findall('.{2}', word)
+    set_temp = set(word_list)
+    temp = set4.isdisjoint(set_temp)
+
+    if temp:
+        set4.add(word_list[0])
+        set4.add(word_list[1])
+        return word_list[0], word_list[1]
+    else:
+        set4.add(word)
+
+#用动态规划对编辑距离进行计算的方法
 def difflib_leven(str1, str2):
     len_str1 = len(str1) + 1
     len_str2 = len(str2) + 1
@@ -91,4 +112,9 @@ def difflib_leven(str1, str2):
                                       matrix[(j-1)*len_str1+(i-1)] + cost)
     return matrix[-1]
 
-data.to_csv("data_treat.csv")
+if __name__ == "__main__":
+    print("读取数据并进行预处理")
+    data, length = get_data()
+    print("进行分词处理")
+    data = word_cut(data, length)
+    data.to_csv("data_treat.csv")
