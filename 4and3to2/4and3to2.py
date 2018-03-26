@@ -38,12 +38,22 @@ def word_cut(data, length):
             if len(listFunction[j]) == 2:
                 word_cut_2(set2, listFunction[j])
 
-            elif len(listFunction[j]) == 3:
-                word_cut_3(set3, listFunction[j])
+        for j in range(length2):
+            if len(listFunction[j]) == 3:
+                word= word_cut_3(set3, listFunction[j])
+                listFunction[j] = word
 
-            elif len(listFunction[j]) == 4:
-                word1, word2 = word_cut_4(set4, listFunction[j])
-                listFunction[j] = '%s %s' % (word1, word2)
+        for j in range(length2):
+            if len(listFunction[j]) == 4:
+                word = word_cut_4(set2, set3, set4, listFunction[j])
+                listFunction[j] = word
+
+    # print("需要人工处理的3字词")
+    # for i in set3:
+    #     print(i)
+    # print("需要人工处理的4字词")
+    # for i in set4:
+    #     print(i)
 
     return data
 
@@ -59,33 +69,50 @@ def word_cut_3(set3, word):
     #用两个列表记录单字及其词性
     word_list = []
     char_list = []
-
+    #判断3字词中每个字的词性
     for s in word:
         #每个word_jieba是一个生成器，包含单字及其词性
         word_jieba = pseg.cut(s)
         for w in word_jieba:
             word_list.append(w.word)
             char_list.append(w.flag)
-
+    # print(char_list)
     #根据三字词中每个字的词性进行进一步处理
     if char_list == ['v', 'n', 'n']:
-        pass
+        # print(word_list)
+        word1 = '%s%s' % (word_list[0], word_list[1])
+        word2 = '%s%s' % (word_list[0], word_list[2])
+        word = '%s%s' % (word1, word2)
+        return word
     else:
         set3.add(word)
+        return word
 
-def word_cut_4(set4, word):
+def word_cut_4(set2, set3, set4, word):
     set4 = set()
+    #与set2中的2字词进行对比并处理
     #按照长度2进行分割
     word_list = re.findall('.{2}', word)
     set_temp = set(word_list)
-    temp = set4.isdisjoint(set_temp)
-
+    # print(set2)
+    temp = set2.isdisjoint(set_temp)
+    # print(temp)
     if temp:
         set4.add(word_list[0])
         set4.add(word_list[1])
-        return word_list[0], word_list[1]
+        word = '%s%s' % (word_list[0], word_list[1])
+        return word
     else:
-        set4.add(word)
+        #与set3中的3字词进行对比并处理
+        for word_3 in set3:
+            dis = difflib_leven(word_3, word)
+            if dis == 1:
+                word = word_cut_3(set3, word_3)
+                return word
+            else:
+                set4.add(word)
+                return word
+
 
 #用动态规划对编辑距离进行计算的方法
 def difflib_leven(str1, str2):
