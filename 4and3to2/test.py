@@ -22,11 +22,11 @@
 # print(set)
 # print(s4)
 
-import jieba.posseg as pseg
-words = pseg.cut("祛")
-for i in words:
-    print(i.word, i.flag)
-    print(type(i.flag))
+# import jieba.posseg as pseg
+# words = pseg.cut("祛")
+# for i in words:
+#     print(i.word, i.flag)
+#     print(type(i.flag))
 
 # s = "祛风寒"
 # for i in s:
@@ -35,3 +35,9 @@ for i in words:
 # l1 = ['我', '是']
 # l2 = ['我', '是']
 # print(l1 == l2)
+
+# import re
+# s = "我，1你23，"
+# # s = re.split("[，]", s)
+# s = re.sub("，", "", s)
+# print(s)

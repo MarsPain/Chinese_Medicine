@@ -10,18 +10,19 @@ length = data.shape[0]
 data.insert(2, "Usage", None)
 data.insert(4, "Effect", None)
 
-#对性味部分数据进行处理
+#对性味部分数据进行处理，
 for i in range(length):
     L = data["Taste"].loc[i].split("。")
     data["Taste"].loc[i] = re.split("[，、]", L[0])
     data["Usage"].loc[i] = re.split("[，、]", L[1])
 # print(data)
 
-#对功用主治部分进行处理
+#对功用主治部分进行处理，仅留下功用部分数据
 for i in range(length):
     L = data["Function"].loc[i].split("。")
     data["Function"].loc[i] = re.split("[，、]", L[0])
-    # data["Effect"].loc[i] = L[1]
+    data["Effect"].loc[i] = re.split("[，、]", L[1])
+    data["Effect"].loc[i] = re.split("[，、]", L[1])
 
 #对功用部分进行分词处理
 set2 = set()
@@ -59,7 +60,7 @@ for i in range(length):
             set_temp = set(words)
             temp = set4.isdisjoint(set_temp)
             if temp:
-                listFunction[j] = words
+                listFunction[j] = '%s %s' % (words[0], words[1])
                 set2.add(words[0])
                 set2.add(words[1])
             else:
