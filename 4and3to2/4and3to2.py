@@ -114,19 +114,19 @@ def difflib_leven(str1, str2):
     matrix = [0 for n in range(len_str1 * len_str2)]
     #初始化X轴
     for i in range(len_str1):
-      matrix[i] = i
+        matrix[i] = i
     #初始化Y轴
     for j in range(0, len(matrix), len_str1):
-      if j % len_str1 == 0:
-          matrix[j] = j // len_str1
+        if j % len_str1 == 0:
+            matrix[j] = j // len_str1
 
     for i in range(1, len_str1):
-      for j in range(1, len_str2):
-          if str1[i-1] == str2[j-1]:
-              cost = 0
-          else:
-              cost = 1
-          matrix[j*len_str1+i] = min(matrix[(j-1)*len_str1+i]+1,
+        for j in range(1, len_str2):
+            if str1[i-1] == str2[j-1]:
+                cost = 0
+            else:
+                cost = 1
+                matrix[j*len_str1+i] = min(matrix[(j-1)*len_str1+i]+1,
                                       matrix[j*len_str1+(i-1)]+1,
                                       matrix[(j-1)*len_str1+(i-1)] + cost)
     return matrix[-1]
@@ -142,15 +142,18 @@ def data_analyse(set2, set3, set4):
     # for i in set4:
     #     print(i, set4[i])
 
-    #字典转换为pandas的DataFrame
-    df_2 = pd.DataFrame({"function": set2.keys(), "times": set2.values()})
-    # print(df_2)
+    #各字典按照值的大小进行排序，然后转换成DataFrame导出到csv
+    set2 = sorted(set2.items(), key=lambda item:item[1], reverse = True)
+    df_2 = pd.DataFrame(set2)
+    print(df_2)
     df_2.to_csv("data_2words.csv")
-    df_3 = pd.DataFrame({"function": set3.keys(), "times": set3.values()})
-    # print(df_3)
+    set3 = sorted(set3.items(), key=lambda item:item[1], reverse = True)
+    df_3 = pd.DataFrame(set3)
+    print(df_3)
     df_3.to_csv("data_3words.csv")
-    df_4 = pd.DataFrame({"function": set4.keys(), "times": set4.values()})
-    # print(df_4)
+    set4 = sorted(set4.items(), key=lambda item:item[1], reverse = True)
+    df_4 = pd.DataFrame(set4)
+    print(df_4)
     df_4.to_csv("data_4words.csv")
 
 if __name__ == "__main__":
