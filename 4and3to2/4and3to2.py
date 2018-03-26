@@ -143,12 +143,15 @@ def data_analyse(set2, set3, set4):
     #     print(i, set4[i])
 
     #字典转换为pandas的DataFrame
-    df_2 = pd.DataFrame({"key": set2.keys(), "value": set2.values()})
-    print(df_2)
-    df_3 = pd.DataFrame({"key": set3.keys(), "value": set3.values()})
-    print(df_3)
-    df_4 = pd.DataFrame({"key": set4.keys(), "value": set4.values()})
-    print(df_4)
+    df_2 = pd.DataFrame({"function": set2.keys(), "times": set2.values()})
+    # print(df_2)
+    df_2.to_csv("data_2words.csv")
+    df_3 = pd.DataFrame({"function": set3.keys(), "times": set3.values()})
+    # print(df_3)
+    df_3.to_csv("data_3words.csv")
+    df_4 = pd.DataFrame({"function": set4.keys(), "times": set4.values()})
+    # print(df_4)
+    df_4.to_csv("data_4words.csv")
 
 if __name__ == "__main__":
     print("读取数据并进行预处理")
