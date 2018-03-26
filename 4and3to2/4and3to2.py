@@ -48,6 +48,9 @@ def word_cut(data, length):
                 word = word_cut_4(set2, set3, set4, listFunction[j])
                 listFunction[j] = word
 
+    # print("2字词库")
+    # for i in set2:
+    #     print(i)
     # print("需要人工处理的3字词")
     # for i in set3:
     #     print(i)
@@ -58,8 +61,7 @@ def word_cut(data, length):
     return data
 
 def word_cut_2(set2, word):
-    set_temp = {word}
-    temp = set2.isdisjoint(set_temp)
+    temp = word in set2
     if temp:
         pass
     else:
@@ -89,14 +91,15 @@ def word_cut_3(set3, word):
         return word
 
 def word_cut_4(set2, set3, set4, word):
-    set4 = set()
     #与set2中的2字词进行对比并处理
     #按照长度2进行分割
     word_list = re.findall('.{2}', word)
-    set_temp = set(word_list)
-    # print(set2)
-    temp = set2.isdisjoint(set_temp)
-    # print(temp)
+    temp = False
+    for i in word_list:
+        if i in set2:
+            temp = True
+        else:
+            pass
     if temp:
         set4.add(word_list[0])
         set4.add(word_list[1])
@@ -112,7 +115,6 @@ def word_cut_4(set2, set3, set4, word):
             else:
                 set4.add(word)
                 return word
-
 
 #用动态规划对编辑距离进行计算的方法
 def difflib_leven(str1, str2):

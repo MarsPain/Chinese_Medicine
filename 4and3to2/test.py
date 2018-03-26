@@ -78,9 +78,14 @@ import difflib
 # for i in s:
 #     print(i)
 
-s1 = {'我','和'}
-s2 = 'sda'
-set2 = {s2}
-print(s2)
-temp = s1.isdisjoint(set2)
+# s1 = {'我','和'}
+# s2 = 'sda'
+# set2 = {s2}
+# temp = s1.isdisjoint(set2)
+# print(temp)
+# print(s2 in s1)
+
+s1 = {"A":1, "B":2}
+s2 = "C"
+temp = s2 in s1
 print(temp)
