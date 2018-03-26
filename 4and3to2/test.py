@@ -88,4 +88,13 @@ import difflib
 s1 = {"A":1, "B":2}
 s2 = "C"
 temp = s2 in s1
-print(temp)
+# s1['A'] += s1['A']
+# print(s1)
+# s1['C'] = 1
+# print(s1)
+# s1[s2] =3
+# print(s1)
+# s1['D']
+# print(s1)
+s1['E'] = (s1['E'] if 'E' in s1 else 0) + 1
+print(s1)

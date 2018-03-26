@@ -25,9 +25,9 @@ def get_data():
 
 #对功用和主治部分的数据进行分词处理
 def word_cut(data, length):
-    set2 = set()
-    set3 = set()
-    set4 = set()
+    set2 = {}
+    set3 = {}
+    set4 = {}
 
     for i in range(length):
         listFunction = data["Function"].loc[i]
@@ -40,7 +40,7 @@ def word_cut(data, length):
 
         for j in range(length2):
             if len(listFunction[j]) == 3:
-                word= word_cut_3(set3, listFunction[j])
+                word= word_cut_3(set2, set3, listFunction[j])
                 listFunction[j] = word
 
         for j in range(length2):
@@ -48,26 +48,16 @@ def word_cut(data, length):
                 word = word_cut_4(set2, set3, set4, listFunction[j])
                 listFunction[j] = word
 
-    # print("2字词库")
-    # for i in set2:
-    #     print(i)
-    # print("需要人工处理的3字词")
-    # for i in set3:
-    #     print(i)
-    # print("需要人工处理的4字词")
-    # for i in set4:
-    #     print(i)
-
-    return data
+    return data, set2, set3, set4
 
 def word_cut_2(set2, word):
     temp = word in set2
     if temp:
-        pass
+        set2[word] += 1
     else:
-        set2.add(word)
+        set2[word] = 1
 
-def word_cut_3(set3, word):
+def word_cut_3(set2, set3, word):
     #用两个列表记录单字及其词性
     word_list = []
     char_list = []
@@ -78,16 +68,16 @@ def word_cut_3(set3, word):
         for w in word_jieba:
             word_list.append(w.word)
             char_list.append(w.flag)
-    # print(char_list)
     #根据三字词中每个字的词性进行进一步处理
     if char_list == ['v', 'n', 'n']:
-        # print(word_list)
         word1 = '%s%s' % (word_list[0], word_list[1])
         word2 = '%s%s' % (word_list[0], word_list[2])
-        word = '%s%s' % (word1, word2)
+        word = '%s %s' % (word1, word2)
+        set2[word1] = (set2[word1] if word1 in set2 else 0) + 1
+        set2[word2] = (set2[word2] if word2 in set2 else 0) + 1
         return word
     else:
-        set3.add(word)
+        set3[word] = (set3[word] if word in set3 else 0) + 1
         return word
 
 def word_cut_4(set2, set3, set4, word):
@@ -101,19 +91,19 @@ def word_cut_4(set2, set3, set4, word):
         else:
             pass
     if temp:
-        set4.add(word_list[0])
-        set4.add(word_list[1])
-        word = '%s%s' % (word_list[0], word_list[1])
+        set2[word_list[0]] = (set2[word_list[0]] if word_list[0] in set2 else 0) + 1
+        set2[word_list[1]] = (set2[word_list[1]] if word_list[1] in set2 else 0) + 1
+        word = '%s %s' % (word_list[0], word_list[1])
         return word
     else:
         #与set3中的3字词进行对比并处理
         for word_3 in set3:
             dis = difflib_leven(word_3, word)
             if dis == 1:
-                word = word_cut_3(set3, word_3)
+                word = word_cut_3(set2, set3, word_3)
                 return word
             else:
-                set4.add(word)
+                set4[word] = (set4[word] if word in set4 else 0) + 1
                 return word
 
 #用动态规划对编辑距离进行计算的方法
@@ -141,9 +131,29 @@ def difflib_leven(str1, str2):
                                       matrix[(j-1)*len_str1+(i-1)] + cost)
     return matrix[-1]
 
+def data_analyse(set2, set3, set4):
+    # print("2字词库")
+    # for i in set2:
+    #     print(i, set2[i])
+    # print("需要人工处理的3字词")
+    # for i in set3:
+    #     print(i, set3[i])
+    # print("需要人工处理的4字词")
+    # for i in set4:
+    #     print(i, set4[i])
+
+    #字典转换为pandas的DataFrame
+    df_2 = pd.DataFrame({"key": set2.keys(), "value": set2.values()})
+    print(df_2)
+    df_3 = pd.DataFrame({"key": set3.keys(), "value": set3.values()})
+    print(df_3)
+    df_4 = pd.DataFrame({"key": set4.keys(), "value": set4.values()})
+    print(df_4)
+
 if __name__ == "__main__":
     print("读取数据并进行预处理")
     data, length = get_data()
     print("进行分词处理")
-    data = word_cut(data, length)
+    data, set2, set3, set4 = word_cut(data, length)
+    data_analyse(set2, set3, set4)
     data.to_csv("data_treat.csv")
