@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import jieba.posseg as pseg
+import matplotlib.pyplot as plt
 
 def get_data():
     data = pd.read_csv("data_init.csv", delimiter="\t")    #用\t而不是,做分隔符
@@ -148,16 +149,27 @@ def data_analyse(set2, set3, set4):
     #各字典按照值的大小进行排序得到相应元祖，然后转换成DataFrame导出到csv
     set2 = sorted(set2.items(), key=lambda item:item[1], reverse = True)
     df_2 = pd.DataFrame(set2)
-    print(df_2)
-    df_2.to_csv("data_2words.csv")
+    df_2.to_csv("data_words_2.csv")
+    words_2 = df_2.iloc[0:15]
+    words_2.plot(kind = 'bar')
+    plt.title("words_2")
+    plt.show()
+
     set3 = sorted(set3.items(), key=lambda item:item[1], reverse = True)
     df_3 = pd.DataFrame(set3)
-    print(df_3)
-    df_3.to_csv("data_3words.csv")
+    df_3.to_csv("data_words_3.csv")
+    words_3 = df_3.iloc[0:15]
+    words_3.plot(kind = 'bar')
+    plt.title("words_3")
+    plt.show()
+
     set4 = sorted(set4.items(), key=lambda item:item[1], reverse = True)
     df_4 = pd.DataFrame(set4)
-    print(df_4)
-    df_4.to_csv("data_4words.csv")
+    df_4.to_csv("data_words_4.csv")
+    words_4 = df_4.iloc[0:15]
+    words_4.plot(kind = 'bar')
+    plt.title("words_4")
+    plt.show()
 
 if __name__ == "__main__":
     print("读取数据并进行预处理")
