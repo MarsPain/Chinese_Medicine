@@ -144,7 +144,7 @@ def word_cut_4(set2, set3_true, set3_flase, set4_true, set4_false, word):
                 set4_false[word] = (set4_false[word] if word in set4_false else 0) + 1
                 return word
 
-#用动态规划对字符串之间的编辑距离进行计算
+#用动态规划对字符串间的编辑距离进行计算
 def difflib_leven(str1, str2):
     len_str1 = len(str1) + 1
     len_str2 = len(str2) + 1
