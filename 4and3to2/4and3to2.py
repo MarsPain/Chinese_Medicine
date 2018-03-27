@@ -25,8 +25,8 @@ def get_data():
 
     return data, length
 
-#对功用和主治部分的数据进行分词处理
-def word_cut(data, length):
+#对功效部分的数据进行分词处理
+def word_cut_function(data, length):
     set2 = {}
     set3 = {}
     set4 = {}
@@ -52,12 +52,32 @@ def word_cut(data, length):
 
     return data, set2, set3, set4
 
+#对主治部分的数据进行分词处理
+# def word_cut_effect(data, length):
+#
+#     for i in range(length):
+#         listFunction = data["Effect"].loc[i]
+#         length2 = len(listFunction)
+#
+#         #根据词长分别进行处理
+#         for j in range(length2):
+#             if len(listFunction[j]) == 2:
+#                 word_cut_2(set2, listFunction[j])
+#
+#         for j in range(length2):
+#             if len(listFunction[j]) == 3:
+#                 word= word_cut_3(set2, set3, listFunction[j])
+#                 listFunction[j] = word
+#
+#         for j in range(length2):
+#             if len(listFunction[j]) == 4:
+#                 word = word_cut_4(set2, set3, set4, listFunction[j])
+#                 listFunction[j] = word
+#
+#     return data, set2, set3, set4
+
 def word_cut_2(set2, word):
-    temp = word in set2
-    if temp:
-        set2[word] += 1
-    else:
-        set2[word] = 1
+    set2[word] = (set2[word] if word in set2 else 0) + 1
 
 def word_cut_3(set2, set3, word):
     #用两个列表记录单字及其词性
@@ -110,7 +130,7 @@ def word_cut_4(set2, set3, set4, word):
                 set4[word] = (set4[word] if word in set4 else 0) + 1
                 return word
 
-#用动态规划对编辑距离进行计算的方法
+#用动态规划对编辑距离进行计算
 def difflib_leven(str1, str2):
     len_str1 = len(str1) + 1
     len_str2 = len(str2) + 1
@@ -136,45 +156,45 @@ def difflib_leven(str1, str2):
     return matrix[-1]
 
 def data_analyse(set2, set3, set4):
-    # print("2字词库")
-    # for i in set2:
-    #     print(i, set2[i])
-    # print("需要人工处理的3字词")
-    # for i in set3:
-    #     print(i, set3[i])
-    # print("需要人工处理的4字词")
-    # for i in set4:
-    #     print(i, set4[i])
+    print("2字词库")
+    for i in set2:
+        print(i, set2[i])
+    print("3字词库")
+    for i in set3:
+        print(i, set3[i])
+    print("需要人工处理的4字词")
+    for i in set4:
+        print(i, set4[i])
 
     #各字典按照值的大小进行排序得到相应元祖，然后转换成DataFrame导出到csv
-    set2 = sorted(set2.items(), key=lambda item:item[1], reverse = True)
-    df_2 = pd.DataFrame(set2)
-    df_2.to_csv("data_words_2.csv")
-    words_2 = df_2.iloc[0:15]
-    words_2.plot(kind = 'bar')
-    plt.title("words_2")
-    plt.show()
-
-    set3 = sorted(set3.items(), key=lambda item:item[1], reverse = True)
-    df_3 = pd.DataFrame(set3)
-    df_3.to_csv("data_words_3.csv")
-    words_3 = df_3.iloc[0:15]
-    words_3.plot(kind = 'bar')
-    plt.title("words_3")
-    plt.show()
-
-    set4 = sorted(set4.items(), key=lambda item:item[1], reverse = True)
-    df_4 = pd.DataFrame(set4)
-    df_4.to_csv("data_words_4.csv")
-    words_4 = df_4.iloc[0:15]
-    words_4.plot(kind = 'bar')
-    plt.title("words_4")
-    plt.show()
+    # set2 = sorted(set2.items(), key=lambda item:item[1], reverse = True)
+    # df_2 = pd.DataFrame(set2)
+    # df_2.to_csv("data_words_2.csv")
+    # words_2 = df_2.iloc[0:15]
+    # words_2.plot(kind = 'bar')
+    # plt.title("words_2")
+    # plt.show()
+    #
+    # set3 = sorted(set3.items(), key=lambda item:item[1], reverse = True)
+    # df_3 = pd.DataFrame(set3)
+    # df_3.to_csv("data_words_3.csv")
+    # words_3 = df_3.iloc[0:15]
+    # words_3.plot(kind = 'bar')
+    # plt.title("words_3")
+    # plt.show()
+    #
+    # set4 = sorted(set4.items(), key=lambda item:item[1], reverse = True)
+    # df_4 = pd.DataFrame(set4)
+    # df_4.to_csv("data_words_4.csv")
+    # words_4 = df_4.iloc[0:15]
+    # words_4.plot(kind = 'bar')
+    # plt.title("words_4")
+    # plt.show()
 
 if __name__ == "__main__":
     print("读取数据并进行预处理")
     data, length = get_data()
     print("进行分词处理")
-    data, set2, set3, set4 = word_cut(data, length)
+    data, set2, set3, set4 = word_cut_function(data, length)
     data_analyse(set2, set3, set4)
     data.to_csv("data_treat.csv")
