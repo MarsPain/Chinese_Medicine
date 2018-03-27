@@ -5,6 +5,7 @@ import jieba.posseg as pseg
 def get_data():
     data = pd.read_csv("data_init.csv", delimiter="\t")    #用\t而不是,做分隔符
     length = data.shape[0]
+    #插入列
     data.insert(2, "Type", None)
     data.insert(4, "Effect", None)
 
@@ -70,9 +71,11 @@ def word_cut_3(set2, set3, word):
             char_list.append(w.flag)
     #根据三字词中每个字的词性进行进一步处理
     if char_list == ['v', 'n', 'n']:
+        #字符串拼接
         word1 = '%s%s' % (word_list[0], word_list[1])
         word2 = '%s%s' % (word_list[0], word_list[2])
         word = '%s %s' % (word1, word2)
+        #词库中词出现次数的计数
         set2[word1] = (set2[word1] if word1 in set2 else 0) + 1
         set2[word2] = (set2[word2] if word2 in set2 else 0) + 1
         return word
@@ -142,7 +145,7 @@ def data_analyse(set2, set3, set4):
     # for i in set4:
     #     print(i, set4[i])
 
-    #各字典按照值的大小进行排序，然后转换成DataFrame导出到csv
+    #各字典按照值的大小进行排序得到相应元祖，然后转换成DataFrame导出到csv
     set2 = sorted(set2.items(), key=lambda item:item[1], reverse = True)
     df_2 = pd.DataFrame(set2)
     print(df_2)
