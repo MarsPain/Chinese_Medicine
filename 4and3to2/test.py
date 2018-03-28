@@ -105,3 +105,8 @@ import difflib
 # print(s)
 # df = pd.DataFrame(s)
 # print(df)
+
+import re
+s = "我知道或者"
+s = re.sub("我|者", "", s)
+print(s)
