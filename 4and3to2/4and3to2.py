@@ -3,8 +3,10 @@ import re
 import jieba.posseg as pseg
 import matplotlib.pyplot as plt
 
+#数据预处理
+# 示例原始数据是药名、性味+归经、功效+主治，这部分代码根据具体数据进行调整
 def get_data():
-    data = pd.read_csv("data_init.csv", delimiter="\t")    #用\t而不是,做分隔符
+    data = pd.read_csv("data_init.csv", delimiter="\t")    #delimiter指定分隔符，根据数据调整
     length = data.shape[0]
     #插入列，分别保存“归经”和“主治”的数据
     data.insert(2, "Type", None)
