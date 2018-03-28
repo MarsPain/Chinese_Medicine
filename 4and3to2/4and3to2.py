@@ -66,17 +66,18 @@ def word_cut_effect(data, length, set2, set3_true, set3_false, set4_true, set4_f
         length2 = len(listFunction)
 
         #根据词长分别进行处理
+        #先建立2字词库
         for j in range(length2):
             #先去除“主治”等停用词
             listFunction[j] = re.sub("主治|或", "", listFunction[j])
             if len(listFunction[j]) == 2:
                 word_cut_2(set2, listFunction[j])
-
+        #对3字词进行处理并建立3字词库
         for j in range(length2):
             if len(listFunction[j]) == 3:
                 word= word_cut_3(set2, set3_true, set3_false, listFunction[j])
                 listFunction[j] = word
-
+        #对4字词进行处理并建立4字词库
         for j in range(length2):
             if len(listFunction[j]) == 4:
                 word = word_cut_4(set2, set3_true, set3_false, set4_true, set4_false, listFunction[j])
@@ -133,17 +134,21 @@ def word_cut_4(set2, set3_true, set3_flase, set4_true, set4_false, word):
         set2[word_list[0]] = (set2[word_list[0]] if word_list[0] in set2 else 0) + 1
         set2[word_list[1]] = (set2[word_list[1]] if word_list[1] in set2 else 0) + 1
         word = '%s %s' % (word_list[0], word_list[1])
+        # print(word)
         return word
     else:
         #若22拆分后的单词在2字词库中未出现过，则先与set3_true中的3字词进行对比
         for word_3 in set3_true:
             dis = difflib_leven(word_3, word)
             if dis == 1:
+                # print("true")
                 # 若与set3_true中某个3字词只有一个编辑距离
                 word = word_cut_3(set2, set3_true, set3_flase, word_3)
+                # print(word)
                 return word
             else:
                 set4_false[word] = (set4_false[word] if word in set4_false else 0) + 1
+                # print(word)
                 return word
 
 #用动态规划对字符串间的编辑距离进行计算
@@ -172,6 +177,8 @@ def difflib_leven(str1, str2):
     return matrix[-1]
 
 def data_analyse(set2, set3_true, set3_false, set4_true, set4_false):
+    # pass
+
     print("==========2字词库==========")
     for i in set2:
         print(i, set2[i])
@@ -202,7 +209,7 @@ if __name__ == "__main__":
     data, length = get_data()
     print("对功用和主治部分进行分词处理")
     data, set2, set3_true, set3_false, set4_true, set4_false = word_cut_function(data, length)
-    data, set2, set3_true, set3_false, set4_true, set4_false = word_cut_effect(data, length, set2, set3_true, set3_false, set4_true, set4_false)
+    # data, set2, set3_true, set3_false, set4_true, set4_false = word_cut_effect(data, length, set2, set3_true, set3_false, set4_true, set4_false)
     print("结果数据处理")
     data_analyse(set2, set3_true, set3_false, set4_true, set4_false)
     data.to_csv("data_treat.csv")

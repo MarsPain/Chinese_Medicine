@@ -79,7 +79,7 @@ import difflib
 #     print(i)
 
 # s1 = {'我','和'}
-# s2 = 'sda'
+# s2 = 'asd'
 # set2 = {s2}
 # temp = s1.isdisjoint(set2)
 # print(temp)
@@ -106,7 +106,7 @@ import difflib
 # df = pd.DataFrame(s)
 # print(df)
 
-import re
-s = "我知道或者"
-s = re.sub("我|者", "", s)
-print(s)
+# import re
+# s = "我知道或者"
+# s = re.sub("我|者", "", s)
+# print(s)
