@@ -6,24 +6,23 @@ import matplotlib.pyplot as plt
 #数据预处理
 # 示例原始数据是药名、性味+归经、功效+主治，这部分代码根据具体数据进行调整
 def get_data():
-    #若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新保存
+    #若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
     data = pd.read_csv("data_init.csv", delimiter="\t")    #delimiter指定分隔符，根据数据调整
     length = data.shape[0]
     #插入列，分别保存“归经”和“主治”的数据
     data.insert(2, "Type", None)
     data.insert(4, "Effect", None)
 
-    #对性味部分数据进行处理，分为性味和归经两列
+    #对性味部分数据进行处理，分为性味和归经两列并以，、作为分隔符返回列表
     for i in range(length):
         L = data["Taste"].loc[i].split("。")
         data["Taste"].loc[i] = re.split("[，、]", L[0])
         data["Type"].loc[i] = re.split("[，、]", L[1])
 
-    #对功用主治部分进行处理,分为功用和主治两列
+    #对功用主治部分进行处理,分为功用和主治两列并以，、作为分隔符返回列表
     for i in range(length):
         L = data["Function"].loc[i].split("。")
         data["Function"].loc[i] = re.split("[，、]", L[0])
-        data["Effect"].loc[i] = re.split("[，、]", L[1])
         data["Effect"].loc[i] = re.split("[，、]", L[1])
 
     return data, length

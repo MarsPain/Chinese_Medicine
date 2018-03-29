@@ -126,4 +126,31 @@ import difflib
 # for i in range(10, 0,-1):
 #     print(i)
 
-print(10%10)
+# import pandas as pd
+# import jieba.posseg as pseg
+# import re
+# data = pd.read_csv("rexing1.csv")
+# data = data.fillna("missing")
+# print(data.info())
+# length = data.shape[0]
+# print(length)
+
+# s = ["asd", "sdsa"]
+# s = str(s)
+# print(s)
+# s = None
+# s = str(s)
+# print(s)
+# print(len("asd"))
+
+# import pandas as pd
+# dict = {'shanghai':{0: [1,2], 1: None},'beijing':{0: [1, 2], 1: [1, 2]}}
+# data = pd.DataFrame(dict)
+# print(data)
+# # print(data.info())
+#
+# data["shanghai"].loc[0]
+#
+# for i in range(2):
+#     length = len(data["shanghai"].loc[i])
+#     print(length)
