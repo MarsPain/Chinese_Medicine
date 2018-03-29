@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 #数据预处理
 # 示例原始数据是药名、性味+归经、功效+主治，这部分代码根据具体数据进行调整
 def get_data():
+    #若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新保存
     data = pd.read_csv("data_init.csv", delimiter="\t")    #delimiter指定分隔符，根据数据调整
     length = data.shape[0]
     #插入列，分别保存“归经”和“主治”的数据
