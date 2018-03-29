@@ -214,4 +214,4 @@ if __name__ == "__main__":
     # data, set2, set3_true, set3_false, set4_true, set4_false = word_cut_effect(data, length, set2, set3_true, set3_false, set4_true, set4_false)
     print("结果数据处理")
     data_analyse(set2, set3_true, set3_false, set4_true, set4_false)
-    data.to_csv("data_treat.csv")
+    data.to_csv("data_treat.csv", encoding = 'utf-8')

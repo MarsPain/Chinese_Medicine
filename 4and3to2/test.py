@@ -110,3 +110,20 @@ import difflib
 # s = "我知道或者"
 # s = re.sub("我|者", "", s)
 # print(s)
+
+# num1 = 15
+# num2 = 10
+# num1 = (num1 >= num2)
+# print(num1)
+
+# num = 2
+# num = 2**3
+# print(num)
+
+# num = 234
+# print(len(str(num)))
+
+# for i in range(10, 0,-1):
+#     print(i)
+
+print(10%10)
