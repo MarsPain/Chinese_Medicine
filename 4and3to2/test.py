@@ -154,3 +154,13 @@ import difflib
 # for i in range(2):
 #     length = len(data["shanghai"].loc[i])
 #     print(length)
+#
+# matrix = [0 for n in range(5 * 5)]
+# print(type(matrix))
+
+# def test1(self, n):
+#     self.res = []
+#     self.test2(n)
+#
+# def test2(self, n)
+#

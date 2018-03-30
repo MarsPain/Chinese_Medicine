@@ -39,20 +39,30 @@ def word_cut_function(data, length):
     # 保存不可拆分的4字词
     set4_false = {}
 
+    #根据词长分别进行处理
+    #先建立2字词库
     for i in range(length):
-        listFunction = data["Function"].loc[i]
+        listFunction = data["Effect"].loc[i]
         length2 = len(listFunction)
-
-        #根据词长分别进行处理
         for j in range(length2):
+            #先去除“主治”等停用词
+            listFunction[j] = re.sub("主治|或", "", listFunction[j])
             if len(listFunction[j]) == 2:
                 word_cut_2(set2, listFunction[j])
 
+    #对3字词进行处理并建立3字词库
+    for i in range(length):
+        listFunction = data["Effect"].loc[i]
+        length2 = len(listFunction)
         for j in range(length2):
             if len(listFunction[j]) == 3:
                 word= word_cut_3(set2, set3_true, set3_false, listFunction[j])
                 listFunction[j] = word
 
+    #对4字词进行处理并建立4字词库
+    for i in range(length):
+        listFunction = data["Effect"].loc[i]
+        length2 = len(listFunction)
         for j in range(length2):
             if len(listFunction[j]) == 4:
                 word = word_cut_4(set2, set3_true, set3_false, set4_true, set4_false, listFunction[j])
@@ -63,23 +73,30 @@ def word_cut_function(data, length):
 #对主治部分的数据进行分词处理
 def word_cut_effect(data, length, set2, set3_true, set3_false, set4_true, set4_false):
 
+    #根据词长分别进行处理
+    #先建立2字词库
     for i in range(length):
         listFunction = data["Effect"].loc[i]
         length2 = len(listFunction)
-
-        #根据词长分别进行处理
-        #先建立2字词库
         for j in range(length2):
             #先去除“主治”等停用词
             listFunction[j] = re.sub("主治|或", "", listFunction[j])
             if len(listFunction[j]) == 2:
                 word_cut_2(set2, listFunction[j])
-        #对3字词进行处理并建立3字词库
+
+    #对3字词进行处理并建立3字词库
+    for i in range(length):
+        listFunction = data["Effect"].loc[i]
+        length2 = len(listFunction)
         for j in range(length2):
             if len(listFunction[j]) == 3:
                 word= word_cut_3(set2, set3_true, set3_false, listFunction[j])
                 listFunction[j] = word
-        #对4字词进行处理并建立4字词库
+
+    #对4字词进行处理并建立4字词库
+    for i in range(length):
+        listFunction = data["Effect"].loc[i]
+        length2 = len(listFunction)
         for j in range(length2):
             if len(listFunction[j]) == 4:
                 word = word_cut_4(set2, set3_true, set3_false, set4_true, set4_false, listFunction[j])
@@ -151,7 +168,7 @@ def word_cut_4(set2, set3_true, set3_flase, set4_true, set4_false, word):
             else:
                 set4_false[word] = (set4_false[word] if word in set4_false else 0) + 1
                 # print(word)
-                return word
+            return word
 
 #用动态规划对字符串间的编辑距离进行计算
 def difflib_leven(str1, str2):
