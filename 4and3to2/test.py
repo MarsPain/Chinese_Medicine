@@ -163,4 +163,6 @@ import difflib
 #     self.test2(n)
 #
 # def test2(self, n)
-#
+
+s = {"asd":1, "sad":2}
+print(len(s))
