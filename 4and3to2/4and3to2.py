@@ -177,7 +177,7 @@ class word_cut:
                 return word
 
     #用动态规划对字符串间的编辑距离进行计算
-    def difflib_leven(self, str1, str2):
+    def difflib_leven(self, str1 , str2):
         len_str1 = len(str1) + 1
         len_str2 = len(str2) + 1
         #创建矩阵
@@ -196,9 +196,9 @@ class word_cut:
                     cost = 0
                 else:
                     cost = 1
-                    matrix[j*len_str1+i] = min(matrix[(j-1)*len_str1+i]+1,
+                matrix[j*len_str1+i] = min(matrix[(j-1)*len_str1+i]+1,
                                           matrix[j*len_str1+(i-1)]+1,
-                                          matrix[(j-1)*len_str1+(i-1)] + cost)
+                                         matrix[(j-1)*len_str1+(i-1)] + cost)
         return matrix[-1]
 
     def data_analyse(self):
