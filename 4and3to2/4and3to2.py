@@ -51,17 +51,16 @@ class word_cut:
         #根据词长分别进行处理
         #先建立2字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
+            listFunction = data["Function"].loc[i]
             length2 = len(listFunction)
             for j in range(length2):
                 #先去除“主治”等停用词
-                listFunction[j] = re.sub("主治|或", "", listFunction[j])
                 if len(listFunction[j]) == 2:
                     self.word_cut_2(listFunction[j])
 
         #对3字词进行处理并建立3字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
+            listFunction = data["Function"].loc[i]
             length2 = len(listFunction)
             for j in range(length2):
                 if len(listFunction[j]) == 3:
@@ -70,7 +69,7 @@ class word_cut:
 
         #对4字词进行处理并建立4字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
+            listFunction = data["Function"].loc[i]
             length2 = len(listFunction)
             for j in range(length2):
                 if len(listFunction[j]) == 4:
@@ -245,4 +244,4 @@ if __name__ == "__main__":
     # 结果数据处理
     word_cut.data_analyse()
     # 结果导出
-    data.to_csv("data_treat.csv", encoding = 'utf-8')
+    data.to_csv("data_treat.csv")
