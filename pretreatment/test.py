@@ -198,3 +198,19 @@ import difflib
 #测试修改GitHub上项目名后还能不能commit and push
 
 #测试从GitHub上下载项目后还能不能commit and push
+l1 = [1, 2, 3]
+l2 = [2, 3]
+length = len(l1)
+flag = False #保存是否删除过元素的信息
+for i in range(length):
+    if flag:
+        i = i - 1
+    if l1[i] in l2:
+        print(l1[i])
+        l1.remove(l1[i])
+        flag = True
+print(l1)
+
+# for i in range(10):
+#     print(i)
+#     i = i + 2
