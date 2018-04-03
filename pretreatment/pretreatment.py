@@ -106,31 +106,31 @@ class word_cut:
         #根据词长分别进行处理
         #先建立2字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
-            length2 = len(listFunction)
+            listEffect = data["Effect"].loc[i]
+            length2 = len(listEffect)
             for j in range(length2):
                 #清理“主治、或”等停用词
-                listFunction[j] = re.sub("主治|或", "", listFunction[j])
-                if len(listFunction[j]) == 2:
-                    self.word_cut_2(listFunction[j])
+                listEffect[j] = re.sub("主治|或", "", listEffect[j])
+                if len(listEffect[j]) == 2:
+                    self.word_cut_2(listEffect[j])
 
         #对3字词进行处理并建立3字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
-            length2 = len(listFunction)
+            listEffect = data["Effect"].loc[i]
+            length2 = len(listEffect)
             for j in range(length2):
-                if len(listFunction[j]) == 3:
-                    word= self.word_cut_3(listFunction[j])
-                    listFunction[j] = word
+                if len(listEffect[j]) == 3:
+                    word= self.word_cut_3(listEffect[j])
+                    listEffect[j] = word
 
         #对4字词进行处理并建立4字词库
         for i in range(self.length):
-            listFunction = data["Effect"].loc[i]
-            length2 = len(listFunction)
+            listEffect = data["Effect"].loc[i]
+            length2 = len(listEffect)
             for j in range(length2):
-                if len(listFunction[j]) == 4:
-                    word = self.word_cut_4(listFunction[j])
-                    listFunction[j] = word
+                if len(listEffect[j]) == 4:
+                    word = self.word_cut_4(listEffect[j])
+                    listEffect[j] = word
 
     def word_cut_2(self, word):
         #保存到词库并计数
