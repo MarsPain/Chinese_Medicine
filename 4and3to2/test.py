@@ -196,3 +196,5 @@ import difflib
 # print(difflib_leven(s1, s2))
 
 #测试修改GitHub上项目名后还能不能commit and push
+
+#测试从GitHub上下载项目后还能不能commit and push
