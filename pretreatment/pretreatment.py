@@ -27,11 +27,34 @@ def get_data():
 
     return data, length
 
+#对性味和归经部分的数据进行清洗
+class word_clean:
+    def __init__(self, data, length):
+        print("对性味和归经部分的数据进行清洗")
+        self.data = data
+        self.length = length
+
+    def word_clean_taste(self, data, length):
+        for i in range(self.length):
+            list_taste = data["Taste"].loc[i]
+            length2 = len(list_taste)
+            for j in range(length2):
+                list_taste[j] = re.sub("性|味", "", list_taste[j])
+
+    def word_clean_type(self, data, length):
+        for i in range(self.length):
+            list_type = data["Type"].loc[i]
+            length2 = len(list_type)
+            for j in range(length2):
+                list_type[j] = re.sub("归|经", "", list_type[j])
+
+#对功效和主治部分数据进行分词和存储
 #建立一个类，便于管理数据
 class word_cut:
 
     #引入语料库并创建词库
     def __init__(self, data, length):
+        print("对功效和主治部分数据进行分词和存储")
         print("引入语料库并创建词库")
         self.data = data
         self.length = length
@@ -54,7 +77,6 @@ class word_cut:
             listFunction = data["Function"].loc[i]
             length2 = len(listFunction)
             for j in range(length2):
-                #先去除“主治”等停用词
                 if len(listFunction[j]) == 2:
                     self.word_cut_2(listFunction[j])
 
@@ -87,7 +109,7 @@ class word_cut:
             listFunction = data["Effect"].loc[i]
             length2 = len(listFunction)
             for j in range(length2):
-                #先去除“主治”等停用词
+                #清理“主治、或”等停用词
                 listFunction[j] = re.sub("主治|或", "", listFunction[j])
                 if len(listFunction[j]) == 2:
                     self.word_cut_2(listFunction[j])
@@ -232,6 +254,11 @@ class word_cut:
 if __name__ == "__main__":
     # 读取数据并进行预处理
     data, length = get_data()
+    #创建数据清理类
+    word_clean = word_clean(data,length)
+    #对性味和归经部分的数据进行清洗
+    word_clean.word_clean_taste(data, length)
+    word_clean.word_clean_type(data, length)
     # 创建分词类
     word_cut = word_cut(data, length)
     # 对功用部分进行分词处理
