@@ -194,3 +194,5 @@ import difflib
 # s1 = "beauty"
 # s2 = "batyu"
 # print(difflib_leven(s1, s2))
+
+#测试修改GitHub上项目名后还能不能commit and push
