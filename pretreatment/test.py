@@ -198,19 +198,102 @@ import difflib
 #测试修改GitHub上项目名后还能不能commit and push
 
 #测试从GitHub上下载项目后还能不能commit and push
-l1 = [1, 2, 3]
-l2 = [2, 3]
-length = len(l1)
-flag = False #保存是否删除过元素的信息
-for i in range(length):
-    if flag:
-        i = i - 1
-    if l1[i] in l2:
-        print(l1[i])
-        l1.remove(l1[i])
-        flag = True
-print(l1)
+
+# l1 = [1, 2, 3, 5, 6, 7]
+# l2 = [2, 3]
+# length = len(l1)
+# flag = False #保存是否删除过元素的信息
+# temp = 0 #保存删除过多少次元素的信息
+# for i in range(length):
+#     if flag:
+#         temp += 1
+#         # length -= 1 #不影响迭代次数
+#         flag = False
+#     i -= temp
+#     print("length:",length)
+#     print("i:", i)
+#     if l1[i] in l2:
+#         print(l1[i])
+#         l1.remove(l1[i])
+#         flag = True
+# print(l1)
 
 # for i in range(10):
 #     print(i)
 #     i = i + 2
+
+# for i in range(10):
+#     i -= 1
+#     print(i)
+
+#
+# L = 10
+# flag = True
+# for i in range(L):
+#     if flag:
+#         L = 3
+#         flag = False
+#     print(i)
+
+# num = [1, 2, 3, 4]
+# print(num[:2] + num[3:])
+#
+# nums1 = [1]
+# nums2 = 4
+# result = []
+# result.append(nums1+nums2)
+# print(result)
+
+# s = "cda"
+# s = sorted(s)
+# print(s)
+
+# s = "asd"
+# res = sorted(s) #拆分成字符并重新排序
+# print(res)
+# res = ''.join(res)  #拼接字符
+# print(res)
+
+# class Solution(object):
+#     def groupAnagrams(self, strs):
+#         """
+#         :type strs: List[str]
+#         :rtype: List[List[str]]
+#         """
+#         dict = {}
+#         for word in strs:
+#             sortedword = "".join(sorted(word))
+#             print(sortedword)
+#             dict[sortedword] = [word] if sortedword not in dict else dict[sortedword] + [word]
+#         result = []
+#         for item in dict:
+#             result.append(dict[item])
+#         return result
+#
+# strs = ["eat","tea","tan","ate","nat","bat"]
+# solution = Solution()
+# result = solution.groupAnagrams(strs)
+# print(result)
+
+# s = ['asd']
+# s2 = ['fgh']
+# s = s + s2
+# print(s)
+
+# s = "a"
+# s = s * 10
+# print(s)
+
+# s = [1, 2, 3, 4, 5, 6]
+# for i in range(len(s)-1, -1, -1):
+#     print(s[i])
+
+# s = "asd"
+# print(s[1])
+
+# n = 4
+# m = 2
+# print(n // m)
+
+from keras.layers import Bidirectional
+
