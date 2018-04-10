@@ -299,3 +299,11 @@ import difflib
 
 # s = [1, 2, 3]
 # print(s)
+
+# import re
+# s = "妇人因出血多，心神不安，不得睡"
+# s = re.sub("(出血)|神|安", "", s)
+# print(s)
+# s1 = "as,d;fg.hjk"
+# s1 = re.sub(r"s|f|g|;", "", s1)
+# print(s1)
