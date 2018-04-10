@@ -295,5 +295,7 @@ import difflib
 # m = 2
 # print(n // m)
 
-from keras.layers import Bidirectional
+# from keras.layers import Bidirectional
 
+# s = [1, 2, 3]
+# print(s)
