@@ -65,14 +65,16 @@ class feature_to_vector:
             # print("success")
         # print(onehot_encoded_all)
         # print(len(onehot_encoded_all))
+        #这一步就出现了问题
+        print(np.shape(onehot_encoded_all))
         for i in range(self.length):
             for j in range(1, len(onehot_encoded_all)):
-                print(onehot_encoded_all[0][i])
+                # print(np.shape(onehot_encoded_all[j][i]))
                 #剩下的问题是如何按照行对数组进行拼接
-                onehot_encoded_all[0][i] + onehot_encoded_all[j][i]
-        onehot_encoded_all = onehot_encoded_all[0]
-        print(onehot_encoded_all)
-        print(np.shape(onehot_encoded_all))
+                onehot_encoded_all[0][i].extend(onehot_encoded_all[j][i])
+        # onehot_encoded_all = onehot_encoded_all[0]
+        # print(onehot_encoded_all)
+        # print(np.shape(onehot_encoded_all))
 
         # print(np.shape(onehot_encoded_all))
 
