@@ -15,7 +15,8 @@ iris = load_iris()  #导入数据集
 # print("定量二值化：", Binarizer(threshold=3).fit_transform(iris.data))  #定量二值化
 
 # 将类别型特征转换为one-hot向量
-data = ['cold', 'cold', 'warm', 'cold', 'hot', 'hot', 'cold', 'warm', 'warm', 'hot']
+# data = ['cold', 'cold', 'warm', 'cold', 'hot', 'hot', 'cold', 'warm', 'warm', 'hot']
+data = ['冷', '冷', '温', '哦', '热', '热', '冷', '温', '温', '热']
 # data = [['cold', 'cold', 'warm'], ['cold', 'hot', 'hot'], ['cold', 'warm', 'hot']]
 # data = ['a', 'c', 'b', 'b', 'b', 'c','a', 'b', 'c']
 # values = np.array(data)
@@ -28,10 +29,10 @@ integer_encoded = label_encoder.fit_transform(data)
 onehot_encoder = OneHotEncoder(sparse=False)
 # print(len(integer_encoded))
 #将integer_encoded reshape成len(integer_encoded)行1列的数据
-# integer_encoded = integer_encoded.reshape(-1, 1)
+integer_encoded = integer_encoded.reshape(-1, 1)
 # print(integer_encoded)
-# onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-# print(onehot_encoded)
+onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
+print(onehot_encoded)
 # onehot_encoder.fit(integer_encoded)
 # print(onehot_encoder.transform([[0, 1]]))
 # #将one-hot向量转换回原类别型特征
