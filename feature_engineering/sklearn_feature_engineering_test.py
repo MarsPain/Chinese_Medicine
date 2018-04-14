@@ -52,6 +52,7 @@ onehot_encoder = OneHotEncoder(sparse=False)
 # print(onehot_encoded)
 # onehot_encoded = onehot_encoder.fit_transform(new_integer_encoded)
 # print(onehot_encoded)
+# print(onehot_encoder.transform([[2, 2]]))
 #本段测试的结论：当特征类别的序列不重要的时候，将整数编码进行排序，以免多余的特征维度
 
 #将fit和transform拆开

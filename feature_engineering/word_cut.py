@@ -43,7 +43,7 @@ class word_clean:
             # print(type(list_taste))
             #列表转为字符串，以便后续利用数据
             s = list_taste[0]
-            for j in range(length2-1):
+            for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_taste[j])
             data["Taste"].loc[i] = s
 
@@ -53,10 +53,10 @@ class word_clean:
             # print(type(list_type))
             length2 = len(list_type)
             for j in range(length2):
-                list_type[j] = re.sub("归|经", "", list_type[j])
+                list_type[j] = re.sub("归|经|入", "", list_type[j])
             #列表转为字符串，以便后续利用数据
             s = list_type[0]
-            for j in range(length2-1):
+            for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_type[j])
             data["Type"].loc[i] = s
 
@@ -249,7 +249,7 @@ class word_cut:
             length2 = len(listFunction)
             # print(length2)
             s = listFunction[0]
-            for j in range(length2):
+            for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", listFunction[j])
             data["Function"].loc[i] = s
 
@@ -258,7 +258,7 @@ class word_cut:
             listFunction = data["Effect"].loc[i]
             length2 = len(listFunction)
             s = listFunction[0]
-            for j in range(length2):
+            for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", listFunction[j])
             data["Effect"].loc[i] = s
 
