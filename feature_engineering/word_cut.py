@@ -113,8 +113,6 @@ class word_cut:
                     listFunction[j] = word
             # print(type(listFunction))
 
-
-
         return self.data, self.set2, self.set3_true, self.set3_false, self.set4_true, self.set4_false
 
     #对主治部分的数据进行分词处理
