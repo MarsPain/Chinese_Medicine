@@ -21,14 +21,23 @@
 # import numpy as np
 # a = [[1, 2, 3], [1, 2, 3]]
 # b = [[4, 5, 6, 7, 8], [4, 5, 6, 7, 8]]
-# # print("a.shape", np.shape(a))
-# # print(a, b)
-# for i in range(2):
-#     print(np.shape(a[i]), np.shape(b[i]))
-#     a[i].extend(b[i])
-# print(a)
+# print("a.shape", np.shape(a))
+# print("b.shape", np.shape(b))
+# # for i in range(2):
+#     # print(np.shape(a[i]), np.shape(b[i]))
+# a.extend(b)
+# print("a.shape", np.shape(a))
 
 # import numpy as np
 # n = np.zeros((4, 1))
 # print(n)
 
+# a = np.arange(15).reshape(3, 5)
+# b = np.arange(15).reshape(3, 5)
+# c = np.append(a, b, axis=1)
+# print(c)
+
+# import numpy as np
+# s = [1, 2, 3,4]
+# b = np.array(s)
+# print(1 in s)
