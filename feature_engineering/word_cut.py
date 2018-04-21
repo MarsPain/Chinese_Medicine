@@ -293,13 +293,23 @@ class word_cut:
         #找出所有词频等于或者低于5的词，将这些词存入列表，然后通过读取列表中的词创建相应的正则表达式，
         #再遍历整个文件去除低词频的词
         word_low_freq = []
-        print(type(self.set2))
-        for key, value in self.set2.items():
-            print(key, value)
-        #     if int(item) <= 5:
-        #         word_low_freq.append(i)
+        # print(type(self.set2))
+        list_set = [self.set2, self.set3_false, self.set4_false]
+        for d in list_set:
+            for key, value in d.items():
+                # print(key, value)
+                if value <= 5:
+                    word_low_freq.append(key)
         # print(word_low_freq)
+        # print(len(word_low_freq))
+        pattern_string = word_low_freq[0]
+        for i in word_low_freq[1:]:
+            pattern_string = "%s%s%s" % (pattern_string, "|", i)
+        print(pattern_string)
 
+        for i in range(self.length):
+            self.data["Function"].loc[i] = re.sub(pattern_string, "", self.data["Function"].loc[i])
+            self.data["Effect"].loc[i] = re.sub(pattern_string, "", self.data["Effect"].loc[i])
 
 if __name__ == "__main__":
     # 读取数据并进行预处理

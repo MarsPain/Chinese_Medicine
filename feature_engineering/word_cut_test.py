@@ -308,3 +308,22 @@ import difflib
 # s1 = re.sub(r"s|f|g|;", "", s1)
 # print(s1)
 
+# d1 = {"a":1, "b":2}
+# d2 = {"c":3, "d":4}
+# l = [d1, d2]
+# l2 = []
+# for dict in l:
+#     for key, value in dict.items():
+#         l2.append(value)
+# print(l2)
+
+import re
+l = ["我", "你"]
+pattern_string = l[0]
+for i in l[1:]:
+    pattern_string = "%s%s%s" % (pattern_string, "|", i)
+# print(pattern_string)
+pattern = re.compile(pattern_string)
+s = "我和你"
+s = re.sub(pattern, "", s)
+print(s)

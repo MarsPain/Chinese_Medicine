@@ -81,9 +81,9 @@ class feature_to_vector:
         # print(type(onehot_encoded_all_joint))
         for j in range(1, len(onehot_encoded_all)):
             onehot_encoded_all_joint = np.append(onehot_encoded_all_joint, onehot_encoded_all[j], axis=1)
-        # print(onehot_encoded_all_joint)
-        # print(np.shape(onehot_encoded_all_joint))
-        # print(type(onehot_encoded_all_joint))
+        print(onehot_encoded_all_joint)
+        print(np.shape(onehot_encoded_all_joint))
+        print(type(onehot_encoded_all_joint))
         return onehot_encoded_all_joint
 
     #将得到的特征向量矩阵转换成pandas的DataFrame格式并导出到CSV文件
