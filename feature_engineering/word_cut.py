@@ -27,8 +27,8 @@ def get_data():
 
     return data, length
 
-#对性味和归经部分的数据进行清洗
-class word_clean:
+#对性味和归经部分的数据进行分词处理
+class word_cut_Taste:
     def __init__(self, data, length):
         print("对性味和归经部分的数据进行清洗")
         self.data = data
@@ -264,20 +264,20 @@ class word_cut:
         print("结果数据处理")
         # pass
         print("========2字词数量=========：", len(self.set2))
-        # for i in self.set2:
-        #     print(i, self.set2[i])
+        for i in self.set2:
+            print(i, self.set2[i])
         print("========被拆分的3字词数量==========：", len(self.set3_true))
-        # for i in self.set3_true:
-        #     print(i, self.set3_true[i])
+        for i in self.set3_true:
+            print(i, self.set3_true[i])
         print("============未被拆分的3字词数量=========：", len(self.set3_false))
-        # for i in self.set3_false:
-        #     print(i, self.set3_false[i])
+        for i in self.set3_false:
+            print(i, self.set3_false[i])
         print("=========被拆分的4字词数量============：", len(self.set4_true))
-        # for i in self.set4_true:
-        #     print(i, self.set4_true[i])
+        for i in self.set4_true:
+            print(i, self.set4_true[i])
         print("=========未被拆分的4字词数量===========：", len(self.set4_false))
-        # for i in self.set4_false:
-        #     print(i, self.set4_false[i])
+        for i in self.set4_false:
+            print(i, self.set4_false[i])
 
         #各字典按照值的大小进行排序得到相应元祖，然后转换为DataFrame并导出到CSV，最后绘图
         # self.set2 = sorted(self.set2.items(), key=lambda item:item[1], reverse = True)
@@ -288,18 +288,24 @@ class word_cut:
         # plt.title("words_2")
         # plt.show()
 
+    #清理词频过低的词（特征）
+    def word_clean(self):
+        pass
+        #找出所有词频等于或者低于5的词，将这些词存入列表，然后通过读取列表中的词创建相应的正则表达式，
+        #再遍历整个文件去除低词频的词
+
 if __name__ == "__main__":
     # 读取数据并进行预处理
     data, length = get_data()
     # data.to_csv("data_treat.csv", encoding="utf-8")
 
-    #创建数据清理类
-    word_clean = word_clean(data,length)
+    #创建对性味和归经的分词类
+    word_cut_Taste = word_cut_Taste(data,length)
     #对性味和归经部分的数据进行清洗
-    word_clean.word_clean_taste(data, length)
-    word_clean.word_clean_type(data, length)
+    word_cut_Taste.word_clean_taste(data, length)
+    word_cut_Taste.word_clean_type(data, length)
 
-    # 创建分词类
+    # 创建主治和功效的分词类
     word_cut = word_cut(data, length)
     # 对功用部分进行分词处理
     word_cut.word_cut_function()
@@ -311,7 +317,10 @@ if __name__ == "__main__":
     #列表转为字符串
     word_cut.list_to_str()
 
-    # 结果数据处理
+    # 结果数据分析
     word_cut.data_analyse()
+    # 数据清理，清理主治和功效中词频过低的词
+    word_cut.word_clean()
+    # word_cut.list_to_str() #如果结果又是列表，则需要再次转换为字符串
     # 结果导出
     data.to_csv("data_treat.csv", encoding="utf-8")
