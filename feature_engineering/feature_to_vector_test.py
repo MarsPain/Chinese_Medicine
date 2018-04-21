@@ -60,3 +60,16 @@
 #     print(i)
 #     if i == 5:
 #         break
+
+#将数组array转换为DataFrame
+# import numpy as np
+# import pandas as pd
+# s = [[1, 2, 3, 4],
+#      [1, 2, 3, 4],
+#      [1, 2, 3, 4],
+#      [1, 2, 3, 4]]
+# s = np.array(s)
+# # print(s)
+# # print(type(s))
+# data = pd.DataFrame(s)
+# print(data)
