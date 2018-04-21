@@ -305,11 +305,13 @@ class word_cut:
         pattern_string = word_low_freq[0]
         for i in word_low_freq[1:]:
             pattern_string = "%s%s%s" % (pattern_string, "|", i)
-        print(pattern_string)
+        # print(pattern_string)
 
         for i in range(self.length):
             self.data["Function"].loc[i] = re.sub(pattern_string, "", self.data["Function"].loc[i])
+            self.data["Function"].loc[i] = re.sub("、{2,}", "、", self.data["Function"].loc[i])
             self.data["Effect"].loc[i] = re.sub(pattern_string, "", self.data["Effect"].loc[i])
+            self.data["Effect"].loc[i] = re.sub("、{2,}", "、", self.data["Effect"].loc[i])
 
 if __name__ == "__main__":
     # 读取数据并进行预处理
