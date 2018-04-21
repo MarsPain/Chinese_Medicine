@@ -41,3 +41,22 @@
 # s = [1, 2, 3,4]
 # b = np.array(s)
 # print(1 in s)
+
+# # 无法通过内部函数直接修改变量的值，所以需要用return
+# def test(s):
+#     s = s + 1
+#     print(s)
+# s = 1
+# test(s)
+# print(s)
+# #可以通过内部函数直接对列表进行修改
+# def test_list(s):
+#     s.append(2)
+# s = []
+# test_list(s)
+# print(s)
+
+# for i in range(10):
+#     print(i)
+#     if i == 5:
+#         break
