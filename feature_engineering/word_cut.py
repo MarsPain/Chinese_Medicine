@@ -263,21 +263,21 @@ class word_cut:
     def data_analyse(self):
         print("结果数据处理")
         # pass
-        print("========2字词数量=========：", len(self.set2))
-        for i in self.set2:
-            print(i, self.set2[i])
-        print("========被拆分的3字词数量==========：", len(self.set3_true))
-        for i in self.set3_true:
-            print(i, self.set3_true[i])
-        print("============未被拆分的3字词数量=========：", len(self.set3_false))
-        for i in self.set3_false:
-            print(i, self.set3_false[i])
-        print("=========被拆分的4字词数量============：", len(self.set4_true))
-        for i in self.set4_true:
-            print(i, self.set4_true[i])
-        print("=========未被拆分的4字词数量===========：", len(self.set4_false))
-        for i in self.set4_false:
-            print(i, self.set4_false[i])
+        # print("========2字词数量=========：", len(self.set2))
+        # for i in self.set2:
+        #     print(i, self.set2[i])
+        # print("========被拆分的3字词数量==========：", len(self.set3_true))
+        # for i in self.set3_true:
+        #     print(i, self.set3_true[i])
+        # print("============未被拆分的3字词数量=========：", len(self.set3_false))
+        # for i in self.set3_false:
+        #     print(i, self.set3_false[i])
+        # print("=========被拆分的4字词数量============：", len(self.set4_true))
+        # for i in self.set4_true:
+        #     print(i, self.set4_true[i])
+        # print("=========未被拆分的4字词数量===========：", len(self.set4_false))
+        # for i in self.set4_false:
+        #     print(i, self.set4_false[i])
 
         #各字典按照值的大小进行排序得到相应元祖，然后转换为DataFrame并导出到CSV，最后绘图
         # self.set2 = sorted(self.set2.items(), key=lambda item:item[1], reverse = True)
@@ -290,9 +290,16 @@ class word_cut:
 
     #清理词频过低的词（特征）
     def word_clean(self):
-        pass
         #找出所有词频等于或者低于5的词，将这些词存入列表，然后通过读取列表中的词创建相应的正则表达式，
         #再遍历整个文件去除低词频的词
+        word_low_freq = []
+        print(type(self.set2))
+        for key, value in self.set2.items():
+            print(key, value)
+        #     if int(item) <= 5:
+        #         word_low_freq.append(i)
+        # print(word_low_freq)
+
 
 if __name__ == "__main__":
     # 读取数据并进行预处理
