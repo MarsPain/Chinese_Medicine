@@ -318,12 +318,19 @@ import difflib
 # print(l2)
 
 import re
-l = ["我", "你"]
-pattern_string = l[0]
-for i in l[1:]:
-    pattern_string = "%s%s%s" % (pattern_string, "|", i)
-# print(pattern_string)
-pattern = re.compile(pattern_string)
-s = "我和你"
-s = re.sub(pattern, "", s)
-print(s)
+#利用字符串拼接创建正则表达式的pattern
+# l = ["我", "你"]
+# pattern_string = l[0]
+# for i in l[1:]:
+#     pattern_string = "%s%s%s" % (pattern_string, "|", i)
+# # print(pattern_string)
+# pattern = re.compile(pattern_string)
+# s = "我和你"
+# s = re.sub(pattern, "", s)
+# print(s)
+#说明前后多余的、不影响分割，
+# 但依然需要去除前后多余的，不然会分割出多余的空字符，
+# 用两种正则表达式+判断末尾是否是“、”进行处理
+# s = "、解表、散寒、止痛、"
+# l= re.split("、", s)
+# print(l)
