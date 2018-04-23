@@ -73,3 +73,9 @@
 # # print(type(s))
 # data = pd.DataFrame(s)
 # print(data)
+
+#说明这种报错是由于缺失值
+# s = None
+# import re
+# s = re.split("、", s)
+# print(s)

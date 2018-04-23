@@ -7,6 +7,7 @@ import jieba.posseg as pseg
 
 def get_data():
     data = pd.read_csv("data_treat.csv")
+    data.fillna("missing")
     print(data.info())
     length = data.shape[0]
     print(length)
@@ -43,7 +44,7 @@ class feature_to_vector:
         return max_length
 
     def feature_to_vector(self):
-        feature_list = ["Taste", "Type", "Function", "Effect"]
+        feature_list = ["Taste", "Type"]
         label_encoder = LabelEncoder()
         onehot_encoder = OneHotEncoder(sparse=False)
         onehot_encoded_all = []
