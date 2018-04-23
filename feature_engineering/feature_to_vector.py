@@ -7,9 +7,9 @@ import jieba.posseg as pseg
 
 def get_data():
     data = pd.read_csv("data_treat.csv")
-    # print(data.info())
+    print(data.info())
     length = data.shape[0]
-    # print(length)
+    print(length)
 
     for i in range(length):
         data["Taste"].loc[i] = re.split("、", data["Taste"].loc[i])
