@@ -313,9 +313,9 @@ class word_cut:
             self.data["Effect"].loc[i] = re.sub(pattern_string, "", self.data["Effect"].loc[i])
             #清理遗留的符号
             self.data["Function"].loc[i] = re.sub("、{2,}", "、", self.data["Function"].loc[i])
-            self.data["Function"].loc[i] = re.sub("(,、|、,)", "、", self.data["Function"].loc[i])
+            self.data["Function"].loc[i] = re.sub("^\、|\、$", "", self.data["Function"].loc[i])
             self.data["Effect"].loc[i] = re.sub("、{2,}", "、", self.data["Effect"].loc[i])
-            self.data["Effect"].loc[i] = re.sub("(,、|、,)", "、", self.data["Function"].loc[i])
+            self.data["Effect"].loc[i] = re.sub("^\、|\、$", "", self.data["Effect"].loc[i])
 
 
 if __name__ == "__main__":
