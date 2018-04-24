@@ -44,7 +44,7 @@ class feature_to_vector:
         return max_length
 
     def feature_to_vector(self):
-        feature_list = ["Taste", "Type"]
+        feature_list = ["Taste", "Type", "Function", "Effect"]
         label_encoder = LabelEncoder()
         onehot_encoder = OneHotEncoder(sparse=False)
         onehot_encoded_all = []
