@@ -263,21 +263,21 @@ class word_cut:
     def data_analyse(self):
         print("结果数据处理")
         # pass
-        # print("========2字词数量=========：", len(self.set2))
-        # for i in self.set2:
-        #     print(i, self.set2[i])
-        # print("========被拆分的3字词数量==========：", len(self.set3_true))
-        # for i in self.set3_true:
-        #     print(i, self.set3_true[i])
-        # print("============未被拆分的3字词数量=========：", len(self.set3_false))
-        # for i in self.set3_false:
-        #     print(i, self.set3_false[i])
-        # print("=========被拆分的4字词数量============：", len(self.set4_true))
-        # for i in self.set4_true:
-        #     print(i, self.set4_true[i])
-        # print("=========未被拆分的4字词数量===========：", len(self.set4_false))
-        # for i in self.set4_false:
-        #     print(i, self.set4_false[i])
+        print("========2字词数量=========：", len(self.set2))
+        for i in self.set2:
+            print(i, self.set2[i])
+        print("========被拆分的3字词数量==========：", len(self.set3_true))
+        for i in self.set3_true:
+            print(i, self.set3_true[i])
+        print("============未被拆分的3字词数量=========：", len(self.set3_false))
+        for i in self.set3_false:
+            print(i, self.set3_false[i])
+        print("=========被拆分的4字词数量============：", len(self.set4_true))
+        for i in self.set4_true:
+            print(i, self.set4_true[i])
+        print("=========未被拆分的4字词数量===========：", len(self.set4_false))
+        for i in self.set4_false:
+            print(i, self.set4_false[i])
 
         #各字典按照值的大小进行排序得到相应元祖，然后转换为DataFrame并导出到CSV，最后绘图
         # self.set2 = sorted(self.set2.items(), key=lambda item:item[1], reverse = True)
@@ -345,6 +345,6 @@ if __name__ == "__main__":
     word_cut.data_analyse()
     # 数据清理，清理主治和功效中词频过低的词
     word_cut.word_clean()
-    # word_cut.list_to_str() #如果结果又是列表，则需要再次转换为字符串
+    # 数据清理后再次进行数据分析，需要重新对data_treat进行读取和记录
     # 结果导出
     data.to_csv("data_treat.csv", encoding="utf-8")
