@@ -43,31 +43,32 @@ from sklearn.decomposition import PCA
 # print(pca.n_components_)
 
 #对100维数据进行测试
-# X, y = make_blobs(n_samples=10000, n_features=100, centers=10,
-#                   cluster_std=0.5, random_state = 8)
-# fig = plt.figure()
-# ax = Axes3D(fig, rect=[0, 0, 1, 1], elev=30, azim=20)
-# plt.scatter(X[:, 0], X[:, 1], X[:, 2], marker="o")
-# plt.show()
-# #先不降维，对数据进行投影，并查看方差分布
-# pca = PCA(n_components=100)
-# pca.fit(X)
-# print(pca.explained_variance_ratio_)    #各主成分的方差值，越大越是重要的主成分
-# print(pca.explained_variance_)  #各成分的方差值占总方差值，越大越是重要的主成分
-# #降维后，再次查看方差分布
-# pca = PCA(n_components=10)
-# pca.fit(X)
-# print(pca.explained_variance_ratio_)
-# print(pca.explained_variance_)
-# #对比两次方差分布，三维投影到二维后，放弃了方差值最小的第三维
-# #指定降维后的主成分方差和的比例
-# pca = PCA(n_components=0.95)
-# pca.fit(X)
-# print(pca.explained_variance_ratio_)
-# print(pca.explained_variance_)
-# print(pca.n_components_)    #第一个维度的方差比例高达98%，只选择第一维即可以满足05%的阈值
-# pca = PCA(n_components=0.99)
-# pca.fit(X)
-# print(pca.explained_variance_ratio_)
-# print(pca.explained_variance_)
-# print(pca.n_components_)    #前两个维度的方差比例加起来才达到99%，所以取前两维度
+X, y = make_blobs(n_samples=10000, n_features=100, centers=10,
+                  cluster_std=0.5, random_state = 8)
+fig = plt.figure()
+ax = Axes3D(fig, rect=[0, 0, 1, 1], elev=30, azim=20)
+plt.scatter(X[:, 0], X[:, 1], X[:, 2], marker="o")
+plt.show()
+#先不降维，对数据进行投影，并查看方差分布
+pca = PCA(n_components=100)
+print(type(X))
+pca.fit(X)
+print(pca.explained_variance_ratio_)    #各主成分的方差值，越大越是重要的主成分
+print(pca.explained_variance_)  #各成分的方差值占总方差值，越大越是重要的主成分
+#降维后，再次查看方差分布
+pca = PCA(n_components=10)
+pca.fit(X)
+print(pca.explained_variance_ratio_)
+print(pca.explained_variance_)
+#对比两次方差分布，三维投影到二维后，放弃了方差值最小的第三维
+#指定降维后的主成分方差和的比例
+pca = PCA(n_components=0.95)
+pca.fit(X)
+print(pca.explained_variance_ratio_)
+print(pca.explained_variance_)
+print(pca.n_components_)    #第一个维度的方差比例高达98%，只选择第一维即可以满足05%的阈值
+pca = PCA(n_components=0.99)
+pca.fit(X)
+print(pca.explained_variance_ratio_)
+print(pca.explained_variance_)
+print(pca.n_components_)    #前两个维度的方差比例加起来才达到99%，所以取前两维度
