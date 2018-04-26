@@ -52,6 +52,7 @@ plt.show()
 #先不降维，对数据进行投影，并查看方差分布
 pca = PCA(n_components=100)
 print(type(X))
+print(X.shape)
 pca.fit(X)
 print(pca.explained_variance_ratio_)    #各主成分的方差值，越大越是重要的主成分
 print(pca.explained_variance_)  #各成分的方差值占总方差值，越大越是重要的主成分
