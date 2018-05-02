@@ -7,20 +7,19 @@ import jieba.posseg as pseg
 
 def get_data():
     data = pd.read_csv("data_treat.csv")
-    data.fillna("missing")
     print(data.info())
     length = data.shape[0]
-    print(length)
+    # print(length)
 
     for i in range(length):
         data["Taste"].loc[i] = re.split("、", data["Taste"].loc[i])
         data["Type"].loc[i] = re.split("、", data["Type"].loc[i])
-        data["Function"].loc[i] = re.split("、", data["Function"].loc[i])
         data["Effect"].loc[i] = re.split("、", data["Effect"].loc[i])
 
     return data, length
 
-class feature_to_vector:
+#保留特征序列的向量化方法,只有方剂的药物组成要用到
+class feature_to_vector_seq:
     def __init__(self, data, length):
         self.data = data
         self.length = length
@@ -44,7 +43,7 @@ class feature_to_vector:
         return max_length
 
     def feature_to_vector(self):
-        feature_list = ["Taste", "Type", "Function", "Effect"]
+        feature_list = ["Taste", "Type", "Effect"]
         label_encoder = LabelEncoder()
         onehot_encoder = OneHotEncoder(sparse=False)
         onehot_encoded_all = []
@@ -61,12 +60,7 @@ class feature_to_vector:
             integer_encoded = label_encoder.fit_transform(d)
             #转换成整数编码后按照max_length reshape成每个药物的特征数组
             integer_encoded = integer_encoded.reshape(-1, max_length)
-            #特征值排序,避免相同特征下排序不同的影响
-            sorted_integer_encoded = []
-            for i in integer_encoded:
-                j = sorted(i)
-                sorted_integer_encoded.append(j)
-            onehot_encoded = onehot_encoder.fit_transform(sorted_integer_encoded)
+            onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
             # print(onehot_encoded)
             # print(type(onehot_encoded))
             # print(np.shape(onehot_encoded))
@@ -91,10 +85,18 @@ class feature_to_vector:
     def data_to_pandas(self, data):
         data = pd.DataFrame(data)
         print(data)
-        data.to_csv("feature_vector.csv")
+        data.to_csv("feature_vector_seq.csv")
+
+#不保留特征序列的向量化
+class feature_to_vector:
+    pass
 
 if __name__ == "__main__":
     data, length = get_data()
-    feature_to_vector = feature_to_vector(data, length)
-    onehot_encoded_all_joint = feature_to_vector.feature_to_vector()
-    feature_to_vector.data_to_pandas(onehot_encoded_all_joint)
+
+    #保留特征序列的向量化
+    # feature_to_vector_seq = feature_to_vector_seq(data, length)
+    # onehot_encoded_all_joint = feature_to_vector_seq.feature_to_vector()
+    # feature_to_vector_seq.data_to_pandas(onehot_encoded_all_joint)
+
+    #不保留特征序列的向量化
