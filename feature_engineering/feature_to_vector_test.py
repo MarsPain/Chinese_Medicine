@@ -79,3 +79,14 @@
 # import re
 # s = re.split("、", s)
 # print(s)
+
+import numpy as np
+# s = np.zeros(10)
+# print(s)
+# s[1] = 1
+# print(s)
+
+s = np.arange(15).reshape(3, 5)
+print(s)
+index = np.argmax(s[0])
+print(index)
