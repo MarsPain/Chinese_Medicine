@@ -86,7 +86,16 @@ import numpy as np
 # s[1] = 1
 # print(s)
 
-s = np.arange(15).reshape(3, 5)
-print(s)
-index = np.argmax(s[0])
-print(index)
+# s = np.arange(15).reshape(3, 5)
+# print(s)
+# index = np.argmax(s[0])
+# print(index)
+
+# def Test():
+#     s = []
+#     def test():
+#         for i in range(5):
+#             s.append(i)
+#     test()
+#     print(s)
+# Test()
