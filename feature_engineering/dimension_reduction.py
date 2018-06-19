@@ -27,6 +27,13 @@ def pca(feature_vector_array):
 
     return feature_vector_array_reduction
 
+    #将得到的特征向量矩阵转换成pandas的DataFrame格式并导出到CSV文件
+def data_to_pandas(data):
+    data = pd.DataFrame(data)
+    # print(data)
+    data.to_csv("feature_vector_pca.csv")
+
 if __name__ == "__main__":
     feature_vector_list = get_data()
     feature_vector_array_reduction = pca(feature_vector_list)
+    data_to_pandas(feature_vector_array_reduction)
