@@ -174,13 +174,13 @@ class feature_to_vector_2:
     def __init__(self, data, length):
         self.data = data
         self.length = length
+        self.feature_name = ["Taste", "Type", "Effect"]
 
     def feature_to_id(self):
         #获取所有样本的所有特征
         feature_all = []
-        feature_name = ["Taste", "Type", "Effect"]
         for i in range(self.length):
-            for f in feature_name:
+            for f in self.feature_name:
                 feature_all.append(data[f][i])
         # print(np.asarray(feature_all).shape)
         #将所有特征转换为字典，key为特征名，value为出现次数
@@ -197,6 +197,24 @@ class feature_to_vector_2:
         # print(feature_to_id)
         return feature_to_id
 
+    def feature_to_vector(self):
+        feature_to_id = self.feature_to_id()
+        feature_length = len(feature_to_id)
+        # print(feature_length)
+        feature_vector = np.zeros((self.length, feature_length))
+        # print(feature_to_vector)
+        for i in range(self.length):
+            for f in self.feature_name:
+                for j in self.data[f].loc[i]:
+                    # print(j)
+                    feature_vector[i][feature_to_id[j]] = 1
+        return feature_vector
+
+    def data_to_pandas(self):
+        feature_vector = self.feature_to_vector()
+        data = pd.DataFrame(feature_vector)
+        data.to_csv("feature_vector.csv")
+
 if __name__ == "__main__":
     data, length = get_data()
 
@@ -212,4 +230,4 @@ if __name__ == "__main__":
 
     # 特征one-hot向量化（不保留序列特征）
     feature_to_vector_2 = feature_to_vector_2(data, length)
-    feature_to_vector_2.feature_dict()
+    feature_to_vector_2.data_to_pandas()
