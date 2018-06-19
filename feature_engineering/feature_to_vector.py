@@ -191,7 +191,7 @@ class feature_to_vector_2:
         # print(feature_dict)
         #根据特征字典feature_dict创建特征映射字典
         feature_dict_sorted = sorted(feature_dict.items(), key=lambda x: (-x[1], x[0])) #根据特征出现频次进行排序
-        # print(feature_dict_sorted)
+        # print(feature_dict_sorted, len(feature_dict_sorted))
         id_to_feature = {i: v[0] for i, v in enumerate(feature_dict_sorted)}  #id（根据词频排序从0开始）到word
         feature_to_id = {v: k for k, v in id_to_feature.items()}  #反转映射
         # print(feature_to_id)
