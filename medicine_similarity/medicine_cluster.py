@@ -14,15 +14,15 @@ def get_data(filename):
     return data
 
 def cluster_kmodes():
-    data = get_data("feature_vector.csv")
-    kmodes = KModes(n_clusters=30, init="Huang", n_init=10, verbose=1)
+    data = get_data("../data/feature_vector.csv")
+    kmodes = KModes(n_clusters=20, init="Huang", n_init=10, verbose=1)
     clusters = kmodes.fit_predict(data)
     print(clusters) #输出每个样本的类别
     print(kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
 
 def cluster_kmeans():
-    data = get_data("feature_vector_pca.csv")
-    kmeans = KMeans(n_clusters=30)
+    data = get_data("../data/feature_vector_pca.csv")
+    kmeans = KMeans(n_clusters=20)
     clusters = kmeans.fit_predict(data)
     print(kmeans.inertia_)
     print(clusters)

@@ -174,7 +174,7 @@ class feature_to_vector_2:
     def __init__(self, data, length):
         self.data = data
         self.length = length
-        self.feature_name = ["Taste", "Type", "Effect"]
+        self.feature_name = ["Taste", "Type"]
 
     def feature_to_id(self):
         #获取所有样本的所有特征
@@ -213,7 +213,7 @@ class feature_to_vector_2:
     def data_to_pandas(self):
         feature_vector = self.feature_to_vector()
         data = pd.DataFrame(feature_vector)
-        data.to_csv("feature_vector.csv")
+        data.to_csv("../data/feature_vector.csv")
 
 if __name__ == "__main__":
     data, length = get_data()

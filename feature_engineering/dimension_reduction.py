@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.decomposition import PCA
 
 def get_data():
-    data = pd.read_csv("feature_vector.csv")
+    data = pd.read_csv("../data/feature_vector.csv")
     print(data.info())
     # print(data)
     length = data.shape[0]
@@ -31,7 +31,7 @@ def pca(feature_vector_array):
 def data_to_pandas(data):
     data = pd.DataFrame(data)
     # print(data)
-    data.to_csv("feature_vector_pca.csv")
+    data.to_csv("../data/feature_vector_pca.csv")
 
 if __name__ == "__main__":
     feature_vector_list = get_data()
