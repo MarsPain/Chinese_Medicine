@@ -13,21 +13,24 @@ def get_data(filename):
     # print(data, data.shape)
     return data
 
-def cluster_kmodes():
+#kmodes聚类方法，处理离散的one-hot特征向量
+def cluster_kmodes(n_clusters):
     data = get_data("../data/feature_vector.csv")
-    kmodes = KModes(n_clusters=20, init="Huang", n_init=10, verbose=1)
+    kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=10, verbose=1)
     clusters = kmodes.fit_predict(data)
-    print(clusters) #输出每个样本的类别
-    print(kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
+    print("每个样本点所属类别索引", clusters) #输出每个样本的类别
+    print("簇中心",kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
 
-def cluster_kmeans():
+#kmeans聚类方法，处理经过PCA处理的特征向量
+def cluster_kmeans(n_clusters):
     data = get_data("../data/feature_vector_pca.csv")
-    kmeans = KMeans(n_clusters=20)
+    kmeans = KMeans(n_clusters=n_clusters)
     clusters = kmeans.fit_predict(data)
-    print(kmeans.inertia_)
-    print(clusters)
-    print(kmeans.cluster_centers_)
+    print("聚类性能", kmeans.inertia_)
+    print("每个样本点所属类别索引", clusters)
+    print("簇中心", kmeans.cluster_centers_)
 
 if __name__ == "__main__":
-    # cluster_kmodes()
-    cluster_kmeans()
+    n_clusters = 10
+    # cluster_kmodes(n_clusters)
+    cluster_kmeans(n_clusters)
