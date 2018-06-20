@@ -15,3 +15,15 @@ import pandas as pd
 # km = KModes(n_clusters=20, init="Huang", n_init=5, verbose=1)
 # clusters = km.fit_predict(data)
 # print(km.cluster_centroids_)
+#高维数据可视化
+# data = np.random.randint(0, 255, size=[40, 40, 40])
+# print("data", data)
+# x, y, z = data[0], data[1], data[2]
+# print("x", x, "y", y, "z", z)
+# ax = plt.subplot(111, projection='3d')  # 创建一个三维的绘图工程
+# #  将数据点分成三部分画，在颜色上有区分度
+# ax.scatter(x, y, z, c='y')  # 绘制数据点，每一个轴坐标可以是同样长度的数组
+# ax.set_zlabel('Z')  # 坐标轴
+# ax.set_ylabel('Y')
+# ax.set_xlabel('X')
+# plt.show()
