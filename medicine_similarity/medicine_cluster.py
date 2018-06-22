@@ -34,6 +34,7 @@ def cluster_kmeans(n_clusters):
     print("聚类性能", kmeans.inertia_)
     print("每个样本点所属类别索引", clusters)
     print("簇中心", kmeans.cluster_centers_)
+    data_labeled_to_csv(clusters)
     visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
@@ -68,14 +69,18 @@ def clusters_label_class(n_clusters, data, clusters):
     for data_labeled_list in data_labeled_lists:
         for data_labeled in data_labeled_list:
             num_count += 1
-    # print("Yes!" if num_count==length else "Error!")
+    # print("Right!" if num_count==length else "Error!")
     return data_labeled_lists
 
+#聚类结果可视化
 def visual_cluster(n_clusters, data, clusters):
     data_labeled_lists = clusters_label_class(n_clusters, data, clusters)
     length = len(data[0])
     x_length, y_length, z_length = length//3, 2*(length//3), 3*(length//3)
-    colors = ['b','g','r','k','c','m','y','#e24fff','#524C90','#845868']
+    colors = ['b','g','r','k','c','m','y','aliceblue','antiquewhite','aqua','aquamarine','azure',
+              'beige','bisque','black','blanchedalmond','blueviolet','brown','burlywood','cadetblue',
+              'chartreuse','chocolate','coral','cornflowerblue','cornsilk','crimson','cyan','darkblue',
+              'darkcyan','darkgoldenrod','darkgray','darkgreen','darkkhaki','darkmagenta']
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     for i in range(n_clusters):
@@ -85,7 +90,21 @@ def visual_cluster(n_clusters, data, clusters):
         ax.scatter(x, y, z, marker="o", c=colors[i])
     plt.show()
 
+#将每个样本的标签合并到原始data中、根据label重新排序，再输出到csv中
+def data_labeled_to_csv(clusters):
+    data = pd.read_csv("../feature_engineering/data_all.csv", index_col=0)
+    # print(data.info())
+    data.insert(1, "Label", None)
+    length = data.shape[0]
+    #验证长度是否对齐
+    # length_test = len(clusters)
+    # print("Right!" if length==length_test else "Error!")
+    for i in range(length):
+        data["Label"][i] = clusters[i]
+    data = data.sort_values(by='Label',ascending=True) #
+    data.to_csv("data_labeld.csv", index=False)
+
 if __name__ == "__main__":
-    n_clusters = 10
+    n_clusters = 30
     # cluster_kmodes(n_clusters)
     cluster_kmeans(n_clusters)

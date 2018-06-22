@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/feature_engineering/data_treat.csv" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/feature_engineering/medicine_init.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/medicine_similarity/data_labeld.csv" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
