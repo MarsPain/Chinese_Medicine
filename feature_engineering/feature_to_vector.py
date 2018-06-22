@@ -6,7 +6,7 @@ import numpy as np
 import jieba.posseg as pseg
 
 def get_data():
-    data = pd.read_csv("data_treat.csv")
+    data = pd.read_csv("data_all.csv")
     print(data.info())
     length = data.shape[0]
     # print(length)

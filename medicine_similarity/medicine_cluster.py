@@ -21,8 +21,9 @@ def cluster_kmodes(n_clusters):
     # visual_data(data)
     kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=10, verbose=1)
     clusters = kmodes.fit_predict(data)
-    # print("每个样本点所属类别索引", clusters) #输出每个样本的类别
-    # print("簇中心",kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
+    print("每个样本点所属类别索引", clusters) #输出每个样本的类别
+    print("簇中心",kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
+    visual_cluster(n_clusters, data, clusters)
 
 #kmeans聚类方法，处理经过PCA处理的特征向量
 def cluster_kmeans(n_clusters):
@@ -30,9 +31,9 @@ def cluster_kmeans(n_clusters):
     # visual_data(data)
     kmeans = KMeans(n_clusters=n_clusters)
     clusters = kmeans.fit_predict(data)
-    # print("聚类性能", kmeans.inertia_)
-    # print("每个样本点所属类别索引", clusters)
-    # print("簇中心", kmeans.cluster_centers_)
+    print("聚类性能", kmeans.inertia_)
+    print("每个样本点所属类别索引", clusters)
+    print("簇中心", kmeans.cluster_centers_)
     visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
@@ -61,7 +62,7 @@ def clusters_label_class(n_clusters, data, clusters):
     for i in range(n_clusters):
         data_labeled_lists[i] = np.asarray(data_labeled_lists[i])
     data_labeled_lists = np.asarray(data_labeled_lists)
-    print(data_labeled_lists)
+    # print(data_labeled_lists)
     #验证是否所有样本均归类
     num_count = 0
     for data_labeled_list in data_labeled_lists:
