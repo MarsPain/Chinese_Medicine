@@ -1,10 +1,11 @@
 import numpy as np
 from kmodes.kmodes import KModes
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, Birch
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn import metrics
 
 def get_data(filename):
     data = pd.read_csv(filename)
@@ -21,6 +22,7 @@ def cluster_kmodes(n_clusters):
     # visual_data(data)
     kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=10, verbose=1)
     clusters = kmodes.fit_predict(data)
+    print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters) #输出每个样本的类别
     print("簇中心",kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
     data_labeled_to_csv(clusters, "data_labeld_kmodes.csv")
@@ -33,10 +35,21 @@ def cluster_kmeans(n_clusters):
     kmeans = KMeans(n_clusters=n_clusters)
     clusters = kmeans.fit_predict(data)
     print("聚类性能", kmeans.inertia_)
+    print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters)
     print("簇中心", kmeans.cluster_centers_)
     data_labeled_to_csv(clusters, "data_labeld_kmeans.csv")
     # visual_cluster(n_clusters, data, clusters)
+
+def cluster_birch(n_clusters):
+    data = get_data("../data/feature_vector_pca.csv")
+    birch = Birch(n_clusters=n_clusters)
+    clusters = birch.fit_predict(data)
+    print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
+    print("每个样本点所属类别索引", clusters)
+    # print("簇中心", birch.cluster_centers_)
+    data_labeled_to_csv(clusters, "data_labeld_birch.csv")
+    visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
     length = len(data[0])
@@ -108,4 +121,5 @@ def data_labeled_to_csv(clusters,filename):
 if __name__ == "__main__":
     n_clusters = 30
     # cluster_kmodes(n_clusters)
-    cluster_kmeans(n_clusters)
+    # cluster_kmeans(n_clusters)
+    cluster_birch(n_clusters)
