@@ -53,7 +53,8 @@ def cluster_birch(n_clusters):
 
 def cluster_SpectralClustering(n_clusters):
     data = get_data("../data/feature_vector_pca.csv")
-    spectral = SpectralClustering(n_clusters=n_clusters, gamma=0.1)
+    opti_gamma = opti_para_select(SpectralClustering, data)
+    spectral = SpectralClustering(n_clusters=n_clusters, gamma=opti_gamma)
     clusters = spectral.fit_predict(data)
     #遍历超参以调参
     # for index, gamma in enumerate((0.01,0.1,1,10)):
@@ -63,7 +64,7 @@ def cluster_SpectralClustering(n_clusters):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters)
     data_labeled_to_csv(clusters, "data_labeld_birch.csv")
-    visual_cluster(n_clusters, data, clusters)
+    # visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
     length = len(data[0])
@@ -131,6 +132,20 @@ def data_labeled_to_csv(clusters,filename):
         data["Label"][i] = clusters[i]
     data = data.sort_values(by='Label',ascending=True) #sort_value是返回一个已排序的对象，而不是原地进行修改！
     data.to_csv(filename, index=False)
+
+def opti_para_select(cluster_name, data):
+    if cluster_name == SpectralClustering:
+        max_score = 0
+        opti_gamma, opti_n_clusters = 0, 0
+        for gamma in (0.01,0.1,1):
+            for n_clusters in (15,20,25,30):
+                clusters = SpectralClustering(n_clusters=n_clusters, gamma=gamma).fit_predict(data)
+                score = metrics.calinski_harabaz_score(data, clusters)
+                # print("Calinski-Harabasz Score with gamma=", gamma, "n_clusters=", n_clusters,"score:", score)
+                if max_score < score:
+                    max_score = score
+                    opti_gamma, opti_n_clusters = gamma, n_clusters
+        return opti_gamma
 
 if __name__ == "__main__":
     n_clusters = 15
