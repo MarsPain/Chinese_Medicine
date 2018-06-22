@@ -1,13 +1,22 @@
 import numpy as np
 from kmodes.kmodes import KModes
 import pandas as pd
+from sklearn.cluster import KMeans
 
 #生成随机数据
 # data = np.random.choice(20, (100, 10))
+# data = [[0,1,0],[0,1,0],[0,1,0],[0,1,0],[0,1,0],[0,1,0],
+#         [1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],
+#         [0,0,1],[0,0,1],[0,0,1],[0,0,1],[0,0,1],[0,0,1],[0,0,1]]
 # print(data)
-# km = KModes(n_clusters=4, init="Huang", n_init=5, verbose=1)
+# km = KModes(n_clusters=3, init="Huang", n_init=5, verbose=1)
 # clusters = km.fit_predict(data)
 # print(km.cluster_centroids_)
+# kmeans = KMeans(n_clusters=3)
+# clusters = kmeans.fit_predict(data)
+# print("聚类性能", kmeans.inertia_)
+# print("每个样本点所属类别索引", clusters)
+# print("簇中心", kmeans.cluster_centers_)
 #中药数据
 # data = pd.read_csv("feature_vector.csv")
 # data = np.asarray(data)

@@ -23,7 +23,8 @@ def cluster_kmodes(n_clusters):
     clusters = kmodes.fit_predict(data)
     print("每个样本点所属类别索引", clusters) #输出每个样本的类别
     print("簇中心",kmodes.cluster_centroids_)    #输出聚类结束后的簇中心
-    visual_cluster(n_clusters, data, clusters)
+    data_labeled_to_csv(clusters, "data_labeld_kmodes.csv")
+    # visual_cluster(n_clusters, data, clusters)
 
 #kmeans聚类方法，处理经过PCA处理的特征向量
 def cluster_kmeans(n_clusters):
@@ -34,8 +35,8 @@ def cluster_kmeans(n_clusters):
     print("聚类性能", kmeans.inertia_)
     print("每个样本点所属类别索引", clusters)
     print("簇中心", kmeans.cluster_centers_)
-    data_labeled_to_csv(clusters)
-    visual_cluster(n_clusters, data, clusters)
+    data_labeled_to_csv(clusters, "data_labeld_kmeans.csv")
+    # visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
     length = len(data[0])
@@ -91,7 +92,7 @@ def visual_cluster(n_clusters, data, clusters):
     plt.show()
 
 #将每个样本的标签合并到原始data中、根据label重新排序，再输出到csv中
-def data_labeled_to_csv(clusters):
+def data_labeled_to_csv(clusters,filename):
     data = pd.read_csv("../feature_engineering/data_all.csv", index_col=0)
     # print(data.info())
     data.insert(1, "Label", None)
@@ -101,8 +102,8 @@ def data_labeled_to_csv(clusters):
     # print("Right!" if length==length_test else "Error!")
     for i in range(length):
         data["Label"][i] = clusters[i]
-    data = data.sort_values(by='Label',ascending=True) #
-    data.to_csv("data_labeld.csv", index=False)
+    data = data.sort_values(by='Label',ascending=True) #sort_value是返回一个已排序的对象，而不是原地进行修改！
+    data.to_csv(filename, index=False)
 
 if __name__ == "__main__":
     n_clusters = 30
