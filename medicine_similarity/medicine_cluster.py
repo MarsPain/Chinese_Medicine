@@ -43,13 +43,13 @@ def cluster_kmeans(n_clusters):
 
 def cluster_birch(n_clusters):
     data = get_data("../data/feature_vector_pca.csv")
-    birch = Birch(n_clusters=n_clusters)
+    birch = Birch(n_clusters=n_clusters, threshold=0.4, branching_factor=50)
     clusters = birch.fit_predict(data)
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters)
     # print("簇中心", birch.cluster_centers_)
     data_labeled_to_csv(clusters, "data_labeld_birch.csv")
-    visual_cluster(n_clusters, data, clusters)
+    # visual_cluster(n_clusters, data, clusters)
 
 def visual_data(data):
     length = len(data[0])
@@ -119,7 +119,7 @@ def data_labeled_to_csv(clusters,filename):
     data.to_csv(filename, index=False)
 
 if __name__ == "__main__":
-    n_clusters = 30
+    n_clusters = 25
     # cluster_kmodes(n_clusters)
     # cluster_kmeans(n_clusters)
     cluster_birch(n_clusters)
