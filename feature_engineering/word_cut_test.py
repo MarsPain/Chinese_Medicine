@@ -334,3 +334,10 @@ import re
 # s = "、解表、散寒、止痛、"
 # l= re.split("、", s)
 # print(l)
+
+def a():
+    param = 'b'  # 这里就会出现这样的提示，因为在main定义的param对象被重新指定了新的值
+    print(param)
+if __name__ == '__main__':
+    param = 'a'
+    a()
