@@ -3,7 +3,7 @@ from kmodes.kmodes import KModes
 import pandas as pd
 from sklearn.cluster import KMeans
 
-#生成随机数据
+# 生成随机数据
 # data = np.random.choice(20, (100, 10))
 # data = [[0,1,0],[0,1,0],[0,1,0],[0,1,0],[0,1,0],[0,1,0],
 #         [1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],[1,0,0],
@@ -17,14 +17,14 @@ from sklearn.cluster import KMeans
 # print("聚类性能", kmeans.inertia_)
 # print("每个样本点所属类别索引", clusters)
 # print("簇中心", kmeans.cluster_centers_)
-#中药数据
+# 中药数据
 # data = pd.read_csv("feature_vector.csv")
 # data = np.asarray(data)
 # data = data[:,1:]
 # km = KModes(n_clusters=20, init="Huang", n_init=5, verbose=1)
 # clusters = km.fit_predict(data)
 # print(km.cluster_centroids_)
-#高维数据可视化
+# 高维数据可视化
 # data = np.random.randint(0, 255, size=[40, 40, 40])
 # print("data", data)
 # x, y, z = data[0], data[1], data[2]
