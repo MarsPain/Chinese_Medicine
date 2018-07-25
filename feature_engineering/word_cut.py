@@ -369,6 +369,7 @@ if __name__ == "__main__":
     data_treat, length_treat = get_data()
     # data.to_csv("data_treat.csv", encoding="utf-8")
 
+    # 实例化的类能够直接调用上面的data_treat和length_treat，所以要注意类内部参数的调用，之前参数调用出错了，上一次commit就是解决该问题的
     # 创建对性味和归经的分词类
     word_cut_Taste = WordCutTaste(data_treat, length_treat)
     # 对性味和归经部分的数据进行清洗
