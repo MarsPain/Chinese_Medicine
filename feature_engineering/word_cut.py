@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import jieba.posseg as pseg
+import numpy as np
 
 
 def get_data():
@@ -367,7 +368,19 @@ class WordCut:
         function_data = self.data["Function"]
         # print(function_data)
         function_data.to_csv("function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
-
+        func_dict = {}
+        for i in range(self.length):
+            word_list = re.split("、", function_data.loc[i])
+            for word in word_list:
+                func_dict[word] = func_dict[word]+1 if word in func_dict else 1
+        print(func_dict)
+        func_list = []
+        for word in func_dict.keys():
+            func_list.append(word)
+        with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
+            for word in func_list:
+                if word:
+                    f.write(word+"\n")
 
 if __name__ == "__main__":
     # 读取数据并进行预处理
