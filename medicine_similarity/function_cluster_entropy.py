@@ -135,12 +135,18 @@ class ClusterEntropy:
             group_all.append(group_clean(group_path))
         write_csv(group_name, group_all_path, group_all)
 
+    def cluster_entropy_main(self):
+        """
+        主聚类函数：调用其他函数完成功效的聚类
+        :return:
+        """
+        self.feature_to_vector()
+        self.root_frequency()
+        self.combine_frequency()
+        self.search_relatives()
+        self.cluster()
+        self.group_all()
 
 if __name__ == "__main__":
     Cluster = ClusterEntropy()
-    Cluster.feature_to_vector()
-    Cluster.root_frequency()
-    Cluster.combine_frequency()
-    Cluster.search_relatives()
-    Cluster.cluster()
-    Cluster.group_all()
+    Cluster.cluster_entropy_main()

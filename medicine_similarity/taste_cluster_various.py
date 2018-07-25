@@ -219,11 +219,24 @@ def opti_para_select(cluster_name, data):
         print("max_score:", max_score, "opti_n_clusters:", opti_n_clusters)
 
 
-if __name__ == "__main__":
+def cluster_main():
+    """
+    主聚类函数
+    :return:
+    """
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
     num_clusters = 6
     cluster_kmodes(num_clusters, data_treat)
+
+if __name__ == "__main__":
+    # data_treat = get_data(file_path)
+    # opti_para_select("k_modes", data_treat)
+    # num_clusters = 6
+    # cluster_kmodes(num_clusters, data_treat)
+
     # cluster_kmeans(num_clusters)
     # cluster_birch(num_clusters)
     # cluster_SpectralClustering(num_clusters)
+
+    cluster_main()
