@@ -359,10 +359,15 @@ class WordCut:
             self.data["Effect"].loc[i] = re.sub("^\、|\、$", "", self.data["Effect"].loc[i])
 
     def write_csv(self):
-        self.data.to_csv("data_treat.csv", encoding="utf-8")
+        """
+        对数据输出写入到CSV文件中
+        :return:
+        """
+        self.data.to_csv("data_treat.csv", encoding="utf-8")    # 输出所有经过处理的数据
         function_data = self.data["Function"]
         # print(function_data)
-        function_data.to_csv("function_treat.csv", encoding="utf-8")
+        function_data.to_csv("function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
+
 
 if __name__ == "__main__":
     # 读取数据并进行预处理

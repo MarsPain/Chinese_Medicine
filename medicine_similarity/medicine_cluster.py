@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn import metrics
 
+file_path = "../data/feature_vector.csv"    # 需要进行聚类的数据特征向量
 
-def get_data(filename):
-    data = pd.read_csv(filename)
+
+def get_data(path):
+    data = pd.read_csv(path)
     # print(data.info())
     # print(data)
     data = np.asarray(data)  # DataFrame转array
@@ -18,21 +20,21 @@ def get_data(filename):
     return data
 
 
-def cluster_kmodes(n_clusters):
+def cluster_kmodes(n_clusters, data):
     """
     kmodes聚类方法，处理离散的原始one-hot特征向量
     :param n_clusters:质心数量
+    :param data:需要进行聚类的数据
     :return:
     """
-    data = get_data("../data/feature_vector.csv")
-    # visual_data(data)
+    # visual_data(data)  #可视化原数据
     kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=10, verbose=1)
     clusters = kmodes.fit_predict(data)
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
     # print("簇中心",kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
     data_labeled_to_csv(clusters, "data_labeld_kmodes.csv")
-    # visual_cluster(n_clusters, data, clusters)
+    visual_cluster(n_clusters, data, clusters)
 
 
 def cluster_kmeans(n_clusters):
@@ -69,15 +71,14 @@ def cluster_birch(n_clusters):
     # visual_cluster(n_clusters, data, clusters)
 
 
-def cluster_SpectralClustering(n_clusters):
+def cluster_spectralclustering(n_clusters):
     """
     SpectralClustering聚类算法
     :param n_clusters:质心数量
     :return:
     """
     data = get_data("../data/feature_vector_pca.csv")
-    opti_gamma = opti_para_select(SpectralClustering, data)
-    spectral = SpectralClustering(n_clusters=n_clusters, gamma=opti_gamma)
+    spectral = SpectralClustering(n_clusters=n_clusters, gamma=0.01)
     clusters = spectral.fit_predict(data)
     # 遍历超参以寻找最优参数
     # for index, gamma in enumerate((0.01, 0.1, 1, 10)):
@@ -171,7 +172,7 @@ def data_labeled_to_csv(clusters, filename):
     :param filename:输出的目标文件路径
     :return:
     """
-    data = pd.read_csv("../feature_engineering/data_all.csv", index_col=0)
+    data = pd.read_csv("../feature_engineering/data_treat.csv", index_col=0)
     # print(data.info())
     data.insert(1, "Label", None)
     length = data.shape[0]
@@ -202,11 +203,27 @@ def opti_para_select(cluster_name, data):
                 if max_score < score:
                     max_score = score
                     opti_gamma, opti_n_clusters = gamma, n_clusters
-        return opti_gamma
+        print("max_score:", max_score, "opti_gamma:", opti_gamma, "opti_n_clusters:", opti_n_clusters)
+
+    if cluster_name == "k_modes":
+        max_score = 0
+        opti_n_clusters = 0
+        for n in range(2, 50):
+            kmodes = KModes(n_clusters=n, init="Huang", n_init=10, verbose=1)
+            clusters = kmodes.fit_predict(data)
+            score = metrics.calinski_harabaz_score(data, clusters)
+            print("Calinski-Harabasz Score——", "n_clusters=", n, "score:", score)
+            if max_score < score:
+                max_score = score
+                opti_n_clusters = n
+        print("max_score:", max_score, "opti_n_clusters:", opti_n_clusters)
+
 
 if __name__ == "__main__":
-    num_clusters = 15
-    cluster_kmodes(num_clusters)
+    data_treat = get_data(file_path)
+    # opti_para_select("k_modes", data_treat)
+    num_clusters = 8
+    cluster_kmodes(num_clusters, data_treat)
     # cluster_kmeans(num_clusters)
     # cluster_birch(num_clusters)
     # cluster_SpectralClustering(num_clusters)

@@ -4,9 +4,16 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 
+file_path = "data_treat.csv"    # 需要进行特征向量化的数据
 
-def get_data():
-    data = pd.read_csv("data_all.csv")
+
+def get_data(path):
+    """
+    读取原数据并进行处理
+    :param path:
+    :return:
+    """
+    data = pd.read_csv(path)
     print(data.info())
     length = data.shape[0]
     # print(length)
@@ -14,7 +21,7 @@ def get_data():
     for i in range(length):
         data["Taste"].loc[i] = re.split("、", data["Taste"].loc[i])
         data["Type"].loc[i] = re.split("、", data["Type"].loc[i])
-        data["Effect"].loc[i] = re.split("、", data["Effect"].loc[i])
+        # data["Effect"].loc[i] = re.split("、", data["Effect"].loc[i])
     # print(data)
     return data, length
 
@@ -253,7 +260,7 @@ class FeatureToVector2:
         data.to_csv("../data/feature_vector.csv")
 
 if __name__ == "__main__":
-    data_treat, length_treat = get_data()
+    data_treat, length_treat = get_data(file_path)
 
     # 保留特征序列的向量化
     # feature_to_vector_seq = FeatureToVectorSeq(data, length)
