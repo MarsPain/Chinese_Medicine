@@ -39,15 +39,13 @@ class WordCutTaste:
         self.data = data
         self.length = length
 
-    def word_clean_taste(self, data, length):
+    def word_clean_taste(self):
         """
         对性味部分数据进行清洗和分词
-        :param data:
-        :param length:
         :return:
         """
         for i in range(self.length):
-            list_taste = data["Taste"].loc[i]
+            list_taste = self.data["Taste"].loc[i]
             length2 = len(list_taste)
             for j in range(length2):
                 list_taste[j] = re.sub("性|味", "", list_taste[j])
@@ -56,17 +54,16 @@ class WordCutTaste:
             s = list_taste[0]
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_taste[j])
-            data["Taste"].loc[i] = s
+            self.data["Taste"].loc[i] = s
 
-    def word_clean_type(self, data, length):
+    def word_clean_type(self):
         """
         对归经部分数据进行清洗和分词
-        :param data:
-        :param length:
+        :param self:
         :return:
         """
         for i in range(self.length):
-            list_type = data["Type"].loc[i]
+            list_type = self.data["Type"].loc[i]
             # print(type(list_type))
             length2 = len(list_type)
             for j in range(length2):
@@ -75,7 +72,7 @@ class WordCutTaste:
             s = list_type[0]
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_type[j])
-            data["Type"].loc[i] = s
+            self.data["Type"].loc[i] = s
 
 
 class WordCut:
@@ -106,7 +103,7 @@ class WordCut:
         print("对功用部分进行分词处理")
         # 先建立2字词库
         for i in range(self.length):
-            list_function = data["Function"].loc[i]
+            list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
             for j in range(length2):
                 if len(list_function[j]) == 2:
@@ -115,17 +112,17 @@ class WordCut:
 
         # 对3字词进行处理并建立3字词库
         for i in range(self.length):
-            list_function = data["Function"].loc[i]
+            list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
             for j in range(length2):
                 if len(list_function[j]) == 3:
-                    word= self.word_cut_3(list_function[j])
+                    word = self.word_cut_3(list_function[j])
                     list_function[j] = word
             # print(type(listFunction))
 
         # 对4字词进行处理并建立4字词库
         for i in range(self.length):
-            list_function = data["Function"].loc[i]
+            list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
             for j in range(length2):
                 if len(list_function[j]) == 4:
@@ -140,7 +137,7 @@ class WordCut:
         print("对主治部分进行分词处理")
         # 先建立2字词库
         for i in range(self.length):
-            list_effect = data["Effect"].loc[i]
+            list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
@@ -150,7 +147,7 @@ class WordCut:
 
         # 对3字词进行处理并建立3字词库
         for i in range(self.length):
-            list_effect = data["Effect"].loc[i]
+            list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             for j in range(length2):
                 if len(list_effect[j]) == 3:
@@ -159,7 +156,7 @@ class WordCut:
 
         # 对4字词进行处理并建立4字词库
         for i in range(self.length):
-            list_effect = data["Effect"].loc[i]
+            list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             for j in range(length2):
                 if len(list_effect[j]) == 4:
@@ -283,21 +280,21 @@ class WordCut:
         :return:
         """
         for i in range(self.length):
-            list_function = data["Function"].loc[i]
+            list_function = self.data["Function"].loc[i]
             # print(type(listFunction))
             length2 = len(list_function)
             # print(length2)
             s = list_function[0]
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_function[j])
-            data["Function"].loc[i] = s
+            self.data["Function"].loc[i] = s
         for i in range(self.length):
-            list_effect = data["Effect"].loc[i]
+            list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             s = list_effect[0]
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_effect[j])
-            data["Effect"].loc[i] = s
+            self.data["Effect"].loc[i] = s
 
     def data_analyse(self):
         """
@@ -364,22 +361,22 @@ class WordCut:
     def write_csv(self):
         self.data.to_csv("data_treat.csv", encoding="utf-8")
         function_data = self.data["Function"]
-        print(function_data)
+        # print(function_data)
         function_data.to_csv("function_treat.csv", encoding="utf-8")
 
 if __name__ == "__main__":
     # 读取数据并进行预处理
-    data, length = get_data()
+    data_treat, length_treat = get_data()
     # data.to_csv("data_treat.csv", encoding="utf-8")
 
     # 创建对性味和归经的分词类
-    word_cut_Taste = WordCutTaste(data, length)
+    word_cut_Taste = WordCutTaste(data_treat, length_treat)
     # 对性味和归经部分的数据进行清洗
-    word_cut_Taste.word_clean_taste(data, length)
-    word_cut_Taste.word_clean_type(data, length)
+    word_cut_Taste.word_clean_taste()
+    word_cut_Taste.word_clean_type()
 
     # 创建主治和功效的分词类
-    word_cut = WordCut(data, length)
+    word_cut = WordCut(data_treat, length_treat)
     # 对功用部分进行分词处理
     word_cut.word_cut_function()
     # 对主治部分进行分词处理
