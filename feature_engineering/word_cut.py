@@ -364,13 +364,13 @@ class WordCut:
         对数据输出写入到CSV文件中
         :return:
         """
-        self.data.to_csv("data_treat.csv", encoding="utf-8")    # 输出所有经过处理的数据
+        self.data.to_csv("../data/data_treat.csv", encoding="utf-8")    # 输出所有经过处理的数据
         function_data = self.data["Function"]
         # print(function_data)
-        function_data.to_csv("function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
+        function_data.to_csv("../data/function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
         func_dict = {}
         for i in range(self.length):
-            word_list = re.split("、", function_data.loc[i])
+            word_list = re.split("[；、]", function_data.loc[i])
             for word in word_list:
                 func_dict[word] = func_dict[word]+1 if word in func_dict else 1
         print(func_dict)

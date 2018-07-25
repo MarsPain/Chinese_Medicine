@@ -33,7 +33,7 @@ def cluster_kmodes(n_clusters, data):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
     # print("簇中心",kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
-    data_labeled_to_csv(clusters, "data_labeld_kmodes.csv")
+    data_labeled_to_csv(clusters, "data/data_labeld_kmodes.csv")
     visual_cluster(n_clusters, data, clusters)
 
 
@@ -51,7 +51,7 @@ def cluster_kmeans(n_clusters):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)
     # print("簇中心", kmeans.cluster_centers_)
-    data_labeled_to_csv(clusters, "data_labeld_kmeans.csv")
+    data_labeled_to_csv(clusters, "data/data_labeld_kmeans.csv")
     # visual_cluster(n_clusters, data, clusters)
 
 
@@ -67,7 +67,7 @@ def cluster_birch(n_clusters):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters)
     # print("簇中心", birch.cluster_centers_)
-    data_labeled_to_csv(clusters, "data_labeld_birch.csv")
+    data_labeled_to_csv(clusters, "data/data_labeld_birch.csv")
     # visual_cluster(n_clusters, data, clusters)
 
 
@@ -88,7 +88,7 @@ def cluster_spectralclustering(n_clusters):
     #               metrics.calinski_harabaz_score(data, clusters))
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     print("每个样本点所属类别索引", clusters)
-    data_labeled_to_csv(clusters, "data_labeld_birch.csv")
+    data_labeled_to_csv(clusters, "data/data_labeld_birch.csv")
     # visual_cluster(n_clusters, data, clusters)
 
 
@@ -172,7 +172,7 @@ def data_labeled_to_csv(clusters, filename):
     :param filename:输出的目标文件路径
     :return:
     """
-    data = pd.read_csv("../feature_engineering/data_treat.csv", index_col=0)
+    data = pd.read_csv("../data/data_treat.csv", index_col=0)
     # print(data.info())
     data.insert(1, "Label", None)
     length = data.shape[0]
@@ -222,7 +222,7 @@ def opti_para_select(cluster_name, data):
 if __name__ == "__main__":
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
-    num_clusters = 8
+    num_clusters = 6
     cluster_kmodes(num_clusters, data_treat)
     # cluster_kmeans(num_clusters)
     # cluster_birch(num_clusters)
