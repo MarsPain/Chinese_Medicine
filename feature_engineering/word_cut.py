@@ -374,13 +374,13 @@ class WordCut:
             for word in word_list:
                 func_dict[word] = func_dict[word]+1 if word in func_dict else 1
         print(func_dict)
-        func_list = []
-        for word in func_dict.keys():
-            func_list.append(word)
-        with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
-            for word in func_list:
-                if word:
-                    f.write(word+"\n")
+        # func_list = []
+        # for word in func_dict.keys():
+        #     func_list.append(word)
+        # with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
+        #     for word in func_list:
+        #         if word:
+        #             f.write(word+"\n")
 
 if __name__ == "__main__":
     # 读取数据并进行预处理

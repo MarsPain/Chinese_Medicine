@@ -10,13 +10,13 @@ def get_data(path):
     """
     从中药的原csv文件读取原始数据，并删除缺失数据
     :param path:中药csv文件的路径
-    :return:datafram
+    :return:df:保存全药物数据的DataFrame;series:保存药物功效数据的Series
     """
     df = pd.read_csv(path, encoding='utf8')
     # series = df['symptom']  # 读取症状数据
     series = df['Function']  # 读取功效数据
     series.dropna(inplace=True)  # 删掉nan
-    return series
+    return df, series
 
 
 def root_to_word(path):

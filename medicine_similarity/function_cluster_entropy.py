@@ -7,7 +7,7 @@ from medicine_similarity.data_utils import get_data, root_to_word, word_to_root,
 from medicine_similarity.relatives import calculate_correlation, create_relatives
 from medicine_similarity.cluster import duplicate_removal, del_by_correlation, create_double_set, merge_loop
 
-medicine_path = '../data/data_treat.csv'    # 药物数据的路径
+medicine_path = 'data/data_labeld_kmodes.csv'    # 药物数据的路径（该药物数据已根据性味归经的聚类结果打上标签）
 thesaurus_path = "../data/function_tongyici.txt"  # 功效同义词字典的路径
 correlation_path = 'data/correlation.csv'   # 保存互信息的文件路径
 max_relatives_nums = 8  # 最大的亲友团数量
@@ -23,27 +23,31 @@ class ClusterEntropy:
         self.combine_index = None  # 存储排序后的组合，用词根的索引表示
         self.combine_fre = None  # 存储词根的两两组合出现的频率，同样用于计算互信息
         self.combine_name = None  # 存储用词根名称表示的
-        self.relatives_list = None  # 保存亲友团数量最大时的亲友团
+        self.relatives_list = None  # 保存最大亲友团数量时的亲友团
+        self.group_all_2 = None  # 保存聚类得到的所有功效亲友团
+        self.data = None    # 保存全药物数据的DataFrame
+        self.series = None  # 保存药物功效数据的Series
 
     def feature_to_vector(self):
         """
         创建并初始化ont-hot向量：从csv中读取药物数据，然后将功效特征转换为one-hot向量
         :return:
         """
-        series = get_data(medicine_path)
-        # print("series", series)
+        self.data, self.series = get_data(medicine_path)
+        print("data:", self.data)
+        print("series:", self.series)
         root_2_word = root_to_word(thesaurus_path)  # 获取同义词根到词的映射字典
         # print("root_2_word", len(root_2_word), root_2_word)
         word_2_root = word_to_root(thesaurus_path)     # 获取词到同义词根的映射字典
         # print("word_2_root", len(word_2_root), word_2_root)
         # 创建并初始化一个DataFrame存储one-hot向量，第一行的列索引为词根
-        self.df = pd.DataFrame(np.zeros((len(series), len(root_2_word))), columns=root_2_word.keys())
-        for indexs in series.index:  # series去掉了nan值，index是不连贯的,所以用这种方法遍历
-            item_str = series[indexs]
+        self.df = pd.DataFrame(np.zeros((len(self.series), len(root_2_word))), columns=root_2_word.keys())
+        for indexs in self.series.index:  # series去掉了nan值，index是不连贯的,所以用这种方法遍历
+            item_str = self.series[indexs]
             if item_str == '':
                 continue
             # item_list = item_str.strip().split()  # 针对以空格作为分隔符的症状数据
-            item_list = re.split("、", item_str)  # 针对以“、”作为分隔符的功效数据
+            item_list = re.split("、|；", item_str)  # 针对以“、”作为分隔符的功效数据
             for item in item_list:
                 if item in word_2_root:
                     # 找到每个功效特征词的词根，然后在one-hot向量的相应索引处进行激活
@@ -121,8 +125,7 @@ class ClusterEntropy:
             # 计算信息利用率
             print(max_num, '/', group_num, '=', max_num / group_num)
 
-    @staticmethod
-    def group_all():
+    def group_all(self):
         """
         先将基于不同数量亲友团的聚类结果进行清理、删除被包含在更大团中的团，然后将清洗后的聚类结果进行结合并输出
         :return:
@@ -133,11 +136,17 @@ class ClusterEntropy:
             group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
             group_name.append("group"+str(i))
             group_all.append(group_clean(group_path))
+        # print("group_all:", group_all)
         write_csv(group_name, group_all_path, group_all)
+        self.group_all_2 = []
+        for group_list in group_all:
+            for group in group_list:
+                self.group_all_2.append(group)
+        print("self.group_all_2:", self.group_all_2)
 
     def cluster_entropy_main(self):
         """
-        主聚类函数：调用其他函数完成功效的聚类
+        主聚类函数：调用其他函数进行功效特征的聚类、找到功效的亲友团，然后找到属于每个亲友团的药物，完成最终药物的聚类
         :return:
         """
         self.feature_to_vector()
@@ -146,6 +155,8 @@ class ClusterEntropy:
         self.search_relatives()
         self.cluster()
         self.group_all()
+        function_to_medicine = {}
+        # for
 
 if __name__ == "__main__":
     Cluster = ClusterEntropy()
