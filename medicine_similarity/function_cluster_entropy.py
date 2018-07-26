@@ -108,7 +108,7 @@ class ClusterEntropy:
         :return:
         """
         # print("relatives_list", relatives_list)
-        list_qyt = duplicate_removal(self.relatives_list, self.root_name)   # 去除重复项，但是存在一些问题？
+        list_qyt = duplicate_removal(self.relatives_list, self.root_name)   # 将每个词根的亲友提取出来、组成亲友团
         list_index = word_2_index(self.root_name, list_qyt)  # 使用索引代替列表中的项
         for group_num in range(min_relatives_nums, max_relatives_nums+1):   # 限制亲友团的数量，根据不同的亲友团数量进行聚类
             new_list = cut_by_num(list_index, group_num)    # 对亲友团进行裁剪

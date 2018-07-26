@@ -5,11 +5,13 @@ from medicine_similarity.data_utils import word_2_index, cut_by_num, index_2_wor
 
 def duplicate_removal(relatives_list, root_name):
     """
-    去除重复项，目的在于将每个词根的亲友团提取出来，之前的亲友团依然是以两两组合形式存在的
-    :param relatives_list:
-    :param root_name:
-    :return:
+    提取亲友团：之前的亲友是以词根和亲友的两两组合列表形式存在的，
+    将每个词根的亲友提取出来组成该词根的亲友团列表
+    :param relatives_list:亲友团列表[[[词根1,亲友1], [词根1, 亲友2], ...], [[词根2,亲友1], [词根2, 亲友2], ...], ...]
+    :param root_name:词根列表
+    :return:list_qyt:亲友团列表[[亲友1, 亲友2,...], [亲友1, 亲友2,...],...]
     """
+    # print("relatives_list:", relatives_list)
     list_qyt = []
     for item in relatives_list:
         new2 = []
@@ -21,6 +23,7 @@ def duplicate_removal(relatives_list, root_name):
         if guo_du:
             guo_du.remove(root_name[relatives_list.index(item)])
         list_qyt.append(guo_du)
+    # print("list_qyt:", list_qyt)
     return list_qyt
 
 
