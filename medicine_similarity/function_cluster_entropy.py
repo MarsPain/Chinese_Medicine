@@ -34,8 +34,8 @@ class ClusterEntropy:
         :return:
         """
         self.data, self.series = get_data(medicine_path)
-        print("data:", self.data)
-        print("series:", self.series)
+        # print("data:", self.data)
+        # print("series:", self.series)
         root_2_word = root_to_word(thesaurus_path)  # 获取同义词根到词的映射字典
         # print("root_2_word", len(root_2_word), root_2_word)
         word_2_root = word_to_root(thesaurus_path)     # 获取词到同义词根的映射字典
@@ -138,10 +138,14 @@ class ClusterEntropy:
             group_all.append(group_clean(group_path))
         # print("group_all:", group_all)
         write_csv(group_name, group_all_path, group_all)
-        self.group_all_2 = []
+        group_all_dict = {}  # 记录各个团出现的次数
+        self.group_all_2 = []   # 用于保存所有功效团
         for group_list in group_all:
             for group in group_list:
-                self.group_all_2.append(group)
+                group_all_dict[tuple(group)] = group_all_dict[tuple(group)]+1 if tuple(group) in group_all_dict else 1
+        print("group_all_dict:", group_all_dict)
+        for group in group_all_dict.keys():
+            self.group_all_2.append(group)  # 确保self.group_all_2中不出现重复的团
         print("self.group_all_2:", self.group_all_2)
 
     def cluster_entropy_main(self):
@@ -155,8 +159,23 @@ class ClusterEntropy:
         self.search_relatives()
         self.cluster()
         self.group_all()
-        function_to_medicine = {}
-        # for
+        group_all_2 = self.group_all_2
+        function_to_medicine = {}   # 用于保存功效团到包含该功效团的药物
+        # 预先为每个团创建一个列表作为value，这里要注意，dict的key必须是可哈希的，所以需要使用元祖tuple
+        for group in group_all_2:
+            function_to_medicine[tuple(group)] = []
+        count = 0   # 记录多少个药物能根据功效团进行聚类
+        for index in self.series.index:  # 由于有些缺失值被删除，所以用这种遍历方式比较保险
+            function_list = re.split("、|；", self.series.loc[index])
+            function_set = set(function_list)
+            # print("function_set:", function_set)
+            for group in group_all_2:
+                # 若功效团是药物功效的子集或者药物功效是功效团的子集，则认为该药物属于该功效团
+                if set(group).issubset(function_set) or function_set.issubset(set(group)):
+                    # print(index, group, function_set)
+                    count += 1
+                    function_to_medicine[tuple(group)].append(index)
+        print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
 
 if __name__ == "__main__":
     Cluster = ClusterEntropy()

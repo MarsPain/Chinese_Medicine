@@ -75,7 +75,7 @@ def merge_loop(double_set, root_name, file=None):
         # oldSet为需要继续进行合并操作的团
         print('成员数:', len(list(old_set)[0]))  # oldSet中团的成员数量
         print('个数:', len(old_set))   # oldSet中团的数量
-        print(old_set)
+        # print("old_set", old_set)
         num_list.append(len(list(old_set)[0]))
         count_list.append(len(old_set))
         group_list.append(old_set)
@@ -86,7 +86,7 @@ def merge_loop(double_set, root_name, file=None):
         group_list = index_2_word(root_name, group_list)
         write_csv(['成员数', '个数', '团'], file, [num_list, count_list, group_list])
         save_pickle(file + '.pkl', group_list)
-    print(best_set)
+    # print("best_set", best_set)
     return len(list(best_set)[0]), best_set
 
 
