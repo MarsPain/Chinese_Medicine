@@ -176,6 +176,7 @@ class ClusterEntropy:
                     count += 1
                     function_to_medicine[tuple(group)].append(index)
         print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
+        return function_to_medicine
 
 if __name__ == "__main__":
     Cluster = ClusterEntropy()

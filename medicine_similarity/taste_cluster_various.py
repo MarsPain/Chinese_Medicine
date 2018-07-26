@@ -34,7 +34,7 @@ def cluster_kmodes(n_clusters, data):
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
     # print("簇中心",kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
     data_labeled_to_csv(clusters, "data/data_labeld_kmodes.csv")
-    visual_cluster(n_clusters, data, clusters)
+    # visual_cluster(n_clusters, data, clusters)
 
 
 def cluster_kmeans(n_clusters):
@@ -219,7 +219,7 @@ def opti_para_select(cluster_name, data):
         print("max_score:", max_score, "opti_n_clusters:", opti_n_clusters)
 
 
-def cluster_main():
+def cluster_various_main():
     """
     主聚类函数
     :return:
@@ -239,4 +239,4 @@ if __name__ == "__main__":
     # cluster_birch(num_clusters)
     # cluster_SpectralClustering(num_clusters)
 
-    cluster_main()
+    cluster_various_main()
