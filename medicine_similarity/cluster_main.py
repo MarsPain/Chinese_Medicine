@@ -47,14 +47,17 @@ def search_relatives(function_to_medicine, medicine_index):
     print("function_set:", function_set)
     for group in function_to_medicine.keys():   # 遍历字典中的功效团
         # 若功效团是目标药物功效的子集或者目标药物功效是功效团的子集，则认为该药物属于该功效团，与该功效图案中的药物有相似的可能性
-        if set(group).issubset(function_set) or function_set.issubset(set(group)):
+        # if set(group).issubset(function_set) or function_set.issubset(set(group)):
+        # 若功效团是目标药物功效的子集，则认为该药物属于该功效团，与该功效图案中的药物有相似的可能性
+        if set(group).issubset(function_set):
             medicine_list = function_to_medicine[tuple(group)]  # 获取属于该功效团的药物列表
             # print("medicine_list:", medicine_list)
             # 遍历属于功效团的药物列表，若基于性味归经的聚类结果的标签相同，则认为目标药物和该药物相似
             for i in medicine_list:
                 if data["Label"].loc[i] == medicine_label and i != medicine_index:  # 后面的条件用于排除目标药物
-                    # relatives_list.append(i)  # 添加相似药物的索引
-                    relatives_list.append(data["Name"].loc[i])  # 添加相似药物的名称
+                    relatives_list.append(i)  # 添加相似药物的索引
+                    # relatives_list.append(data["Name"].loc[i])  # 添加相似药物的名称
+    relatives_list = set(relatives_list)    # 去除重复项
     print("relatives_list:", relatives_list)
     return relatives_list
 
@@ -74,7 +77,7 @@ def main(is_cluster):
         with open(function_to_medicine_path, 'rb') as f:
             function_to_medicine_dict = pickle.load(f)   # 加载聚类结果
         print("function_to_medicine:", function_to_medicine_dict)
-        medicine_word = "金银花"   # 目标药物
+        medicine_word = "拳参"   # 目标药物
         medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
         relatives_list = search_relatives(function_to_medicine_dict, medicine)  # 获得药物的相似药物的索引列表
         return relatives_list

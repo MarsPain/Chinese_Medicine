@@ -171,7 +171,9 @@ class ClusterEntropy:
             # print("function_set:", function_set)
             for group in group_all_2:
                 # 若功效团是药物功效的子集或者药物功效是功效团的子集，则认为该药物属于该功效团
-                if set(group).issubset(function_set) or function_set.issubset(set(group)):
+                # if set(group).issubset(function_set) or function_set.issubset(set(group)):
+                # 若功效团是药物功效的子集，则认为该药物属于该功效团
+                if set(group).issubset(function_set):
                     # print(index, group, function_set)
                     count += 1
                     function_to_medicine[tuple(group)].append(index)
