@@ -343,20 +343,32 @@ import re
 #     a()
 
 # 删除标注数据中的词性
-path = "effect_data_all/combine_sentence_annotation_test.txt"
-path_new = "effect_data_all_new/combine_sentence_annotation_test.txt"
-with open(path, "r", encoding="utf-8") as f:
-    string_new = ""
-    for line in f.readlines():
-        word_list = re.split("    ", line)
-        # print(word_list)
-        if len(line.strip()) > 0:
-            string_temp = word_list[0] + "\t" + word_list[-1]
-            string_new = string_new + string_temp
-        else:
-            string_new += "\n"
-    # print(string_new)
-    with open(path_new, "w", encoding="utf-8") as f_new:
-        f_new.write(string_new)
-        with open(path_new, "a", encoding="utf-8") as f_new:
-            f_new.write(word_list[0] + "\t" + word_list[-1])
+# path = "effect_data_all/combine_sentence_annotation_test.txt"
+# path_new = "effect_data_all_new/combine_sentence_annotation_test.txt"
+# with open(path, "r", encoding="utf-8") as f:
+#     string_new = ""
+#     for line in f.readlines():
+#         word_list = re.split("    ", line)
+#         # print(word_list)
+#         if len(line.strip()) > 0:
+#             string_temp = word_list[0] + "\t" + word_list[-1]
+#             string_new = string_new + string_temp
+#         else:
+#             string_new += "\n"
+#     # print(string_new)
+#     with open(path_new, "w", encoding="utf-8") as f_new:
+#         f_new.write(string_new)
+#         with open(path_new, "a", encoding="utf-8") as f_new:
+#             f_new.write(word_list[0] + "\t" + word_list[-1])
+
+# 删除标注数据中对空白字符进行O标注的行
+# path = "effect_all/test.test"
+# path_new = "effect_all_new/test.test"
+# with open(path, "r", encoding="utf-8") as f:
+#     for line in f.readlines():
+#         # print(line)
+#         word_list = re.split("\t", line)
+#         # print(word_list)
+#         if word_list[0] != "":
+#             with open(path_new, "a", encoding="utf-8") as f_new:
+#                 f_new.write(line)
