@@ -195,9 +195,9 @@ import difflib
 # s2 = "batyu"
 # print(difflib_leven(s1, s2))
 
-#测试修改GitHub上项目名后还能不能commit and push
+# 测试修改GitHub上项目名后还能不能commit and push
 
-#测试从GitHub上下载项目后还能不能commit and push
+# 测试从GitHub上下载项目后还能不能commit and push
 
 # l1 = [1, 2, 3, 5, 6, 7]
 # l2 = [2, 3]
@@ -318,7 +318,7 @@ import difflib
 # print(l2)
 
 import re
-#利用字符串拼接创建正则表达式的pattern
+# 利用字符串拼接创建正则表达式的pattern
 # l = ["我", "你"]
 # pattern_string = l[0]
 # for i in l[1:]:
@@ -328,7 +328,7 @@ import re
 # s = "我和你"
 # s = re.sub(pattern, "", s)
 # print(s)
-#说明前后多余的、不影响分割，
+# 说明前后多余的、不影响分割，
 # 但依然需要去除前后多余的，不然会分割出多余的空字符，
 # 用两种正则表达式+判断末尾是否是“、”进行处理
 # s = "、解表、散寒、止痛、"
@@ -372,3 +372,82 @@ import re
 #         if word_list[0] != "":
 #             with open(path_new, "a", encoding="utf-8") as f_new:
 #                 f_new.write(line)
+
+# 动态规划计算编辑距离的测试
+# def difflib_leven(str1 , str2):
+#     len_str1 = len(str1) + 1
+#     len_str2 = len(str2) + 1
+#     # 创建矩阵
+#     matrix = [0 for n in range(len_str1 * len_str2)]
+#     print(matrix)
+#     # 初始化X轴
+#     for i in range(len_str1):
+#         matrix[i] = i
+#     print(matrix)
+#     # 初始化Y轴
+#     for j in range(0, len(matrix), len_str1):
+#         if j % len_str1 == 0:
+#             matrix[j] = j // len_str1
+#     print(matrix)
+#
+#     for i in range(1, len_str1):
+#         for j in range(1, len_str2):
+#             if str1[i-1] == str2[j-1]:
+#                 cost = 0
+#             else:
+#                 cost = 1
+#             matrix[j*len_str1+i] = min(matrix[(j-1)*len_str1+i]+1,
+#                                        matrix[j*len_str1+(i-1)]+1,
+#                                        matrix[(j-1)*len_str1+(i-1)] + cost)
+#     return matrix[-1]
+# print(difflib_leven("asdf", "asd"))
+
+
+def maze(maze_size, link_input):
+    """
+    # 晨哥笔试题
+    :param maze_size:迷宫大小
+    :param link_input:节点连接列表
+    :return:
+    """
+    row = maze_size[0]  # 迷宫行数
+    col = maze_size[-1]  # 迷宫列数
+    # 初始化连接字典
+    link_dict = {}
+    for i in range(row):
+        for j in range(col):
+            link_dict[tuple((i, j))] = []
+    # 得到连接字典，键值对为“节点：该节点所连接的节点列表”
+    for link_list in link_input:
+        link_dict[tuple(link_list[0])].append(tuple(link_list[-1]))
+        link_dict[tuple(link_list[-1])].append(tuple(link_list[0]))
+    # 字典中的字典列表value去重
+    for key in link_dict.keys():
+        link_dict[key] = set(link_dict[key])
+    print(link_dict)
+    link_node_set = set()    # 用于记录深度搜索过程中出现过的节点
+
+    def dfs(node):
+        if node in link_node_set:
+            return
+        else:
+            link_node_set.add(node)
+            for link_node in link_dict[node]:
+                dfs(link_node)
+    dfs(tuple((0, 0)))
+    print(link_node_set)
+    if len(link_node_set) == row*col:   # 如果一次深度搜索能搜索到所有节点，则该迷宫能够连通
+        print("Yes!!!!!!")
+        return link_dict
+    else:
+        print("Error!!!!!!!!")
+# 案例测试
+maze_size = [3, 3]
+link_input = [[(0, 1), (0, 2)], [(0, 0), (1, 0)], [(0, 1), (1, 1)], [(0, 2), (1, 2)], [(1, 0), (1, 1)],
+              [(1, 1), (1, 2)], [(1, 1), (2, 1)], [(1, 2), (2, 2)], [(2, 0), (2, 1)]]
+link_dict = maze(maze_size, link_input)
+
+# l = [1, 2, 3]
+# s = set(l)
+# s.add(3)
+# print(s)
