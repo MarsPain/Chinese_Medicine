@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/data/function_tongyici.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/feature_engineering/data_treat.csv" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/feature_engineering/medicine_init.csv" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/feature_engineering/方剂数据集-妇科_test.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/medicine_similarity/data/data_labeld_birch.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/medicine_similarity/data/data_labeld_kmeans.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/medicine_similarity/data/data_labeld_kmodes.csv" charset="UTF-8" />
