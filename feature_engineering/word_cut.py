@@ -227,18 +227,20 @@ class WordCut:
             for w in word_jieba:
                 word_list.append(w.word)
                 char_list.append(w.flag)
+        word1 = '%s%s' % (word_list[0], word_list[1])
+        word2 = '%s%s' % (word_list[0], word_list[2])
+        word_new = '%s%s%s' % (word1, "、", word2)
         # 根据三字词中每个字的词性进行进一步处理
+        # if char_list == ['v', 'n', 'n'] and (word1 in self.set2 or word2 in self.set2):
+        # 若满足“动名名”的规律且拆分后的某个词在2字词库中出现了，则认为该词是可分的，分配到set_true词库中(这样做应该更合理，但是会出错)
         if char_list == ['v', 'n', 'n']:
-            # 若满足“动名名”的规律，则认为该词是可分的、分配到set3_true词库中
+            # 若满足“动名名”的规律，则认为该词是可分的，分配到set_true词库中
             self.set3_true[word] = (self.set3_true[word] if word in self.set3_true else 0) + 1
             # 字符串拼接
-            word1 = '%s%s' % (word_list[0], word_list[1])
-            word2 = '%s%s' % (word_list[0], word_list[2])
-            word = '%s%s%s' % (word1, "、", word2)
             # 将拆分成的2字词添加到2字词库中
             self.set2[word1] = (self.set2[word1] if word1 in self.set2 else 0) + 1
             self.set2[word2] = (self.set2[word2] if word2 in self.set2 else 0) + 1
-            return word
+            return word_new
         else:
             # 无法拆分，先分配到set3_false词库中
             self.set3_false[word] = (self.set3_false[word] if word in self.set3_false else 0) + 1
@@ -431,7 +433,6 @@ class WordCut:
         set3_false_dict = os.path.join(path_dir, "set3_false_dict"+".txt")
         set4_true_dict = os.path.join(path_dir, "set4_true_dict"+".txt")
         set4_false_dict = os.path.join(path_dir, "set4_false_dict"+".txt")
-        print("self.set2_dict:", self.set2)
         with open(set2_dict, "w", encoding="utf-8") as f:
             for word in self.set2:
                 f.write(word+"\n")
