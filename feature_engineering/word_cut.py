@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import os
 import jieba.posseg as pseg
 import numpy as np
 
@@ -176,7 +177,7 @@ class WordCut:
         for i in range(self.length):
             list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
-            print(list_effect)
+            # print(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
                 list_effect[j] = re.sub("主治|或", "", list_effect[j])
@@ -420,6 +421,33 @@ class WordCut:
                 if word:
                     f.write(word+"\n")
 
+    def write_txt(self, str_type):
+        if str_type == "function":
+            path_dir = "data/dict_function"
+        else:
+            path_dir = "data/dict_effect"
+        set2_dict = os.path.join(path_dir, "set2_dict"+".txt")
+        set3_true_dict = os.path.join(path_dir, "set3_true_dict"+".txt")
+        set3_false_dict = os.path.join(path_dir, "set3_false_dict"+".txt")
+        set4_true_dict = os.path.join(path_dir, "set4_true_dict"+".txt")
+        set4_false_dict = os.path.join(path_dir, "set4_false_dict"+".txt")
+        print("self.set2_dict:", self.set2)
+        with open(set2_dict, "w", encoding="utf-8") as f:
+            for word in self.set2:
+                f.write(word+"\n")
+        with open(set3_true_dict, "w", encoding="utf-8") as f:
+            for word in self.set3_true:
+                f.write(word+"\n")
+        with open(set3_false_dict, "w", encoding="utf-8") as f:
+            for word in self.set3_false:
+                f.write(word+"\n")
+        with open(set4_true_dict, "w", encoding="utf-8") as f:
+            for word in self.set4_true:
+                f.write(word+"\n")
+        with open(set4_false_dict, "w", encoding="utf-8") as f:
+            for word in self.set4_false:
+                f.write(word+"\n")
+
     def cut_main(self):
         # 对性味归经部分数据进行清洗
         self.word_clean_taste()
@@ -429,7 +457,7 @@ class WordCut:
         self.word_cut_function()
         self.data_analyse()  # 分词结果分析
         # 将词库输出写入到文件中
-        # 初始化词库字典、用于存储主治特征词
+        self.write_txt("function")  # 初始化词库字典、用于存储主治特征词
         self.set2 = {}
         self.set3_true = {}  # 保存可以拆分的3字词
         self.set3_false = {}    # 保存不可拆分的3字词
@@ -440,7 +468,7 @@ class WordCut:
         self.word_cut_effect()
         self.list_to_str()
         self.data_analyse()
-        # 将词库输出写入到文件中
+        self.write_txt("effect")    # 将词库输出写入到文件中
         self.write_csv()
 
 if __name__ == "__main__":
