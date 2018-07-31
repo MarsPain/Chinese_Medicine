@@ -185,7 +185,7 @@ class WordCut:
             # print(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
-                list_effect[j] = re.sub("主治|或", "", list_effect[j])
+                list_effect[j] = re.sub("主治|或|治", "", list_effect[j])
                 if len(list_effect[j]) == 2:
                     self.word_cut_2(list_effect[j])
 
@@ -236,10 +236,10 @@ class WordCut:
         word2 = '%s%s' % (word_list[0], word_list[2])
         word_new = '%s%s%s' % (word1, "、", word2)
         # 根据三字词中每个字的词性进行进一步处理
-        # if char_list == ['v', 'n', 'n'] and (word1 in self.set2 or word2 in self.set2):
-        # 若满足“动名名”的规律且拆分后的某个词在2字词库中出现了，则认为该词是可分的，分配到set_true词库中(这样做应该更合理，但是会出错)
-        if char_list == ['v', 'n', 'n']:
-            # 若满足“动名名”的规律，则认为该词是可分的，分配到set_true词库中
+        # 若满足“动名名”的规律且拆分后的某个词在2字词库中出现了，则认为该词是可分的，分配到set_true词库中(这样做应该更合理，但是在测试数据集上会出错)
+        if char_list == ['v', 'n', 'n'] and (word1 in self.set2 or word2 in self.set2):
+        # 若满足“动名名”的规律，则认为该词是可分的，分配到set_true词库中
+        # if char_list == ['v', 'n', 'n']:
             self.set3_true[word] = (self.set3_true[word] if word in self.set3_true else 0) + 1
             # 字符串拼接
             # 将拆分成的2字词添加到2字词库中
