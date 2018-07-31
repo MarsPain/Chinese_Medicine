@@ -11,7 +11,7 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data_init.csv", delimiter="\t")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_init.csv", delimiter="\t")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
     # 插入列，分别保存“归经”和“主治”的数据
     data.insert(2, "Type", None)
@@ -32,19 +32,75 @@ def get_data():
     return data, length
 
 
-class WordCutTaste:
+# class WordCutTaste:
+#     """
+#     #对性味和归经部分的数据进行分词处理
+#     """
+#     def __init__(self, data, length):
+#         self.data = data
+#         self.length = length
+#
+#     def word_clean_taste(self):
+#         """
+#         对性味部分数据进行清洗和分词
+#         :return:
+#         """
+#         for i in range(self.length):
+#             list_taste = self.data["Taste"].loc[i]
+#             length2 = len(list_taste)
+#             for j in range(length2):
+#                 list_taste[j] = re.sub("性|味", "", list_taste[j])
+#             # print(type(list_taste))
+#             # 列表转为字符串，以便后续输出数据
+#             s = list_taste[0]
+#             for j in range(1, length2):
+#                 s = "%s%s%s" % (s, "、", list_taste[j])
+#             self.data["Taste"].loc[i] = s
+#
+#     def word_clean_type(self):
+#         """
+#         对归经部分数据进行清洗和分词
+#         :param self:
+#         :return:
+#         """
+#         for i in range(self.length):
+#             list_type = self.data["Type"].loc[i]
+#             # print(type(list_type))
+#             length2 = len(list_type)
+#             for j in range(length2):
+#                 list_type[j] = re.sub("归|经|入", "", list_type[j])
+#             # 列表转为字符串，以便后续输出数据
+#             s = list_type[0]
+#             for j in range(1, length2):
+#                 s = "%s%s%s" % (s, "、", list_type[j])
+#             self.data["Type"].loc[i] = s
+
+
+class WordCut:
     """
-    #对性味和归经部分的数据进行分词处理
+    对功效和主治部分数据进行分词和存储
     """
     def __init__(self, data, length):
+        """
+        引入语料库并创建词库
+        :param data:原药物数据
+        :param length:样本数量
+        :return:
+        """
         self.data = data
         self.length = length
+        self.set2 = {}
+        self.set3_true = {}  # 保存可以拆分的3字词
+        self.set3_false = {}    # 保存不可拆分的3字词
+        self.set4_true = {}  # 保存可以拆分的4字词
+        self.set4_false = {}    # 保存不可拆分的4字词
 
     def word_clean_taste(self):
         """
         对性味部分数据进行清洗和分词
         :return:
         """
+        print("对性味部分数据进行清洗")
         for i in range(self.length):
             list_taste = self.data["Taste"].loc[i]
             length2 = len(list_taste)
@@ -63,6 +119,7 @@ class WordCutTaste:
         :param self:
         :return:
         """
+        print("对归经部分数据进行清洗")
         for i in range(self.length):
             list_type = self.data["Type"].loc[i]
             # print(type(list_type))
@@ -75,28 +132,6 @@ class WordCutTaste:
                 s = "%s%s%s" % (s, "、", list_type[j])
             self.data["Type"].loc[i] = s
 
-
-class WordCut:
-    """
-    对功效和主治部分数据进行分词和存储
-    """
-    def __init__(self, data, length):
-        """
-        引入语料库并创建词库
-        :param data:原药物数据
-        :param length:样本数量
-        :return:
-        """
-        print("对功效和主治部分数据进行分词和存储")
-        print("引入语料库并创建词库")
-        self.data = data
-        self.length = length
-        self.set2 = {}
-        self.set3_true = {}  # 保存可以拆分的3字词
-        self.set3_false = {}    # 保存不可拆分的3字词
-        self.set4_true = {}  # 保存可以拆分的4字词
-        self.set4_false = {}    # 保存不可拆分的4字词
-
     def word_cut_function(self):
         """
         对功效部分的数据进行分词处理，依次对2字词、3字词、4字词进行处理
@@ -106,6 +141,7 @@ class WordCut:
         for i in range(self.length):
             list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
+            # print(list_function)
             for j in range(length2):
                 if len(list_function[j]) == 2:
                     self.word_cut_2(list_function[j])
@@ -140,6 +176,7 @@ class WordCut:
         for i in range(self.length):
             list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
+            print(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
                 list_effect[j] = re.sub("主治|或", "", list_effect[j])
@@ -368,48 +405,73 @@ class WordCut:
         function_data = self.data["Function"]
         # print(function_data)
         function_data.to_csv("../data/function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
+        # 输出所有功效特征词，用于进行功效特征词的同义词分类和复杂系统熵聚类
         func_dict = {}
         for i in range(self.length):
             word_list = re.split("[；、]", function_data.loc[i])
             for word in word_list:
                 func_dict[word] = func_dict[word]+1 if word in func_dict else 1
         print(func_dict)
-        # func_list = []
-        # for word in func_dict.keys():
-        #     func_list.append(word)
-        # with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
-        #     for word in func_list:
-        #         if word:
-        #             f.write(word+"\n")
+        func_list = []
+        for word in func_dict.keys():
+            func_list.append(word)
+        with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
+            for word in func_list:
+                if word:
+                    f.write(word+"\n")
+
+    def cut_main(self):
+        # 对性味归经部分数据进行清洗
+        self.word_clean_taste()
+        self.word_clean_type()
+        # 重复对功效部分数据进行分词处理，使词库完整
+        self.word_cut_function()
+        self.word_cut_function()
+        self.data_analyse()  # 分词结果分析
+        # 将词库输出写入到文件中
+        # 初始化词库字典、用于存储主治特征词
+        self.set2 = {}
+        self.set3_true = {}  # 保存可以拆分的3字词
+        self.set3_false = {}    # 保存不可拆分的3字词
+        self.set4_true = {}  # 保存可以拆分的4字词
+        self.set4_false = {}    # 保存不可拆分的4字词
+        # 重复对主治部分数据进行分词处理，使词库完整
+        self.word_cut_effect()
+        self.word_cut_effect()
+        self.list_to_str()
+        self.data_analyse()
+        # 将词库输出写入到文件中
+        self.write_csv()
 
 if __name__ == "__main__":
     # 读取数据并进行预处理
     data_treat, length_treat = get_data()
-    # data.to_csv("data_treat.csv", encoding="utf-8")
+    word_cut = WordCut(data_treat, length_treat)
+    word_cut.cut_main()
 
-    # 实例化的类能够直接调用上面的data_treat和length_treat，所以要注意类内部参数的调用，之前参数调用出错了，上一次commit就是解决该问题的
-    # 创建对性味和归经的分词类
-    word_cut_Taste = WordCutTaste(data_treat, length_treat)
-    # 对性味和归经部分的数据进行清洗
-    word_cut_Taste.word_clean_taste()
-    word_cut_Taste.word_clean_type()
+    # # 实例化的类能够直接调用上面的data_treat和length_treat，所以要注意类内部参数的调用，之前参数调用出错了，上一次commit就是解决该问题的
+    # # 创建对性味和归经的分词类
+    # word_cut_Taste = WordCut(data_treat, length_treat)
+    # # 对性味和归经部分的数据进行清洗
+    # word_cut_Taste.word_clean_taste()
+    # word_cut_Taste.word_clean_type()
 
     # 创建主治和功效的分词类
-    word_cut = WordCut(data_treat, length_treat)
-    # 对功用部分进行分词处理
-    word_cut.word_cut_function()
-    # 对主治部分进行分词处理
-    word_cut.word_cut_effect()
-    # 重复对功效和主治部分进行分词处理，使词库完整
-    word_cut.word_cut_function()
-    word_cut.word_cut_effect()
-    # 列表转为字符串
-    word_cut.list_to_str()
-
-    # 结果数据分析
-    word_cut.data_analyse()
-    # 数据清理，清理主治和功效中词频过低的词
-    word_cut.word_clean()
-    # 数据清理后再次进行数据分析，需要重新对data_treat进行读取和记录
-    # 结果导出
-    word_cut.write_csv()
+    # word_cut = WordCut(data_treat, length_treat)
+    # # 对功用部分进行分词处理
+    # word_cut.word_cut_function()
+    # # 对主治部分进行分词处理
+    # word_cut.word_cut_effect()
+    # # 重复对功效和主治部分进行分词处理，使词库完整
+    # word_cut.word_cut_function()
+    # word_cut.word_cut_effect()
+    # # 列表转为字符串
+    # word_cut.list_to_str()
+    #
+    # # 结果数据分析
+    # word_cut.data_analyse()
+    # # 数据清理，清理主治和功效中词频过低的词
+    # word_cut.word_clean()
+    # # 数据清理后再次进行数据分析，需要重新对data_treat进行读取和记录
+    # # 结果导出
+    # word_cut.write_csv()

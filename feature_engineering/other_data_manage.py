@@ -2,8 +2,8 @@ import pandas as pd
 import os
 
 # 删除标注数据中的词性
-# path = "effect_data_all/combine_sentence_annotation_test.txt"
-# path_new = "effect_data_all_new/combine_sentence_annotation_test.txt"
+# path = "data/effect_data_all/combine_sentence_annotation_test.txt"
+# path_new = "data/effect_data_all_new/combine_sentence_annotation_test.txt"
 # with open(path, "r", encoding="utf-8") as f:
 #     string_new = ""
 #     for line in f.readlines():
@@ -21,8 +21,8 @@ import os
 #             f_new.write(word_list[0] + "\t" + word_list[-1])
 
 # 删除标注数据中对空白字符进行O标注的行
-# path = "effect_all/test.test"
-# path_new = "effect_all_new/test.test"
+# path = "data/effect_all/test.test"
+# path_new = "data/effect_all_new/test.test"
 # with open(path, "r", encoding="utf-8") as f:
 #     for line in f.readlines():
 #         # print(line)
@@ -33,8 +33,8 @@ import os
 #                 f_new.write(line)
 
 # 对公司提供的《方剂数据集-妇科》中的主治信息进行提取并等量划分
-path_source = "方剂数据集-妇科.csv"
-path_target = "prescription_need_token"
+path_source = "data/方剂数据集-妇科.csv"
+path_target = "data/prescription_need_token"
 with open(path_source, "r", encoding="utf-8") as f_source:
     data = pd.read_csv(f_source)
     # print(data["主治"])
