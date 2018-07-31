@@ -12,23 +12,28 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data/data_init.csv", delimiter="\t")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_all.csv")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
+    print(data.info())
+    data = data.fillna("missing")
+    print(data.info())
     # 插入列，分别保存“归经”和“主治”的数据
-    data.insert(2, "Type", None)
-    data.insert(4, "Effect", None)
+    # data.insert(2, "Type", None)
+    # data.insert(4, "Effect", None)
 
     # 对性味部分数据进行处理，分为性味和归经两列并以，、作为分隔符返回列表
     for i in range(length):
-        l = data["Taste"].loc[i].split("。")
-        data["Taste"].loc[i] = re.split("[，、]", l[0])
-        data["Type"].loc[i] = re.split("[，、]", l[1])
+        l = data["Taste"].loc[i]
+        data["Taste"].loc[i] = re.split("、", l)
+        l = data["Type"].loc[i]
+        # print("l:", l)
+        data["Type"].loc[i] = re.split("、", l)
 
     # 对功用主治部分进行处理,分为功用和主治两列并以，、作为分隔符返回列表
     for i in range(length):
         l = data["Function"].loc[i].split("。")
-        data["Function"].loc[i] = re.split("[，、]", l[0])
-        data["Effect"].loc[i] = re.split("[，、]", l[1])
+        data["Function"].loc[i] = re.split("[，、；]", l[0])
+        data["Effect"].loc[i] = re.split("[，、；]", l[1])
 
     return data, length
 
