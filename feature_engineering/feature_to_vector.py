@@ -4,7 +4,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelEncoder
 import numpy as np
 
-file_path = "data_treat.csv"    # 需要进行特征向量化的数据
+file_path = "../data/data_treat.csv"    # 需要进行特征向量化的数据
 
 
 def get_data(path):
@@ -205,7 +205,7 @@ class FeatureToVector:
         """
         data = pd.DataFrame(data)
         # print(data)
-        data.to_csv("feature_vector.csv")
+        data.to_csv("../data/feature_vector.csv")
 
 
 class FeatureToVector2:

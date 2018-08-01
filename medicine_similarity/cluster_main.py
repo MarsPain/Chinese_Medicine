@@ -83,4 +83,4 @@ def main(is_cluster):
         return relatives_list
 
 if __name__ == "__main__":
-    main(False)
+    main(True)
