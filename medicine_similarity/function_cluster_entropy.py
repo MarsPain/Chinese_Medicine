@@ -3,7 +3,7 @@ import numpy as np
 import os
 import re
 from medicine_similarity.data_utils import get_data, root_to_word, word_to_root, dict_sort, combine_count, index_2_word, \
-    write_csv, word_2_index, cut_by_num, group_clean
+    write_csv, word_2_index, cut_by_num, group_clean, write_qyt
 from medicine_similarity.relatives import calculate_correlation, create_relatives
 from medicine_similarity.cluster import duplicate_removal, del_by_correlation, create_double_set, merge_loop
 
@@ -104,7 +104,7 @@ class ClusterEntropy:
         data = write_csv(['组合', '关联度系数'], correlation_path, [self.combine_name, correlation])
         # 获取每个症状的亲友团list
         self.relatives_list = create_relatives(self.root_name, data, max_relatives_nums)
-        # print("relatives_list", relatives_list)  # 这里的亲友团是用嵌套列表存储的，用字典存储应该更好吧？键值对为变量-亲友团列表
+        print("relatives_list", self.relatives_list)  # 这里的亲友团是用嵌套列表存储的，用字典存储应该更好吧？键值对为变量-亲友团列表
 
     def cluster(self):
         """
@@ -113,6 +113,8 @@ class ClusterEntropy:
         """
         # print("relatives_list", relatives_list)
         list_qyt = duplicate_removal(self.relatives_list, self.root_name)   # 将每个词根的亲友提取出来、组成亲友团
+        print("list_qyt:", list_qyt)
+        write_qyt(list_qyt, self.root_name)
         list_index = word_2_index(self.root_name, list_qyt)  # 使用索引代替列表中的项
         for group_num in range(min_relatives_nums, max_relatives_nums+1):   # 限制亲友团的数量，根据不同的亲友团数量进行聚类
             new_list = cut_by_num(list_index, group_num)    # 对亲友团进行裁剪

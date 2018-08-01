@@ -1,3 +1,5 @@
+import pandas as pd
+
 # 寻找两个元祖的交集大小，查看一个元祖被包括于另一个元祖
 # l1 = [1, 2, 3, 4, 5]
 # l2 = [3, 4, 5, 6, 7]
@@ -11,5 +13,9 @@
 # if s1.issubset(s3):
 #     print("YES!!!!")
 
-dict = {"1":[1, 2, 3]}
-print()
+# dict = {"1":[1, 2, 3]}
+# print()
+
+# data = pd.DataFrame(columns=["test1", "test2"])
+# data["test1"].loc[0] = 0
+# print(data)

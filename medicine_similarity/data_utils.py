@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import itertools
 import operator
 import sys
@@ -231,3 +232,22 @@ def group_clean(pkl_file):
                     break
         all_list.extend(new_item)
     return all_list
+
+
+def write_qyt(list_qyt, root_name):
+    """
+    将具体的亲友团输出到csv文件中
+    :param list_qyt:亲友团列表
+    :param root_name:词根列表
+    :return:
+    """
+    length = len(root_name)
+    data = pd.DataFrame(np.zeros((length, 2)), columns=["功效词根", "亲友团"])
+    for i in range(length):
+        data["功效词根"].loc[i] = root_name[i]
+        string = ""
+        for j in range(1, len(list_qyt[i])):
+            string = string + list_qyt[i][j] + "、"
+        data["亲友团"].loc[i] = string[:-1]
+        # print("data:", data)
+    data.to_csv("data/qyt.csv", encoding="utf-8")
