@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sklearn import metrics
 
 file_path = "../data/feature_vector.csv"    # 需要进行聚类的数据特征向量
+file_data_treat = "../data/data_treat.csv"  # 需要进行聚类的原数据文件
 
 
 def get_data(path):
@@ -33,7 +34,8 @@ def cluster_kmodes(n_clusters, data):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
     # print("簇中心",kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
-    data_labeled_to_csv(clusters, "data/data_labeld_kmodes.csv")
+    # 聚类结果输出到CSV中，包括加上聚类结果标签的全体数据和单独的性味归经数据
+    data_labeled_to_csv(clusters, file_data_treat, "data/data_labeld_kmodes.csv", "data/taste_group.csv")
     # visual_cluster(n_clusters, data, clusters)
 
 
@@ -165,14 +167,16 @@ def visual_cluster(n_clusters, data, clusters):
     plt.show()
 
 
-def data_labeled_to_csv(clusters, filename):
+def data_labeled_to_csv(clusters, data_treat, filename, filename_taste):
     """
     输出聚类结果：将每个样本的标签合并到原始data中、根据label重新排序，再输出到csv中
     :param clusters:聚类结果
-    :param filename:输出的目标文件路径
+    :param data_treat:需要进行聚类的原数据
+    :param filename:输出打上聚类结果标签的全体数据的目标文件路径
+    :param filename_taste:输出打上聚类结果标签的性味归经数据的目标路径文件
     :return:
     """
-    data = pd.read_csv("../data/data_treat.csv", index_col=0)
+    data = pd.read_csv(data_treat, index_col=0)
     # print(data.info())
     data.insert(1, "Label", None)
     length = data.shape[0]
@@ -183,6 +187,16 @@ def data_labeled_to_csv(clusters, filename):
         data["Label"][i] = clusters[i]
     data = data.sort_values(by='Label', ascending=True)  # 这里要注意sort_value是返回一个已排序的对象，而不是原地进行修改
     data.to_csv(filename, index=False, encoding="utf-8")
+    # data_taste = pd.concat([data["Label"], data["名称"], data["Taste", data["Type"]]], axis=1)
+    # data_taste.to_csv(filename_taste, index=False, encoding="utf-8")
+    data_taste = pd.DataFrame(np.zeros((length, 4)), columns=["Label", "名称", "Taste", "Type"])
+    for i in range(length):
+        data_taste["Label"][i] = data["Label"][i]
+        data_taste["名称"][i] = data["名称"][i]
+        data_taste["Taste"][i] = data["Taste"][i]
+        data_taste["Type"][i] = data["Type"][i]
+    # print("data_taste", data_taste)
+    data_taste.to_csv(filename_taste, index=False, encoding="utf-8")
 
 
 def opti_para_select(cluster_name, data):
@@ -208,7 +222,7 @@ def opti_para_select(cluster_name, data):
     if cluster_name == "k_modes":
         max_score = 0
         opti_n_clusters = 0
-        for n in range(2, 50):
+        for n in range(2, 30):
             kmodes = KModes(n_clusters=n, init="Huang", n_init=10, verbose=1)
             clusters = kmodes.fit_predict(data)
             score = metrics.calinski_harabaz_score(data, clusters)
@@ -226,7 +240,7 @@ def cluster_various_main():
     """
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
-    num_clusters = 6
+    num_clusters = 17
     cluster_kmodes(num_clusters, data_treat)
 
 if __name__ == "__main__":

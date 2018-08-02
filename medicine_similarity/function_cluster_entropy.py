@@ -134,7 +134,7 @@ class ClusterEntropy:
         """
         group_all = []
         group_name = []
-        for i in range(max_relatives_nums, 4, -1):
+        for i in range(max_relatives_nums, 2, -1):
             group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
             group_name.append("group"+str(i))
             group_all.append(group_clean(group_path))
