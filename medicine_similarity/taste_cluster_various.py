@@ -33,7 +33,7 @@ def cluster_kmodes(n_clusters, data):
     clusters = kmodes.fit_predict(data)
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
-    # print("簇中心",kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
+    # print("簇中心", kmodes.cluster_centroids_)    # 输出聚类结束后的簇中心
     # 聚类结果输出到CSV中，包括加上聚类结果标签的全体数据和单独的性味归经数据
     data_labeled_to_csv(clusters, file_data_treat, "data/data_labeld_kmodes.csv", "data/taste_group.csv")
     # visual_cluster(n_clusters, data, clusters)

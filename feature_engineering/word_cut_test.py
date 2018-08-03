@@ -451,3 +451,7 @@ import re
 # s = set(l)
 # s.add(3)
 # print(s)
+
+# d = {"a":5, "b":8}
+# d_sorted = sorted(d.items(), key=lambda x: (-x[1], x[0]))
+# print(d_sorted)
