@@ -136,7 +136,7 @@ for i in range(length):
     for type in data["Type"].loc[i]:
         print(type)
         # if len(taste) == 2 or len(taste) == 3 or len(taste) == 4:
-        taste_dict[type] = taste_dict[type]+1 if type in type_dict else 1
+        type_dict[type] = type_dict[type]+1 if type in type_dict else 1
     for function in data["Function"].loc[i]:
         print(function)
         if len(function) == 2 or len(function) == 3 or len(function) == 4:
