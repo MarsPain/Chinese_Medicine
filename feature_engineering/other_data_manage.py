@@ -22,19 +22,19 @@ import re
 #             f_new.write(word_list[0] + "\t" + word_list[-1])
 
 # 删除标注数据中对空白字符进行O标注的行
-path = "data/function_all_token/5000.train"
-path_new = "data/function_all_token_new/5000.train"
-with open(path, "r", encoding="utf-8") as f:
-    for line in f.readlines():
-        # print(line)
-        word_list = re.split("\t", line)
-        # print(word_list)
-        if word_list[0] != "":
-            with open(path_new, "a", encoding="utf-8") as f_new:
-                f_new.write(line)
-        else:
-            with open(path_new, "a", encoding="utf-8") as f_new:
-                f_new.write("\n")
+# path = "data/function_all_token/5000.train"
+# path_new = "data/function_all_token_new/5000.train"
+# with open(path, "r", encoding="utf-8") as f:
+#     for line in f.readlines():
+#         # print(line)
+#         word_list = re.split("\t", line)
+#         # print(word_list)
+#         if word_list[0] != "":
+#             with open(path_new, "a", encoding="utf-8") as f_new:
+#                 f_new.write(line)
+#         else:
+#             with open(path_new, "a", encoding="utf-8") as f_new:
+#                 f_new.write("\n")
 
 # 对公司提供的《方剂数据集-妇科》中的主治信息进行提取并等量划分
 # path_source = "data/方剂数据集-妇科.csv"
@@ -84,3 +84,29 @@ with open(path, "r", encoding="utf-8") as f:
 #     string_test += string_test_temp
 #     with open(path_test_data, "w", encoding="utf-8") as f:
 #         f.write(string_test)
+
+# 将对2700个功效词条的标注转移到1800个功效词条中
+path = "data/dict_function/set4_true_dict.txt"
+path_source = "data/dict_function/set4_true_dict_labled_old.txt"
+path_target = "data/dict_function/set4_true_dict_labeld.txt"
+with open(path_source, "r", encoding="utf-8") as f_source:
+    lines = f_source.readlines()
+    # print(lines)
+    label_dict = {}
+    for line in lines:
+        line_list = re.split(" ", line.strip())
+        # print(line_list)
+        label_dict[line_list[0]] = line_list[1]
+    print(label_dict)
+with open(path, "r", encoding="utf-8") as f:
+    lines = f.readlines()
+    string = ""
+    for line in lines:
+        line = line.strip()
+        if line in label_dict:
+            string = string + line + "  " + label_dict[line] + "\n"
+        else:
+            string = string + line + "  " + "\n"
+    print(string)
+with open(path_target, "w", encoding="utf-8") as f_target:
+    f_target.write(string)
