@@ -27,3 +27,11 @@ import numpy as np
 # data_new = pd.concat([data["a"], data["b"]], axis=1)
 # print(type(data_new), data_new)
 # data_new.to_csv()   # 为何拼接而成的DataFrame无法调用to_csv函数，与普通的DataFrame有什么区别
+
+# 对打上聚类结果标签的性味归经数据根据label进行排序
+path_source = "data/taste_group.csv"
+path_target = "data/taster_group_new.csv"
+data_source = pd.read_csv(path_source)
+data_new = data_source.sort_values(by='Label', ascending=True)  # 根据label进行排序
+data_new.to_csv(path_target, encoding="utf-8")
+

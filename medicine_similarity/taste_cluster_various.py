@@ -196,7 +196,8 @@ def data_labeled_to_csv(clusters, data_treat, filename, filename_taste):
         data_taste["Taste"][i] = data["Taste"][i]
         data_taste["Type"][i] = data["Type"][i]
     # print("data_taste", data_taste)
-    data_taste.to_csv(filename_taste, index=False, encoding="utf-8")
+    data_taste_new = data_taste.sort_values(by='Label', ascending=True)  # 根据label进行排序
+    data_taste_new.to_csv(filename_taste, index=False, encoding="utf-8")
 
 
 def opti_para_select(cluster_name, data):
