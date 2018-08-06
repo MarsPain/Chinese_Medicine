@@ -45,7 +45,7 @@ def cluster_kmeans(n_clusters):
     :param n_clusters:质心数量
     :return:
     """
-    data = get_data("../data/feature_vector_pca.csv")
+    data = get_data("../data/feature_vector.csv")
     # visual_data(data)
     kmeans = KMeans(n_clusters=n_clusters)
     clusters = kmeans.fit_predict(data)
@@ -53,7 +53,7 @@ def cluster_kmeans(n_clusters):
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)
     # print("簇中心", kmeans.cluster_centers_)
-    data_labeled_to_csv(clusters, "data/data_labeld_kmeans.csv")
+    data_labeled_to_csv(clusters, file_data_treat, "data/data_labeld_kmodes.csv", "data/taste_group.csv")
     # visual_cluster(n_clusters, data, clusters)
 
 
@@ -233,6 +233,19 @@ def opti_para_select(cluster_name, data):
                 opti_n_clusters = n
         print("max_score:", max_score, "opti_n_clusters:", opti_n_clusters)
 
+    if cluster_name == "k_means":
+        max_score = 0
+        opti_n_clusters = 0
+        for n in range(2, 30):
+            kmodes = KModes(n_clusters=n, init="Huang", n_init=10, verbose=1)
+            clusters = kmodes.fit_predict(data)
+            score = metrics.calinski_harabaz_score(data, clusters)
+            print("Calinski-Harabasz Score——", "n_clusters=", n, "score:", score)
+            if max_score < score:
+                max_score = score
+                opti_n_clusters = n
+        print("max_score:", max_score, "opti_n_clusters:", opti_n_clusters)
+
 
 def cluster_various_main():
     """
@@ -241,8 +254,11 @@ def cluster_various_main():
     """
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
-    num_clusters = 17
-    cluster_kmodes(num_clusters, data_treat)
+    # num_clusters = 13
+    # cluster_kmodes(num_clusters, data_treat)
+    # opti_para_select("k_means", data_treat)
+    num_clusters = 14
+    cluster_kmeans(num_clusters)
 
 if __name__ == "__main__":
     # data_treat = get_data(file_path)
