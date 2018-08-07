@@ -43,6 +43,7 @@ def get_word2vec():
     print("痛", model["痛"])
     print("疼", model["疼"])
     print(model.most_similar(["痛"]))
+    print(model.wv.similarity('痛', '虚'))
 
 if __name__ == "__main__":
     # get_data()
