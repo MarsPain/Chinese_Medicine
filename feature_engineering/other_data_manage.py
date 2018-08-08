@@ -111,8 +111,8 @@ import re
 # with open(path_target, "w", encoding="utf-8") as f_target:
 #     f_target.write(string)
 
-# 对总药物数据集进行分析，主要对性味归经功效特征词的数量以及词频进行统计
-# path = "data/data_all_v4.csv"
+# 对原总药物数据集进行分析，主要对性味归经功效特征词的数量以及词频进行统计
+# path = "data/data_all_v4.csv"   # 原数据集
 # data = pd.read_csv(path)
 # print(data.info())
 # data = data.fillna("missing")
@@ -167,3 +167,25 @@ import re
 #         else:
 #             false_count += 1
 # print("true_count:", true_count, "false_count:", false_count, "accuracy:", true_count/(true_count+false_count))
+
+# 对将功效进行分词后的功效词进行统计
+# path = "../data/data_treat.csv"   # 将功效进行分词后的数据集
+# data = pd.read_csv(path)
+# print(data.info())
+# data = data.fillna("missing")
+# print(data.info())
+# length = data.shape[0]
+# # 分割数据
+# for i in range(length):
+#     data["Function"].loc[i] = re.split("[，、；]", data["Function"].loc[i])
+# # 统计数据
+# function_num = 0
+# function_dict = {}
+# for i in range(length):
+#     for function in data["Function"].loc[i]:
+#         # print(function)
+#         function_num += 1
+#         if len(function) == 2 or len(function) == 3 or len(function) == 4:
+#             function_dict[function] = function_dict[function]+1 if function in function_dict else 1
+# function_dict_sorted = sorted(function_dict.items(), key=lambda x: (-x[1], x[0]))   # 根据特征出现频次进行排序
+# print("function_dict_sorted:", function_num, len(function_dict_sorted), function_dict_sorted)
