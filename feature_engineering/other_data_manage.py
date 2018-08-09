@@ -189,3 +189,38 @@ import re
 #             function_dict[function] = function_dict[function]+1 if function in function_dict else 1
 # function_dict_sorted = sorted(function_dict.items(), key=lambda x: (-x[1], x[0]))   # 根据特征出现频次进行排序
 # print("function_dict_sorted:", function_num, len(function_dict_sorted), function_dict_sorted)
+
+# 将人工审核为被正确拆分的词和被错误拆分的词存储到一个csv中，以不同列的方式进行存储，作为word_cut程序中优先级高于规则的拆分指标
+# def word_cut_label_to_txt():
+#     path_set3_labeld = "data/dict_function/set3_true_dict_labeld.txt"   # 经过人工审核并打上标签的被拆分的3字词
+#     path_set4_labeld = "data/dict_function/set4_true_dict_labeld.txt"   # 经过人工审核并打上标签的被拆分的4字词
+#     path_cut_labled = "data/cut_labled.csv"  # 可以被拆分的多字词以及不可拆分的多字词
+#     cut_true_set = set()    # 保存可以被拆分的多字词
+#     cut_false_set = set()   # 保存不可以被拆分的多字词
+#     with open(path_set3_labeld, "r", encoding="utf-8") as f_3:
+#         lines = f_3.readlines()
+#         for line in lines:
+#             word_tag_list = line.strip().split()
+#             # print(word_tag_list)
+#             if word_tag_list[-1] == "1":
+#                 cut_true_set.add(word_tag_list[0])
+#             else:
+#                 cut_false_set.add(word_tag_list[0])
+#     with open(path_set4_labeld, "r", encoding="utf-8") as f_4:
+#         lines = f_4.readlines()
+#         for line in lines:
+#             word_tag_list = line.strip().split()
+#             # print(word_tag_list)
+#             if word_tag_list[-1] == "1":
+#                 cut_true_set.add(word_tag_list[0])
+#             else:
+#                 cut_false_set.add(word_tag_list[0])
+#     cut_true_list = list(cut_true_set)
+#     cut_false_list = list(cut_false_set)
+#     cut_true_series = pd.Series(cut_true_list, name="cut_true")
+#     cut_false_series = pd.Series(cut_false_list, name="cut_false")
+#     series_list = [cut_true_series, cut_false_series]
+#     cut_labled = pd.concat(series_list, axis=1)
+#     # print(cut_labled)
+#     cut_labled.to_csv(path_cut_labled, encoding="utf-8")
+# word_cut_label_to_txt()

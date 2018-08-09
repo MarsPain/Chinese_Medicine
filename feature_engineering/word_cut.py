@@ -334,13 +334,13 @@ class WordCut:
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_function[j])
             self.data["Function"].loc[i] = s
-        for i in range(self.length):
-            list_effect = self.data["Effect"].loc[i]
-            length2 = len(list_effect)
-            s = list_effect[0]
-            for j in range(1, length2):
-                s = "%s%s%s" % (s, "、", list_effect[j])
-            self.data["Effect"].loc[i] = s
+        # for i in range(self.length):
+        #     list_effect = self.data["Effect"].loc[i]
+        #     length2 = len(list_effect)
+        #     s = list_effect[0]
+        #     for j in range(1, length2):
+        #         s = "%s%s%s" % (s, "、", list_effect[j])
+        #     self.data["Effect"].loc[i] = s
 
     def data_analyse(self):
         """
