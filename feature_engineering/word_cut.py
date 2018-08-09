@@ -176,6 +176,8 @@ class WordCut:
                     if word in self.cut_true_set:
                         word1 = '%s%s' % (word[0], word[1])
                         word2 = '%s%s' % (word[0], word[2])
+                        self.set2[word1] = (self.set2[word1] if word1 in self.set2 else 0) + 1
+                        self.set2[word2] = (self.set2[word2] if word2 in self.set2 else 0) + 1
                         word = '%s%s%s' % (word1, "、", word2)
                     elif word in self.cut_false_set:
                         pass
@@ -189,9 +191,12 @@ class WordCut:
             list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
             for j in range(length2):
+                word = list_function[j]
                 if len(list_function[j]) == 4:
                     if word in self.cut_true_set:
                         word_list = re.findall('.{2}', word)
+                        self.set2[word_list[0]] = (self.set2[word_list[0]] if word_list[0] in self.set2 else 0) + 1
+                        self.set2[word_list[1]] = (self.set2[word_list[1]] if word_list[1] in self.set2 else 0) + 1
                         word = '%s%s%s' % (word_list[0], "、", word_list[1])
                     elif word in self.cut_false_set:
                         pass
