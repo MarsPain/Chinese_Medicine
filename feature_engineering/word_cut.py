@@ -100,6 +100,17 @@ class WordCut:
         self.set3_false = {}    # 保存不可拆分的3字词
         self.set4_true = {}  # 保存可以拆分的4字词
         self.set4_false = {}    # 保存不可拆分的4字词
+        self.cut_true_set = None    # 可被拆分的多字词库
+        self.cut_false_set = None    # 不可被拆分的多字词库
+
+    def get_cut_lable(self):
+        cut_lable_data = pd.read_csv("data/cut_labled.csv")
+        cut_true_list = list(cut_lable_data["cut_true"])
+        cut_false_list = list(cut_lable_data["cut_false"])
+        # print(cut_true_list)
+        self.cut_true_set = set(cut_true_list)
+        # print(self.cut_true_set)
+        self.cut_false_set = set(cut_false_list)
 
     def word_clean_taste(self):
         """
@@ -142,6 +153,7 @@ class WordCut:
         """
         对功效部分的数据进行分词处理，依次对2字词、3字词、4字词进行处理
         """
+        self.get_cut_lable()    # 获取可拆分的多字词库和不可拆分的多字词库
         print("对功用部分进行分词处理")
         # 先建立2字词库
         for i in range(self.length):
@@ -158,8 +170,17 @@ class WordCut:
             list_function = self.data["Function"].loc[i]
             length2 = len(list_function)
             for j in range(length2):
+                word = list_function[j]
                 if len(list_function[j]) == 3:
-                    word = self.word_cut_3(list_function[j])
+                    # 首先判断该词是否在可拆分的多字词库或者不可拆分的多字词库中（以前拆分过且经过人工审核）
+                    if word in self.cut_true_set:
+                        word1 = '%s%s' % (word[0], word[1])
+                        word2 = '%s%s' % (word[0], word[2])
+                        word = '%s%s%s' % (word1, "、", word2)
+                    elif word in self.cut_false_set:
+                        pass
+                    else:
+                        word = self.word_cut_3(word)
                     list_function[j] = word
             # print(type(listFunction))
 
@@ -169,7 +190,13 @@ class WordCut:
             length2 = len(list_function)
             for j in range(length2):
                 if len(list_function[j]) == 4:
-                    word = self.word_cut_4(list_function[j])
+                    if word in self.cut_true_set:
+                        word_list = re.findall('.{2}', word)
+                        word = '%s%s%s' % (word_list[0], "、", word_list[1])
+                    elif word in self.cut_false_set:
+                        pass
+                    else:
+                        word = self.word_cut_4(word)
                     list_function[j] = word
             # print(type(listFunction))
 
@@ -194,8 +221,9 @@ class WordCut:
             list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             for j in range(length2):
-                if len(list_effect[j]) == 3:
-                    word = self.word_cut_3(list_effect[j])
+                word = list_effect[j]
+                if len(word) == 3:
+                    word = self.word_cut_3(word)    # 没出现在多字词库中的新词才根据规则进行拆分
                     list_effect[j] = word
 
         # 对4字词进行处理并建立4字词库
@@ -203,8 +231,9 @@ class WordCut:
             list_effect = self.data["Effect"].loc[i]
             length2 = len(list_effect)
             for j in range(length2):
-                if len(list_effect[j]) == 4:
-                    word = self.word_cut_4(list_effect[j])
+                word = list_effect[j]
+                if len(word) == 4:
+                    word = self.word_cut_4(word)
                     list_effect[j] = word
 
     def word_cut_2(self, word):
@@ -238,8 +267,6 @@ class WordCut:
         # 根据三字词中每个字的词性进行进一步处理
         # 若满足“动名名”的规律且拆分后的某个词在2字词库中出现了，则认为该词是可分的，分配到set_true词库中(这样做应该更合理，但是在测试数据集上会出错)
         if char_list == ['v', 'n', 'n'] and (word1 in self.set2 or word2 in self.set2):
-        # 若满足“动名名”的规律，则认为该词是可分的，分配到set_true词库中
-        # if char_list == ['v', 'n', 'n']:
             self.set3_true[word] = (self.set3_true[word] if word in self.set3_true else 0) + 1
             # 字符串拼接
             # 将拆分成的2字词添加到2字词库中

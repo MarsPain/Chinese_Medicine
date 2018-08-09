@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 # s = "123我，456你"
 # import re
 #
@@ -455,3 +458,10 @@ import re
 # d = {"a":5, "b":8}
 # d_sorted = sorted(d.items(), key=lambda x: (-x[1], x[0]))
 # print(d_sorted)
+
+# data = pd.read_csv("data/cut_labled.csv")
+# # print(data)
+# cut_true_list = list(data["cut_true"])
+# print(cut_true_list)
+# cut_true_set = set(cut_true_list)
+# print(cut_true_set)
