@@ -22,8 +22,8 @@ import re
 #             f_new.write(word_list[0] + "\t" + word_list[-1])
 
 # 删除标注数据中对空白字符进行O标注的行
-# path = "data/function_all_token/5000.train"
-# path_new = "data/function_all_token_new/5000.train"
+# path = "data/function_all_token/test.txt"
+# path_new = "data/function_all_token_new/test.test"
 # with open(path, "r", encoding="utf-8") as f:
 #     for line in f.readlines():
 #         # print(line)
@@ -62,7 +62,7 @@ import re
 # 将被标注了实体的单个txt文件整合为不同大小的训练集
 # path_source = "data/token"
 # path_target = "data/function_all_token"
-# data_size = [30, 50, 70, 100]
+# data_size = [70]
 # for size in data_size:
 #     path_data = os.path.join(path_target, str(size)+"00.train")
 #     string = ""
@@ -75,10 +75,10 @@ import re
 #     with open(path_data, "w", encoding="utf-8") as f:
 #         f.write(string)
 #
-# path_test_data = os.path.join(path, "test.txt")
+# path_test_data = os.path.join(path_target, "test.txt")
 # string_test = ""
-# for i in range(101, 113):
-#     path_test_temp = os.path.join(path, str(i)+".txt")
+# for i in range(71, 113):
+#     path_test_temp = os.path.join(path_source, str(i)+".txt")
 #     with open(path_test_temp, "r", encoding="utf-8") as f_temp:
 #         string_test_temp = f_temp.read()
 #     string_test += string_test_temp
