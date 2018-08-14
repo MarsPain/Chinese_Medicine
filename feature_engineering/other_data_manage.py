@@ -224,3 +224,29 @@ import re
 #     # print(cut_labled)
 #     cut_labled.to_csv(path_cut_labled, encoding="utf-8")
 # word_cut_label_to_txt()
+
+# 对原始的总药物数据集中主治部分数据进行清洗——列表（之前生成该数据的时候，错误地直接将列表进行输出）转成原始的字符串
+# path_source = "data/data_all_v4.csv"
+# path_target = "data/data_all_v5.csv"
+# def clean_list():
+#     data = pd.read_csv(path_source)
+#     print(data.info())
+#     data = data.fillna("missing")
+#     print(data.info())
+#     len_data = data.shape[0]
+#     data_effect = data["Effect"]
+#     count = 0
+#     for i in range(len_data):
+#         count += 1
+#         string_old = data_effect.loc[i]
+#         if count < 50:
+#             print(string_old)
+#         string_new = re.sub(r"(\['|'\]|')", "", string_old)
+#         if count < 50:
+#             print(string_new)
+#         string_new = re.sub(r"(, )", "、", string_new)
+#         if count < 50:
+#             print(string_new)
+#         data_effect.loc[i] = string_new
+#     data.to_csv(path_target, encoding="utf-8")
+# clean_list()
