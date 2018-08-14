@@ -12,7 +12,7 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data/data_all_v4.csv")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_all_v5.csv")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
     print(data.info())
     data = data.fillna("missing")
@@ -33,7 +33,7 @@ def get_data():
     for i in range(length):
         # l = data["Function"].loc[i].split("。")
         data["Function"].loc[i] = re.split("[，、；]", data["Function"].loc[i])
-        # data["Effect"].loc[i] = re.split("[，、；]", l[1])
+        data["Effect"].loc[i] = re.split("[，、；]", data["Effect"].loc[i])
 
     return data, length
 
@@ -228,7 +228,16 @@ class WordCut:
             for j in range(length2):
                 word = list_effect[j]
                 if len(word) == 3:
-                    word = self.word_cut_3(word)    # 没出现在多字词库中的新词才根据规则进行拆分
+                    if word in self.cut_true_set:
+                        word1 = '%s%s' % (word[0], word[1])
+                        word2 = '%s%s' % (word[0], word[2])
+                        self.set2[word1] = (self.set2[word1] if word1 in self.set2 else 0) + 1
+                        self.set2[word2] = (self.set2[word2] if word2 in self.set2 else 0) + 1
+                        word = '%s%s%s' % (word1, "、", word2)
+                    elif word in self.cut_false_set:
+                        pass
+                    else:
+                        word = self.word_cut_3(word)
                     list_effect[j] = word
 
         # 对4字词进行处理并建立4字词库
@@ -238,7 +247,15 @@ class WordCut:
             for j in range(length2):
                 word = list_effect[j]
                 if len(word) == 4:
-                    word = self.word_cut_4(word)
+                    if word in self.cut_true_set:
+                        word_list = re.findall('.{2}', word)
+                        self.set2[word_list[0]] = (self.set2[word_list[0]] if word_list[0] in self.set2 else 0) + 1
+                        self.set2[word_list[1]] = (self.set2[word_list[1]] if word_list[1] in self.set2 else 0) + 1
+                        word = '%s%s%s' % (word_list[0], "、", word_list[1])
+                    elif word in self.cut_false_set:
+                        pass
+                    else:
+                        word = self.word_cut_4(word)
                     list_effect[j] = word
 
     def word_cut_2(self, word):
@@ -366,13 +383,13 @@ class WordCut:
             for j in range(1, length2):
                 s = "%s%s%s" % (s, "、", list_function[j])
             self.data["Function"].loc[i] = s
-        # for i in range(self.length):
-        #     list_effect = self.data["Effect"].loc[i]
-        #     length2 = len(list_effect)
-        #     s = list_effect[0]
-        #     for j in range(1, length2):
-        #         s = "%s%s%s" % (s, "、", list_effect[j])
-        #     self.data["Effect"].loc[i] = s
+        for i in range(self.length):
+            list_effect = self.data["Effect"].loc[i]
+            length2 = len(list_effect)
+            s = list_effect[0]
+            for j in range(1, length2):
+                s = "%s%s%s" % (s, "、", list_effect[j])
+            self.data["Effect"].loc[i] = s
 
     def data_analyse(self):
         """
@@ -457,7 +474,7 @@ class WordCut:
             func_list.append(word)
         with open("../data/function_tongyici.txt", "w", encoding="utf-8") as f:
             for word in func_list:
-                if word:
+                if len(word) == 2 or len(word) == 3 or len(word) == 4:
                     f.write(word+"\n")
 
     def write_txt(self, str_type):
@@ -496,16 +513,17 @@ class WordCut:
         self.data_analyse()  # 分词结果分析
         # 将词库输出写入到文件中
         self.write_txt("function")  # 初始化词库字典、用于存储主治特征词
-        # self.set2 = {}
-        # self.set3_true = {}  # 保存可以拆分的3字词
-        # self.set3_false = {}    # 保存不可拆分的3字词
-        # self.set4_true = {}  # 保存可以拆分的4字词
-        # self.set4_false = {}    # 保存不可拆分的4字词
-        # # 重复对主治部分数据进行分词处理，使词库完整
-        # self.word_cut_effect()
-        # self.word_cut_effect()
-        # self.data_analyse()
-        # self.write_txt("effect")    # 将词库输出写入到文件中
+        # 初始化存储特征词的dict
+        self.set2 = {}
+        self.set3_true = {}  # 保存可以拆分的3字词
+        self.set3_false = {}    # 保存不可拆分的3字词
+        self.set4_true = {}  # 保存可以拆分的4字词
+        self.set4_false = {}    # 保存不可拆分的4字词
+        # 重复对主治部分数据进行分词处理，使词库完整
+        self.word_cut_effect()
+        self.word_cut_effect()
+        self.data_analyse()
+        self.write_txt("effect")    # 将词库输出写入到文件中
         self.list_to_str()
         self.write_csv()
 
