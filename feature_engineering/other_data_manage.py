@@ -247,7 +247,9 @@ def word_cut_label_to_txt():
     cut_false_list_effect = list(cut_false_set_effect)
     cut_true_series_effect = pd.Series(cut_true_list_effect, name="cut_true_effect")
     cut_false_series_effect = pd.Series(cut_false_list_effect, name="cut_false_effect")
-    series_list = [cut_true_series_function, cut_false_series_function, cut_true_series_effect, cut_false_series_effect]
+    series_list = [cut_true_series_function, cut_false_series_function,
+                   cut_true_series_effect, cut_false_series_effect,
+                   ]
     cut_labled = pd.concat(series_list, axis=1)
     # print(cut_labled)
     cut_labled.to_csv(path_cut_labled, encoding="utf-8")

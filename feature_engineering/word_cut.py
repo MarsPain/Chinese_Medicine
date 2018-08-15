@@ -12,7 +12,7 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data/data_all_v5.csv")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_all_v7.csv")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
     print(data.info())
     data = data.fillna("missing")
@@ -38,50 +38,6 @@ def get_data():
     return data, length
 
 
-# class WordCutTaste:
-#     """
-#     #对性味和归经部分的数据进行分词处理
-#     """
-#     def __init__(self, data, length):
-#         self.data = data
-#         self.length = length
-#
-#     def word_clean_taste(self):
-#         """
-#         对性味部分数据进行清洗和分词
-#         :return:
-#         """
-#         for i in range(self.length):
-#             list_taste = self.data["Taste"].loc[i]
-#             length2 = len(list_taste)
-#             for j in range(length2):
-#                 list_taste[j] = re.sub("性|味", "", list_taste[j])
-#             # print(type(list_taste))
-#             # 列表转为字符串，以便后续输出数据
-#             s = list_taste[0]
-#             for j in range(1, length2):
-#                 s = "%s%s%s" % (s, "、", list_taste[j])
-#             self.data["Taste"].loc[i] = s
-#
-#     def word_clean_type(self):
-#         """
-#         对归经部分数据进行清洗和分词
-#         :param self:
-#         :return:
-#         """
-#         for i in range(self.length):
-#             list_type = self.data["Type"].loc[i]
-#             # print(type(list_type))
-#             length2 = len(list_type)
-#             for j in range(length2):
-#                 list_type[j] = re.sub("归|经|入", "", list_type[j])
-#             # 列表转为字符串，以便后续输出数据
-#             s = list_type[0]
-#             for j in range(1, length2):
-#                 s = "%s%s%s" % (s, "、", list_type[j])
-#             self.data["Type"].loc[i] = s
-
-
 class WordCut:
     """
     对功效和主治部分数据进行分词和存储
@@ -100,17 +56,25 @@ class WordCut:
         self.set3_false = {}    # 保存不可拆分的3字词
         self.set4_true = {}  # 保存可以拆分的4字词
         self.set4_false = {}    # 保存不可拆分的4字词
-        self.cut_true_set = None    # 可被拆分的多字词库
-        self.cut_false_set = None    # 不可被拆分的多字词库
+        self.cut_true_set_function = None    # 可被拆分的功效多字词库
+        self.cut_false_set_function = None    # 不可被拆分的功效多字词库
+        self.cut_true_set_effect = None    # 可被拆分的症状多字词库
+        self.cut_false_set_effect = None    # 不可被拆分的症状多字词库
 
     def get_cut_lable(self):
         cut_lable_data = pd.read_csv("data/cut_labled.csv")
-        cut_true_list = list(cut_lable_data["cut_true"])
-        cut_false_list = list(cut_lable_data["cut_false"])
+        # 创建可被拆分与不可拆分的功效多字词库
+        cut_true_list_function = list(cut_lable_data["cut_true_function"])
+        cut_false_list_function = list(cut_lable_data["cut_false_function"])
         # print(cut_true_list)
-        self.cut_true_set = set(cut_true_list)
+        self.cut_true_set_function = set(cut_true_list_function)
         # print(self.cut_true_set)
-        self.cut_false_set = set(cut_false_list)
+        self.cut_false_set_function = set(cut_false_list_function)
+        # 创建可被拆分与不可拆分的症状多字词库
+        cut_true_list_effect = list(cut_lable_data["cut_true_effect"])
+        cut_false_list_effect = list(cut_lable_data["cut_false_effect"])
+        self.cut_true_set_effect = set(cut_true_list_effect)
+        self.cut_false_set_effect = set(cut_false_list_effect)
 
     def word_clean_taste(self):
         """
@@ -173,13 +137,13 @@ class WordCut:
                 word = list_function[j]
                 if len(list_function[j]) == 3:
                     # 首先判断该词是否在可拆分的多字词库或者不可拆分的多字词库中（以前拆分过且经过人工审核）
-                    if word in self.cut_true_set:
+                    if word in self.cut_true_set_function:
                         word1 = '%s%s' % (word[0], word[1])
                         word2 = '%s%s' % (word[0], word[2])
                         self.set2[word1] = (self.set2[word1] if word1 in self.set2 else 0) + 1
                         self.set2[word2] = (self.set2[word2] if word2 in self.set2 else 0) + 1
                         word = '%s%s%s' % (word1, "、", word2)
-                    elif word in self.cut_false_set:
+                    elif word in self.cut_false_set_function:
                         pass
                     else:
                         word = self.word_cut_3(word)
@@ -193,12 +157,12 @@ class WordCut:
             for j in range(length2):
                 word = list_function[j]
                 if len(list_function[j]) == 4:
-                    if word in self.cut_true_set:
+                    if word in self.cut_true_set_function:
                         word_list = re.findall('.{2}', word)
                         self.set2[word_list[0]] = (self.set2[word_list[0]] if word_list[0] in self.set2 else 0) + 1
                         self.set2[word_list[1]] = (self.set2[word_list[1]] if word_list[1] in self.set2 else 0) + 1
                         word = '%s%s%s' % (word_list[0], "、", word_list[1])
-                    elif word in self.cut_false_set:
+                    elif word in self.cut_false_set_function:
                         pass
                     else:
                         word = self.word_cut_4(word)
@@ -217,7 +181,7 @@ class WordCut:
             # print(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
-                list_effect[j] = re.sub("主治|或|治", "", list_effect[j])
+                list_effect[j] = re.sub("主治|主|治|用于|常用|可用|用|等症|等", "", list_effect[j])
                 if len(list_effect[j]) == 2:
                     self.word_cut_2(list_effect[j])
 
@@ -228,13 +192,13 @@ class WordCut:
             for j in range(length2):
                 word = list_effect[j]
                 if len(word) == 3:
-                    if word in self.cut_true_set:
+                    if word in self.cut_true_set_effect:
                         word1 = '%s%s' % (word[0], word[1])
                         word2 = '%s%s' % (word[0], word[2])
                         self.set2[word1] = (self.set2[word1] if word1 in self.set2 else 0) + 1
                         self.set2[word2] = (self.set2[word2] if word2 in self.set2 else 0) + 1
                         word = '%s%s%s' % (word1, "、", word2)
-                    elif word in self.cut_false_set:
+                    elif word in self.cut_false_set_effect:
                         pass
                     else:
                         word = self.word_cut_3(word)
@@ -247,12 +211,12 @@ class WordCut:
             for j in range(length2):
                 word = list_effect[j]
                 if len(word) == 4:
-                    if word in self.cut_true_set:
+                    if word in self.cut_true_set_effect:
                         word_list = re.findall('.{2}', word)
                         self.set2[word_list[0]] = (self.set2[word_list[0]] if word_list[0] in self.set2 else 0) + 1
                         self.set2[word_list[1]] = (self.set2[word_list[1]] if word_list[1] in self.set2 else 0) + 1
                         word = '%s%s%s' % (word_list[0], "、", word_list[1])
-                    elif word in self.cut_false_set:
+                    elif word in self.cut_false_set_effect:
                         pass
                     else:
                         word = self.word_cut_4(word)
