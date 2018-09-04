@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import jieba
 
 # s = "123我，456你"
 # import re
@@ -465,3 +466,14 @@ import re
 # print(cut_true_list)
 # cut_true_set = set(cut_true_list)
 # print(cut_true_set)
+
+# 测试结巴分词是否是最大正向匹配
+s = "比如腰酸背痛是一个症状实体，" \
+    "腰酸和背痛也是一个实体，" \
+    "我们肯定希望腰酸和背痛分别作为一个词向量进行输入，" \
+    "然后腰酸背痛被识别为一个实体（因为采用的是最大正向匹配，" \
+    "所以会先将腰酸背痛匹配为一个实体，这里又出现了一个问题，"
+jieba.load_userdict("test_dict.txt")
+s_cut = jieba.cut(s)
+result = " ".join(s_cut)
+print(result)
