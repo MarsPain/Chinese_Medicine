@@ -253,7 +253,7 @@ def word_cut_label_to_txt():
     cut_labled = pd.concat(series_list, axis=1)
     # print(cut_labled)
     cut_labled.to_csv(path_cut_labled, encoding="utf-8")
-word_cut_label_to_txt()
+# word_cut_label_to_txt()
 
 # 对原始的总药物数据集中主治部分数据进行清洗——列表（之前生成该数据的时候，错误地直接将列表进行输出）转成原始的字符串
 # path_source = "data/data_all_v4.csv"
@@ -280,3 +280,9 @@ word_cut_label_to_txt()
 #         data_effect.loc[i] = string_new
 #     data.to_csv(path_target, encoding="utf-8")
 # clean_list()
+
+# 对实体词库进行筛选，留下2字词和3字词，得到新的用于分词的实体词库，然后基于该词库对方剂数据的主治信息进行分词
+path_dict_target = "data/dict_entity"
+path_dict_source = "data/dict_entity/cut_dict.txt"
+path_txt_source = "data/prescription_need_token"
+path_txt_target = "data/"

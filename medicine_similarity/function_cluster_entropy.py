@@ -178,8 +178,18 @@ class ClusterEntropy:
                 if set(group).issubset(function_set):
                     # print(index, group, function_set)
                     count += 1
-                    function_to_medicine[tuple(group)].append(index)
+                    function_to_medicine[tuple(group)].append(self.data["名称"].iloc[index])
+        function_group_list = []
+        medicines_list = []
+        for function_group, medicines in function_to_medicine.items():
+            function_group_list.append(function_group)
+            medicines_list.append(medicines)
         print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
+        function_group_series = pd.Series(function_group_list, name="功效团")
+        medicines_series = pd.Series(medicines_list, name="药物列表")
+        function_to_medicine_df_list = [function_group_series, medicines_series]
+        function_to_medicine_df = pd.concat(function_to_medicine_df_list, axis=1)
+        function_to_medicine_df.to_csv("data/result_function_cluster", encoding="utf-8")
         return function_to_medicine
 
 if __name__ == "__main__":

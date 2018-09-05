@@ -254,11 +254,11 @@ def cluster_various_main():
     """
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
-    # num_clusters = 13
-    # cluster_kmodes(num_clusters, data_treat)
+    num_clusters = 13
+    cluster_kmodes(num_clusters, data_treat)
     # opti_para_select("k_means", data_treat)
-    num_clusters = 14
-    cluster_kmeans(num_clusters)
+    # num_clusters = 14
+    # cluster_kmeans(num_clusters)
 
 if __name__ == "__main__":
     # data_treat = get_data(file_path)
