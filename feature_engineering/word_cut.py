@@ -12,7 +12,7 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data/data_all_v7.csv")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_all_v8.csv")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
     print(data.info())
     data = data.fillna("missing")
@@ -425,6 +425,14 @@ class WordCut:
         self.data.to_csv("../data/data_treat.csv", encoding="utf-8")    # 输出所有经过处理的数据
         function_data = self.data["Function"]
         # print(function_data)
+        for i in range(function_data.shape[0]):
+            function_line = function_data.loc[i]
+            function_list = function_line.strip().split("、")
+            function_list_234 = []
+            for word in function_list:
+                if len(word) == 2 or len(word) == 3 or len(word) == 4:
+                    function_list_234.append(word)
+            function_line = "、".join(function_list_234)
         function_data.to_csv("../data/function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
         # 输出所有功效特征词，用于进行功效特征词的同义词分类和复杂系统熵聚类
         func_dict = {}
@@ -477,17 +485,17 @@ class WordCut:
         self.data_analyse()  # 分词结果分析
         # 将词库输出写入到文件中
         self.write_txt("function")  # 初始化词库字典、用于存储主治特征词
-        # 初始化存储特征词的dict
-        self.set2 = {}
-        self.set3_true = {}  # 保存可以拆分的3字词
-        self.set3_false = {}    # 保存不可拆分的3字词
-        self.set4_true = {}  # 保存可以拆分的4字词
-        self.set4_false = {}    # 保存不可拆分的4字词
-        # 重复对主治部分数据进行分词处理，使词库完整
-        self.word_cut_effect()
-        self.word_cut_effect()
-        self.data_analyse()
-        self.write_txt("effect")    # 将词库输出写入到文件中
+        # # 初始化存储特征词的dict
+        # self.set2 = {}
+        # self.set3_true = {}  # 保存可以拆分的3字词
+        # self.set3_false = {}    # 保存不可拆分的3字词
+        # self.set4_true = {}  # 保存可以拆分的4字词
+        # self.set4_false = {}    # 保存不可拆分的4字词
+        # # 重复对主治部分数据进行分词处理，使词库完整
+        # self.word_cut_effect()
+        # self.word_cut_effect()
+        # self.data_analyse()
+        # self.write_txt("effect")    # 将词库输出写入到文件中
         self.list_to_str()
         self.write_csv()
 
