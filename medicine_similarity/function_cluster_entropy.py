@@ -173,9 +173,9 @@ class ClusterEntropy:
             # print("function_set:", function_set)
             for group in group_all_2:
                 # 若功效团是药物功效的子集或者药物功效是功效团的子集，则认为该药物属于该功效团
-                # if set(group).issubset(function_set) or function_set.issubset(set(group)):
+                if set(group).issubset(function_set) or function_set.issubset(set(group)):
                 # 若功效团是药物功效的子集，则认为该药物属于该功效团
-                if set(group).issubset(function_set):
+                # if set(group).issubset(function_set):
                     # print(index, group, function_set)
                     count += 1
                     function_to_medicine[tuple(group)].append(self.data["名称"].iloc[index])
@@ -184,12 +184,19 @@ class ClusterEntropy:
         for function_group, medicines in function_to_medicine.items():
             function_group_list.append(function_group)
             medicines_list.append(medicines)
-        print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
+        max_functions = 0
+        max_medicines = 0
+        for functions, medicines in function_to_medicine.items():
+            if len(medicines) > max_medicines:
+                max_medicines = len(medicines)
+                max_functions = functions
+        print("能够被聚类的药物数量:", count, "拥有最多药物的团及拥有的药物数量：", {max_functions: max_medicines},
+              "function_to_medicine:", len(function_to_medicine), function_to_medicine)
         function_group_series = pd.Series(function_group_list, name="功效团")
         medicines_series = pd.Series(medicines_list, name="药物列表")
         function_to_medicine_df_list = [function_group_series, medicines_series]
         function_to_medicine_df = pd.concat(function_to_medicine_df_list, axis=1)
-        function_to_medicine_df.to_csv("data/result_function_cluster", encoding="utf-8")
+        function_to_medicine_df.to_csv("data/result_function_cluster.csv", encoding="utf-8")
         return function_to_medicine
 
 if __name__ == "__main__":
