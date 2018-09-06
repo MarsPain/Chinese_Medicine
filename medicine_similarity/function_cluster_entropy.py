@@ -179,11 +179,15 @@ class ClusterEntropy:
                     # print(index, group, function_set)
                     count += 1
                     function_to_medicine[tuple(group)].append(self.data["名称"].iloc[index])
-        function_group_list = []
-        medicines_list = []
-        for function_group, medicines in function_to_medicine.items():
-            function_group_list.append(function_group)
-            medicines_list.append(medicines)
+        # 根据功效团拥有的药物数量进行排序
+        function_to_medicine_sort = sorted(function_to_medicine.items(), key=lambda x: len(x[1]))
+        print(function_to_medicine_sort)
+        function_group_list = []    # 功效团列表
+        medicines_list = []  # 功效团拥有的药物列表
+        for function_medicine in function_to_medicine_sort:
+            function_group_list.append(function_medicine[0])
+            medicines_list.append(function_to_medicine[function_medicine[0]])
+        # 获取拥有最多药物的功效团以及其具体拥有的药物
         max_functions = 0
         max_medicines = 0
         for functions, medicines in function_to_medicine.items():

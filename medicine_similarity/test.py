@@ -45,3 +45,8 @@ def sort_label():
 # index = 5
 # print(series[index])
 # print(data["名称"].iloc[index])
+
+# 测试根据字典value进行排序
+# dict = {"a": 4, "b": 3, "c": 6}
+# dict_sort = sorted_items = sorted(dict.items(), key=lambda x: x[1])
+# print(dict_sort)
