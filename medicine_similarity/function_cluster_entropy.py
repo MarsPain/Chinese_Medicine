@@ -205,11 +205,12 @@ class ClusterEntropy:
         max_functions = 0
         max_medicines = 0
         for functions, medicines in function_to_medicine.items():
+            print("功效团：", functions, "药物数量：", len(medicines))
             if len(medicines) > max_medicines:
                 max_medicines = len(medicines)
                 max_functions = functions
-        print("能够被聚类的药物数量:", count, "拥有最多药物的团及拥有的药物数量：", {max_functions: max_medicines},
-              "function_to_medicine:", len(function_to_medicine), function_to_medicine)
+        print("拥有最多药物的功效团：", function_to_medicine, "药物数量：", len(max_functions))
+        print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
         function_group_series = pd.Series(function_group_list, name="功效团")
         medicines_series = pd.Series(medicines_list, name="药物列表")
         function_to_medicine_df_list = [function_group_series, medicines_series]
