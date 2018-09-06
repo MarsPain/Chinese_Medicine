@@ -13,6 +13,7 @@ correlation_path = 'data/correlation.csv'   # 保存互信息的文件路径
 max_relatives_nums = 8  # 最大的亲友团数量
 min_relatives_nums = 3  # 最小的亲友团数量
 group_all_path = "data/group_all.csv"
+group_best_path = "data/group_best.csv"
 
 
 class ClusterEntropy:
@@ -24,7 +25,8 @@ class ClusterEntropy:
         self.combine_fre = None  # 存储词根的两两组合出现的频率，同样用于计算互信息
         self.combine_name = None  # 存储用词根名称表示的
         self.relatives_list = None  # 保存最大亲友团数量时的亲友团
-        self.group_all_2 = None  # 保存聚类得到的所有功效亲友团
+        self.group_all_2 = None  # 保存各种亲友团数量下的聚类得到的所有功效亲友团
+        self.group_best = None  # 保存最佳聚类下得到的功效亲友团
         self.data = None    # 保存全药物数据的DataFrame
         self.series = None  # 保存药物功效数据的Series
 
@@ -139,9 +141,9 @@ class ClusterEntropy:
             group_name.append("group"+str(i))
             group_all.append(group_clean(group_path))
         # print("group_all:", group_all)
-        write_csv(group_name, group_all_path, group_all)
+        write_csv(group_name, group_all_path, group_all)    # 将不同亲友团数量下的所有聚类结果进行输出
         group_all_dict = {}  # 记录各个团出现的次数
-        self.group_all_2 = []   # 用于保存所有功效团
+        self.group_all_2 = []   # 用于保存所有亲友团数量下的功效团
         for group_list in group_all:
             for group in group_list:
                 group_all_dict[tuple(group)] = group_all_dict[tuple(group)]+1 if tuple(group) in group_all_dict else 1
@@ -149,6 +151,17 @@ class ClusterEntropy:
         for group in group_all_dict.keys():
             self.group_all_2.append(group)  # 确保self.group_all_2中不出现重复的团
         print("self.group_all_2:", self.group_all_2)
+        # 人工审核找到信息利用率最高的亲友团数量，即最佳的亲友团数量，然后以该亲友团数量下的结果作为最佳结果
+        group_best_name = []
+        group_best = []
+        for i in range(6, 7):
+            group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
+            group_best_name.append("group"+str(i))
+            group_best.append(group_clean(group_path))
+        write_csv(group_best_name, group_best_path, group_best)
+        self.group_best = group_best[0]
+        print(self.group_best)
+
 
     def cluster_entropy_main(self):
         """
@@ -161,7 +174,8 @@ class ClusterEntropy:
         self.search_relatives()
         self.cluster()
         self.group_all()
-        group_all_2 = self.group_all_2
+        # group_all_2 = self.group_all_2   # 用所有亲友团数量下的功效团进行药物聚类
+        group_all_2 = self.group_best   # 用最佳亲友团数量下的功效团进行聚类
         function_to_medicine = {}   # 用于保存功效团到包含该功效团的药物
         # 预先为每个团创建一个列表作为value，这里要注意，dict的key必须是可哈希的，所以需要使用元祖tuple
         for group in group_all_2:
