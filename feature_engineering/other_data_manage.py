@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import re
+import jieba
 
 # 删除标注数据中的词性
 # path = "data/effect_data_all/combine_sentence_annotation_test.txt"
@@ -282,7 +283,47 @@ def word_cut_label_to_txt():
 # clean_list()
 
 # 对实体词库进行筛选，留下2字词和3字词，得到新的用于分词的实体词库，然后基于该词库对方剂数据的主治信息进行分词
-path_dict_target = "data/dict_entity"
-path_dict_source = "data/dict_entity/cut_dict.txt"
-path_txt_source = "data/prescription_need_token"
-path_txt_target = "data/"
+def filter_dict():
+    path_dict_source = "data/dict_entity"
+    path_dict_target = "data/dict_entity/jieba_cut_dict.txt"
+    entity_list = ["diseases_", "pattern_", "symptom_", "treat_"]
+    with open(path_dict_target, "w", encoding="utf-8") as f_t:
+        for entity_name in entity_list:
+            path_dict = os.path.join(path_dict_source, entity_name+"7000.txt")
+            with open(path_dict, "r", encoding="utf-8") as f_s:
+                lines = f_s.readlines()
+                for line in lines:
+                    word = line.strip()
+                    if len(word) == 2 or len(word) == 3:
+                        f_t.write(word+"\n")
+    return path_dict_target
+def cut_string(path_dict_target):
+    path_txt_source = "data/prescription_need_token"
+    path_txt_target_train = "data/train_word_emb.train"
+    path_txt_target_dev = "data/dev_word_emb.dev"
+    jieba.load_userdict(path_dict_target)
+    string = ""
+    for i in range(1, 71):
+        path_temp = os.path.join(path_txt_source, str(i)+".txt")
+        with open(path_temp, "r", encoding="utf-8") as f_temp:
+            lines = f_temp.readlines()
+            string_temp = ""
+            for line in lines:
+                cut = jieba.cut(line.strip())
+                string_temp += " ".join(cut)+"\n"
+        string += string_temp
+    with open(path_txt_target_train, "w", encoding="utf-8") as f_t_t:
+        f_t_t.write(string)
+    for i in range(71, 113):
+        path_temp = os.path.join(path_txt_source, str(i)+".txt")
+        with open(path_temp, "r", encoding="utf-8") as f_temp:
+            lines = f_temp.readlines()
+            string_temp = ""
+            for line in lines:
+                cut = jieba.cut(line.strip())
+                string_temp += " ".join(cut)+"\n"
+        string += string_temp
+    with open(path_txt_target_dev, "w", encoding="utf-8") as f_t_d:
+        f_t_d.write(string)
+# path_dict_target = filter_dict()
+# cut_string(path_dict_target)
