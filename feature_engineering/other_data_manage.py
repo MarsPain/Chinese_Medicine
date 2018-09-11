@@ -331,8 +331,8 @@ def cut_string(path_dict_target):
 
 # 去除药物数据的功效和症状中多余的空格
 def delete_space():
-    path_source = "data/data_all_v9.csv"
-    path_target = "data/data_all_v10.csv"
+    path_source = "data/data_all_v8.csv"
+    path_target = "data/data_all_v9.csv"
     data = pd.read_csv(path_source, encoding="utf-8")
     data = data.fillna("missing")
     length = data.shape[0]
@@ -347,7 +347,7 @@ def delete_space():
         # print(string)
         string_new = re.sub(" ", "", string)
         data_effect.loc[i] = string_new
-    data.to_csv(path_target, encoding="utf-8")
+    data.to_csv(path_target, index=False, encoding="utf-8")
     # 测试空格是否被去除
     # data_new = pd.read_csv(path_target, encoding="utf-8")
     # for i in range(length):
