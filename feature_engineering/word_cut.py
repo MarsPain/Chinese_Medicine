@@ -181,7 +181,7 @@ class WordCut:
             # print(list_effect)
             for j in range(length2):
                 # 清理“主治、或”等停用词
-                list_effect[j] = re.sub("主治|主|治|用于|常用|可用|用|等症|等", "", list_effect[j])
+                list_effect[j] = re.sub("主治|主|治|用于|常用|可用|可|用|等症|等", "", list_effect[j])
                 if len(list_effect[j]) == 2:
                     self.word_cut_2(list_effect[j])
 

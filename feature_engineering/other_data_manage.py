@@ -314,6 +314,7 @@ def cut_string(path_dict_target):
         string += string_temp
     with open(path_txt_target_train, "w", encoding="utf-8") as f_t_t:
         f_t_t.write(string)
+    string = ""
     for i in range(71, 113):
         path_temp = os.path.join(path_txt_source, str(i)+".txt")
         with open(path_temp, "r", encoding="utf-8") as f_temp:
