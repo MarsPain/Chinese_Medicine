@@ -331,17 +331,26 @@ def cut_string(path_dict_target):
 
 # 去除药物数据的功效和症状中多余的空格
 def delete_space():
-    path_source = "data/data_all_v8.csv"
-    path_target = "data/data_all_v9.csv"
-    data_source = pd.read_csv(path_source, encoding="utf-8")
-    length = data_source.shape[0]
-    data_function = data_source["Function"]
-    data_effect = data_source["Effect"]
+    path_source = "data/data_all_v9.csv"
+    path_target = "data/data_all_v10.csv"
+    data = pd.read_csv(path_source, encoding="utf-8")
+    data = data.fillna("missing")
+    length = data.shape[0]
+    data_function = data["Function"]
+    data_effect = data["Effect"]
     for i in range(length):
         string = data_function.loc[i]
-        print(string)
-        # print(re.match("    ", string))
+        # print(string)
+        # print(re.match(" ", string))
     for i in range(length):
-        string = data_function.loc[i]
-        print(string)
-# delete_space()    # 打印后搜索发现并没有出现空格
+        string = data_effect.loc[i]
+        # print(string)
+        string_new = re.sub(" ", "", string)
+        data_effect.loc[i] = string_new
+    data.to_csv(path_target, encoding="utf-8")
+    # 测试空格是否被去除
+    # data_new = pd.read_csv(path_target, encoding="utf-8")
+    # for i in range(length):
+    #     string_new = data_new["Effect"].loc[i]
+    #     print(string_new)
+delete_space()    # 打印后搜索发现并没有出现空格
