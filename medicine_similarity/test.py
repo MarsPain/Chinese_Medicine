@@ -50,3 +50,13 @@ def sort_label():
 # dict = {"a": 4, "b": 3, "c": 6}
 # dict_sort = sorted_items = sorted(dict.items(), key=lambda x: x[1])
 # print(dict_sort)
+
+# 测试dataframe的搜索
+# data = pd.DataFrame([[1, 2, 3, 4], [2, 4, 6, 8], [2, 9, 12, 36]], columns=["a", "b", "c", "d"])
+# print(data)
+# num = data["d"].loc[data["a"] == 2].iloc[0]  # 搜索到能匹配的行，返回一个series
+# index = data.loc[data["a"] == 2].index[0]   # 获取索引，index中的索引代表被搜索到的所有行中的第几行
+# num_new = data["a"].iloc[index]
+# print(num, type(num))
+# print(index)
+# print(num_new)

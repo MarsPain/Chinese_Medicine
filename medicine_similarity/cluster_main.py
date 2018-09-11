@@ -26,10 +26,11 @@ def word_to_index(word):
     :return:
     """
     data, series = get_data(medicine_path)  # data为完整药物数据
-    for indexs in data.index:
-        if data["Name"].loc[indexs] == word:
-            print("index:", indexs)
-            return indexs
+    index = data.loc[data["名称"] == word].index[0]
+    # for indexs in data.index:
+    #     if data["名称"].loc[indexs] == word:
+    #         print("index:", indexs)
+    return index
 
 
 def search_relatives(function_to_medicine, medicine_index):
@@ -54,7 +55,7 @@ def search_relatives(function_to_medicine, medicine_index):
             # print("medicine_list:", medicine_list)
             # 遍历属于功效团的药物列表，若基于性味归经的聚类结果的标签相同，则认为目标药物和该药物相似
             for i in medicine_list:
-                if data["Label"].loc[i] == medicine_label and i != medicine_index:  # 后面的条件用于排除目标药物
+                if data["Label"].loc[word_to_index(i)] == medicine_label and word_to_index(i) != medicine_index:
                     relatives_list.append(i)  # 添加相似药物的索引
                     # relatives_list.append(data["Name"].loc[i])  # 添加相似药物的名称
     relatives_list = set(relatives_list)    # 去除重复项
@@ -83,4 +84,4 @@ def main(is_cluster):
         return relatives_list
 
 if __name__ == "__main__":
-    main(True)
+    main(False)
