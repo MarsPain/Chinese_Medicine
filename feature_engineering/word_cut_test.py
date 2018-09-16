@@ -478,6 +478,6 @@ import re
 # result = " ".join(s_cut)
 # print(result)
 
-data = pd.DataFrame([[1, 1, 1, 1], [1, 1, 1, 1]])
-print(data)
-data.to_csv("test_csv", encoding="utf-8")
+# data = pd.DataFrame([[1, 1, 1, 1], [1, 1, 1, 1]])
+# print(data)
+# data.to_csv("test_csv", encoding="utf-8")

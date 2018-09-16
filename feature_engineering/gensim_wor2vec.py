@@ -19,17 +19,17 @@ def get_data():
     for i in range(len_data):
         list_function = []
         for char in data_function.loc[i]:
-            if char != "," and char != "，" and char != "。" and char != "m" \
+            if char != "m" \
                     and char != "i" and char != "s" and char != "n" and char != "g":
                 list_function.append(char)
         string_function = " ".join(list_function)
         list_effect = []
         for char in data_effect.loc[i]:
-            if char != "," and char != "，" and char != "。"and char != "m" \
+            if char != "m" \
                     and char != "i" and char != "s" and char != "n" and char != "g":
                 list_effect.append(char)
         string_effect = " ".join(list_effect)
-        string = string + string_function + string_effect + " "
+        string = string + string_function + " " + string_effect + " "
     # print(string)
     with open(path_word2vec_string, "w", encoding="utf-8") as f:
         f.write(string)
@@ -37,9 +37,12 @@ def get_data():
 
 def get_word2vec():
     sentences = word2vec.LineSentence(path_word2vec_string)
-    model = word2vec.Word2Vec(sentences, hs=1, min_count=1, window=3, size=100)
-    model.save("data/word2vec_model")
-    model.wv.save_word2vec_format('data/word2vec_model.txt', binary=False)
+    # model = word2vec.Word2Vec(sentences, sg=0, hs=1, min_count=1, window=3, size=100)  # CBOW
+    # model.save("data/word2vec_model")
+    # model.wv.save_word2vec_format('data/word2vec_model.txt', binary=False)
+    model = word2vec.Word2Vec(sentences, sg=1, hs=1, min_count=1, window=3, size=100)   # skipgram
+    model.save("data/word2vec_model_sg")
+    model.wv.save_word2vec_format('data/word2vec_model_sg.txt', binary=False)
     print("痛", model["痛"])
     print("疼", model["疼"])
     print(model.most_similar(["痛"]))
