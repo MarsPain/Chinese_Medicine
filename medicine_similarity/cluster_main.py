@@ -81,14 +81,23 @@ def main(is_cluster=False, search_all=False):
         if search_all:
             data, _ = get_data(medicine_path)
             length = data.shape[0]
-            all_relatives = pd.DataFrame(np.zeros((length, 2)), columns=["药物名称", "相似药物"])
+            # all_relatives = pd.DataFrame(np.zeros((length, 2)), columns=["药物名称", "相似药物"])
+            all_medicine_word_list = []
+            all_relatives_list = []
             for i in range(length):
                 medicine_word = data["名称"].loc[i]
                 medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
                 relatives_list = search_relatives(function_to_medicine_dict, medicine)  # 获得药物的相似药物的索引列表
-                all_relatives["药物名称"].loc[i] = medicine_word
-                all_relatives["相似药物"].loc[i] = "、".join(relatives_list)
-                all_relatives.to_csv(all_relatives_path, encoding="utf-8")
+                all_medicine_word_list.append(medicine_word)
+                all_relatives_list.append("、".join(relatives_list))
+                # all_relatives["药物名称"].loc[i] = medicine_word
+                # all_relatives["相似药物"].loc[i] = "、".join(relatives_list)
+                # all_relatives.to_csv(all_relatives_path, encoding="utf-8")
+            all_medicine_word_series = pd.Series(all_medicine_word_list, name="药物名称")
+            all_relatives_series = pd.Series(all_relatives_list, name="相似药物")
+            series_list = [all_medicine_word_series, all_relatives_series]
+            all_relatives_data = pd.concat(series_list, axis=1)
+            all_relatives_data.to_csv(all_relatives_path, index=False, encoding="utf-8")
         else:
             medicine_word = "拳参"   # 目标药物
             medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
