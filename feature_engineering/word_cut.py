@@ -12,7 +12,7 @@ def get_data():
     :return:data:经处理的DataFrame["Name","Taste","Type","Function","Effect"]
     """
     # 若文件读取错误只要在记事本或者编辑器中打开以utf-8的编码格式重新打开即可
-    data = pd.read_csv("data/data_all_v8.csv")    # delimiter指定分隔符，根据具体数据调整
+    data = pd.read_csv("data/data_all_v10.csv")    # delimiter指定分隔符，根据具体数据调整
     length = data.shape[0]
     print(data.info())
     data = data.fillna("missing")
@@ -486,16 +486,16 @@ class WordCut:
         # 将词库输出写入到文件中
         self.write_txt("function")  # 初始化词库字典、用于存储主治特征词
         # # 初始化存储特征词的dict
-        # self.set2 = {}
-        # self.set3_true = {}  # 保存可以拆分的3字词
-        # self.set3_false = {}    # 保存不可拆分的3字词
-        # self.set4_true = {}  # 保存可以拆分的4字词
-        # self.set4_false = {}    # 保存不可拆分的4字词
+        self.set2 = {}
+        self.set3_true = {}  # 保存可以拆分的3字词
+        self.set3_false = {}    # 保存不可拆分的3字词
+        self.set4_true = {}  # 保存可以拆分的4字词
+        self.set4_false = {}    # 保存不可拆分的4字词
         # # 重复对主治部分数据进行分词处理，使词库完整
-        # self.word_cut_effect()
-        # self.word_cut_effect()
-        # self.data_analyse()
-        # self.write_txt("effect")    # 将词库输出写入到文件中
+        self.word_cut_effect()
+        self.word_cut_effect()
+        self.data_analyse()
+        self.write_txt("effect")    # 将词库输出写入到文件中
         self.list_to_str()
         self.write_csv()
 
