@@ -215,7 +215,7 @@ class ClusterEntropy:
         medicines_series = pd.Series(medicines_list, name="药物列表")
         function_to_medicine_df_list = [function_group_series, medicines_series]
         function_to_medicine_df = pd.concat(function_to_medicine_df_list, axis=1)
-        function_to_medicine_df.to_csv("data/result_function_cluster.csv", encoding="utf-8")
+        function_to_medicine_df.to_csv("data/result_function_cluster.csv", index=False, encoding="utf-8")
         return function_to_medicine
 
 if __name__ == "__main__":

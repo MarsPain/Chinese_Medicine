@@ -2,10 +2,13 @@ from medicine_similarity.function_cluster_entropy import ClusterEntropy
 from medicine_similarity.taste_cluster_various import cluster_various_main
 from medicine_similarity.data_utils import get_data
 import pickle
+import numpy as np
+import pandas as pd
 import re
 
 medicine_path = 'data/data_labeld_kmodes.csv'    # 药物数据的路径（该药物数据已根据性味归经的聚类结果打上标签）
 function_to_medicine_path = "data/function_to_medicine.pkl"
+all_relatives_path = "data/all_relatives.csv"
 
 
 def cluster():
@@ -27,9 +30,6 @@ def word_to_index(word):
     """
     data, series = get_data(medicine_path)  # data为完整药物数据
     index = data.loc[data["名称"] == word].index[0]
-    # for indexs in data.index:
-    #     if data["名称"].loc[indexs] == word:
-    #         print("index:", indexs)
     return index
 
 
@@ -56,17 +56,17 @@ def search_relatives(function_to_medicine, medicine_index):
             # 遍历属于功效团的药物列表，若基于性味归经的聚类结果的标签相同，则认为目标药物和该药物相似
             for i in medicine_list:
                 if data["Label"].loc[word_to_index(i)] == medicine_label and word_to_index(i) != medicine_index:
-                    relatives_list.append(i)  # 添加相似药物的索引
-                    # relatives_list.append(data["Name"].loc[i])  # 添加相似药物的名称
+                    relatives_list.append(i)  # 添加相似药物的名称
     relatives_list = set(relatives_list)    # 去除重复项
     print("relatives_list:", relatives_list)
     return relatives_list
 
 
-def main(is_cluster):
+def main(is_cluster=False, search_all=False):
     """
     主函数，根据is_cluster进行聚类或者相似药物的寻找
     :param is_cluster: 决定是进行聚类，还是根据聚类结果搜索目标药物的相似药物
+    :param search_all: 决定是否输出所有药物的相似药物到文件中
     :return:
     """
     if is_cluster:  # 若需要进行聚类
@@ -78,10 +78,22 @@ def main(is_cluster):
         with open(function_to_medicine_path, 'rb') as f:
             function_to_medicine_dict = pickle.load(f)   # 加载聚类结果
         print("function_to_medicine:", function_to_medicine_dict)
-        medicine_word = "拳参"   # 目标药物
-        medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
-        relatives_list = search_relatives(function_to_medicine_dict, medicine)  # 获得药物的相似药物的索引列表
-        return relatives_list
+        if search_all:
+            data, _ = get_data(medicine_path)
+            length = data.shape[0]
+            all_relatives = pd.DataFrame(np.zeros((length, 2)), columns=["药物名称", "相似药物"])
+            for i in range(length):
+                medicine_word = data["名称"].loc[i]
+                medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
+                relatives_list = search_relatives(function_to_medicine_dict, medicine)  # 获得药物的相似药物的索引列表
+                all_relatives["药物名称"].loc[i] = medicine_word
+                all_relatives["相似药物"].loc[i] = "、".join(relatives_list)
+                all_relatives.to_csv(all_relatives_path, encoding="utf-8")
+        else:
+            medicine_word = "拳参"   # 目标药物
+            medicine = word_to_index(medicine_word)  # 获取目标药物在总药物数据中的索引
+            relatives_list = search_relatives(function_to_medicine_dict, medicine)  # 获得药物的相似药物的索引列表
+            return relatives_list
 
 if __name__ == "__main__":
-    main(False)
+    main(is_cluster=False, search_all=True)

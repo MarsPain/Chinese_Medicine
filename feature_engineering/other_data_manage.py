@@ -353,4 +353,4 @@ def delete_space():
     # for i in range(length):
     #     string_new = data_new["Effect"].loc[i]
     #     print(string_new)
-delete_space()    # 打印后搜索发现并没有出现空格
+# delete_space()

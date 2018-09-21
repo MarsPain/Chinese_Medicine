@@ -422,7 +422,7 @@ class WordCut:
         对数据输出写入到CSV文件中
         :return:
         """
-        self.data.to_csv("../data/data_treat.csv", encoding="utf-8")    # 输出所有经过处理的数据
+        self.data.to_csv("../data/data_treat.csv", index=False, encoding="utf-8")    # 输出所有经过处理的数据
         function_data = self.data["Function"]
         # print(function_data)
         for i in range(function_data.shape[0]):
@@ -433,7 +433,7 @@ class WordCut:
                 if len(word) == 2 or len(word) == 3 or len(word) == 4:
                     function_list_234.append(word)
             function_line = "、".join(function_list_234)
-        function_data.to_csv("../data/function_treat.csv", encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
+        function_data.to_csv("../data/function_treat.csv", index=False, encoding="utf-8")    # 输出功效数据，用于进行针对功效的复杂系统熵聚类
         # 输出所有功效特征词，用于进行功效特征词的同义词分类和复杂系统熵聚类
         func_dict = {}
         for i in range(self.length):

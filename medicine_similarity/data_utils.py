@@ -250,4 +250,4 @@ def write_qyt(list_qyt, root_name):
             string = string + list_qyt[i][j] + "、"
         data["亲友团"].loc[i] = string[:-1]
         # print("data:", data)
-    data.to_csv("data/qyt.csv", encoding="utf-8")
+    data.to_csv("data/qyt.csv", index=False,encoding="utf-8")

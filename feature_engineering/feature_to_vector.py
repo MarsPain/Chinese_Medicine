@@ -109,7 +109,7 @@ class FeatureToVectorSeq:
         """
         data = pd.DataFrame(data)
         # print(data)
-        data.to_csv("feature_vector_seq.csv")
+        data.to_csv("feature_vector_seq.csv", index=False)
 
 
 class FeatureToVector:
@@ -205,7 +205,7 @@ class FeatureToVector:
         """
         data = pd.DataFrame(data)
         # print(data)
-        data.to_csv("../data/feature_vector.csv")
+        data.to_csv("../data/feature_vector.csv", index=False)
 
 
 class FeatureToVector2:
@@ -257,7 +257,7 @@ class FeatureToVector2:
     def data_to_pandas(self):
         feature_vector = self.feature_to_vector()
         data = pd.DataFrame(feature_vector)
-        data.to_csv("../data/feature_vector.csv")
+        data.to_csv("../data/feature_vector.csv", index=False)
 
 if __name__ == "__main__":
     data_treat, length_treat = get_data(file_path)

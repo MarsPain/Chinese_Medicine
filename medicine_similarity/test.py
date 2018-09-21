@@ -55,8 +55,21 @@ def sort_label():
 # data = pd.DataFrame([[1, 2, 3, 4], [2, 4, 6, 8], [2, 9, 12, 36]], columns=["a", "b", "c", "d"])
 # print(data)
 # num = data["d"].loc[data["a"] == 2].iloc[0]  # 搜索到能匹配的行，返回一个series
-# index = data.loc[data["a"] == 2].index[0]   # 获取索引，index中的索引代表被搜索到的所有行中的第几行
+# index = data.loc[data["a"] == 2].index[0]   # 获取索引(与loc方法对应)，index中的索引代表被搜索到的所有行中的第几行
 # num_new = data["a"].iloc[index]
 # print(num, type(num))
 # print(index)
 # print(num_new)
+# 测试dataframe中的loc和iloc
+data = pd.DataFrame([[1, 2, 3, 4], [2, 4, 6, 8], [2, 9, 12, 36]], index=[2, 4, 8], columns=["a", "b", "c", "d"])
+print(data)
+index = data["b"].loc[data["a"] == 2].iloc[0]   # 获取索引，index中的索引代表被搜索到的所有行中的第几行
+print(index)
+print(data[1:2])    # 切片默认是用下标进行搜索（即行号，对应iloc）
+print(data.loc[1:2])    # 用loc进行切片即是索引
+# 测试读取csv后自动生成的索引
+# data.to_csv("test.csv", index=False)
+# data = pd.read_csv("test.csv")
+# print(data)
+# print(data.loc[1])
+# print(data.iloc[1])
