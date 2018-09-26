@@ -354,3 +354,39 @@ def delete_space():
     #     string_new = data_new["Effect"].loc[i]
     #     print(string_new)
 # delete_space()
+
+# 给NER的训练集添加词性
+import jieba.posseg as pseg
+def add_character():
+    path = "data/dev.dev"
+    path_new = "data/dev_new.train"
+    string = ""
+    char_list = []
+    tag_list = []
+    with open(path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+        for line in lines:
+            if len(line) > 1:
+                char_tag_list = line.strip().split()
+                # print(char_tag_list)
+                string += char_tag_list[0]
+                char_list.append(char_tag_list[0])
+                tag_list.append(char_tag_list[-1])
+            else:
+                char_list.append("None")
+                tag_list.append("None")
+    word_jieba = pseg.cut("打")
+    character_list = []
+    for c in char_list:
+        word_jieba = pseg.cut(c)
+        for w in word_jieba:
+            character_list.append(w.flag)
+    print(len(char_list), len(tag_list), len(character_list))
+    with open(path_new, "w", encoding="utf-8") as f:
+        pass
+        for index, char in enumerate(char_list):
+            if char != "None":
+                f.write(char + "\t" + character_list[index] + "\t" + tag_list[index] + "\n")
+            else:
+                f.write("\n")
+add_character()

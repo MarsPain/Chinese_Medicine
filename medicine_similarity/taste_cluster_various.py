@@ -4,11 +4,13 @@ from sklearn.cluster import KMeans, Birch, SpectralClustering
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn import metrics
 
 file_path = "../data/feature_vector.csv"    # 需要进行聚类的数据特征向量
 file_data_treat = "../data/data_treat.csv"  # 需要进行聚类的原数据文件
+medicines_to_taste_label_path = "data/medicines_to_taste_label.pkl"  # 保存药物到性味归经聚类标签的字典
 
 
 def get_data(path):
@@ -29,7 +31,7 @@ def cluster_kmodes(n_clusters, data):
     :return:
     """
     # visual_data(data)  #可视化原数据
-    kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=10, verbose=1)
+    kmodes = KModes(n_clusters=n_clusters, init="Huang", n_init=2, verbose=1)
     clusters = kmodes.fit_predict(data)
     print("Calinski-Harabasz Score", metrics.calinski_harabaz_score(data, clusters))
     # print("每个样本点所属类别索引", clusters)  # 输出每个样本的类别
@@ -177,25 +179,33 @@ def data_labeled_to_csv(clusters, data_treat, filename, filename_taste):
     :return:
     """
     data = pd.read_csv(data_treat, index_col=0)
-    # print(data.info())
+    print(data.info())
     data.insert(1, "Label", None)
     length = data.shape[0]
     # 验证长度是否对齐
-    # length_test = len(clusters)
-    # print("Right!" if length==length_test else "Error!")
+    length_clusters = len(clusters)
+    # print(data)
+    print("length_clusters:", length_clusters)
+    print("Right!" if length == length_clusters else "Error!" + str(length) + ":" + str(length_clusters))
+    medicines_to_taste_label = {}
     for i in range(length):
-        data["Label"][i] = clusters[i]
-    print(data)
+        data["Label"].iloc[i] = clusters[i]
+        medicines_to_taste_label[data["名称"].iloc[i]] = clusters[i]
+    with open(medicines_to_taste_label_path, "wb") as f:
+        pickle.dump(medicines_to_taste_label, f)
+    print("medicines_to_taste_label has been dump!!!!!!!!")
+    print(data.info())
     data = data.sort_values(by='Label', ascending=True)  # 这里要注意sort_value是返回一个已排序的对象，而不是原地进行修改
     data.to_csv(filename, index=False, encoding="utf-8")
     # data_taste = pd.concat([data["Label"], data["名称"], data["Taste", data["Type"]]], axis=1)
     # data_taste.to_csv(filename_taste, index=False, encoding="utf-8")
     data_taste = pd.DataFrame(np.zeros((length, 4)), columns=["Label", "名称", "Taste", "Type"])
+    print(data_taste.info())
     for i in range(length):
-        data_taste["Label"][i] = data["Label"][i]
-        data_taste["名称"][i] = data["名称"][i]
-        data_taste["Taste"][i] = data["Taste"][i]
-        data_taste["Type"][i] = data["Type"][i]
+        data_taste["Label"].iloc[i] = data["Label"].iloc[i]
+        data_taste["名称"].iloc[i] = data["名称"].iloc[i]
+        data_taste["Taste"].iloc[i] = data["Taste"].iloc[i]
+        data_taste["Type"].iloc[i] = data["Type"].iloc[i]
     # print("data_taste", data_taste)
     data_taste_new = data_taste.sort_values(by='Label', ascending=True)  # 根据label进行排序
     data_taste_new.to_csv(filename_taste, index=False, encoding="utf-8")
@@ -224,8 +234,10 @@ def opti_para_select(cluster_name, data):
     if cluster_name == "k_modes":
         max_score = 0
         opti_n_clusters = 0
-        for n in range(2, 30):
-            kmodes = KModes(n_clusters=n, init="Huang", n_init=10, verbose=1)
+        cluster_num_list = [30, 40, 50, 60, 70, 80, 90, 100]
+        # for n in range(30, 100):
+        for n in cluster_num_list:
+            kmodes = KModes(n_clusters=n, init="Huang", n_init=5, verbose=1)
             clusters = kmodes.fit_predict(data)
             score = metrics.calinski_harabaz_score(data, clusters)
             print("Calinski-Harabasz Score——", "n_clusters=", n, "score:", score)
@@ -255,9 +267,9 @@ def cluster_various_main():
     """
     data_treat = get_data(file_path)
     # opti_para_select("k_modes", data_treat)
-    num_clusters = 13
+    num_clusters = 30
     cluster_kmodes(num_clusters, data_treat)
-    # opti_para_select("k_means", data_treat)
+    # opti_para_select("k_modes", data_treat)
     # num_clusters = 14
     # cluster_kmeans(num_clusters)
 

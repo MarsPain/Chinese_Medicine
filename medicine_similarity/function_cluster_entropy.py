@@ -11,11 +11,12 @@ from medicine_similarity.cluster import duplicate_removal, del_by_correlation, c
 medicine_path = 'data/data_labeld_kmodes.csv'    # 药物数据的路径（该药物数据已根据性味归经的聚类结果打上标签）
 thesaurus_path = "../data/function_tongyici.txt"  # 功效同义词字典的路径
 correlation_path = 'data/correlation.csv'   # 保存互信息的文件路径
-max_relatives_nums = 8  # 最大的亲友团数量
-min_relatives_nums = 3  # 最小的亲友团数量
+max_relatives_nums = 15  # 最大的亲友团数量
+min_relatives_nums = 11  # 最小的亲友团数量
 group_all_path = "data/group_all.csv"
 group_best_path = "data/group_best.csv"
 function_to_medicine_path = "data/function_to_medicine.pkl"  # 保存功效团到相似药物的映射
+all_medicines_cluster_path = "data/all_medicines_cluster.pkl"   # 保存所有能被聚类的药物
 
 
 class ClusterEntropy:
@@ -138,7 +139,7 @@ class ClusterEntropy:
         """
         group_all = []
         group_name = []
-        for i in range(max_relatives_nums, 2, -1):
+        for i in range(max_relatives_nums, min_relatives_nums-1, -1):
             group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
             group_name.append("group"+str(i))
             group_all.append(group_clean(group_path))
@@ -156,7 +157,7 @@ class ClusterEntropy:
         # 人工审核找到信息利用率最高的亲友团数量，即最佳的亲友团数量，然后以该亲友团数量下的结果作为最佳结果
         group_best_name = []
         group_best = []
-        for i in range(6, 7):
+        for i in range(12, 13):
             group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
             group_best_name.append("group"+str(i))
             group_best.append(group_clean(group_path))
@@ -204,19 +205,24 @@ class ClusterEntropy:
             function_group_list.append(function_medicine[0])
             medicines_list.append(function_to_medicine[function_medicine[0]])
         # 获取拥有最多药物的功效团以及其具体拥有的药物
+        all_medicines_cluster = []
         max_functions = 0
         max_medicines = 0
         for functions, medicines in function_to_medicine.items():
             print("功效团：", functions, "药物数量：", len(medicines))
+            all_medicines_cluster.extend(medicines)
             if len(medicines) > max_medicines:
                 max_medicines = len(medicines)
                 max_functions = functions
+        print("一共被能被聚类的药物数量：", len(all_medicines_cluster))
         print("拥有最多药物的功效团：", max_functions, "药物数量：", max_medicines)
         print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
         function_group_series = pd.Series(function_group_list, name="功效团")
         medicines_series = pd.Series(medicines_list, name="药物列表")
         function_to_medicine_df_list = [function_group_series, medicines_series]
         function_to_medicine_df = pd.concat(function_to_medicine_df_list, axis=1)
+        with open(all_medicines_cluster_path, "wb") as f:
+            pickle.dump(all_medicines_cluster, f)  # 将所有被聚类的药物保存
         with open(function_to_medicine_path, "wb") as f:
             pickle.dump(function_to_medicine, f)    # 将聚类结果保存
         function_to_medicine_df.to_csv("data/result_function_cluster.csv", index=False, encoding="utf-8")
