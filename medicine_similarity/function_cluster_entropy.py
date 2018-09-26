@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import re
+import pickle
 from medicine_similarity.data_utils import get_data, root_to_word, word_to_root, dict_sort, combine_count, index_2_word, \
     write_csv, word_2_index, cut_by_num, group_clean, write_qyt
 from medicine_similarity.relatives import calculate_correlation, create_relatives
@@ -14,6 +15,7 @@ max_relatives_nums = 8  # 最大的亲友团数量
 min_relatives_nums = 3  # 最小的亲友团数量
 group_all_path = "data/group_all.csv"
 group_best_path = "data/group_best.csv"
+function_to_medicine_path = "data/function_to_medicine.pkl"  # 保存功效团到相似药物的映射
 
 
 class ClusterEntropy:
@@ -209,14 +211,15 @@ class ClusterEntropy:
             if len(medicines) > max_medicines:
                 max_medicines = len(medicines)
                 max_functions = functions
-        print("拥有最多药物的功效团：", function_to_medicine, "药物数量：", len(max_functions))
+        print("拥有最多药物的功效团：", max_functions, "药物数量：", max_medicines)
         print("能够被聚类的药物数量:", count, "function_to_medicine:", len(function_to_medicine), function_to_medicine)
         function_group_series = pd.Series(function_group_list, name="功效团")
         medicines_series = pd.Series(medicines_list, name="药物列表")
         function_to_medicine_df_list = [function_group_series, medicines_series]
         function_to_medicine_df = pd.concat(function_to_medicine_df_list, axis=1)
+        with open(function_to_medicine_path, "wb") as f:
+            pickle.dump(function_to_medicine, f)    # 将聚类结果保存
         function_to_medicine_df.to_csv("data/result_function_cluster.csv", index=False, encoding="utf-8")
-        return function_to_medicine
 
 if __name__ == "__main__":
     Cluster = ClusterEntropy()

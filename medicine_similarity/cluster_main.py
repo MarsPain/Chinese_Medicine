@@ -18,8 +18,7 @@ def cluster():
     """
     cluster_various_main()  # 利用kmodes针对性味归经的聚类结果，将聚类结果作为标签输出到原药物数据中
     cluster_entropy = ClusterEntropy()  # 初始化复杂系统熵聚类
-    function_to_medicine = cluster_entropy.cluster_entropy_main()   # 基于上一次的聚类结果，获取利用复杂系统熵、基于功效团的聚类结果
-    return function_to_medicine
+    cluster_entropy.cluster_entropy_main()   # 基于上一次的聚类结果，获取利用复杂系统熵、基于功效团的聚类结果
 
 
 def word_to_index(word):
@@ -70,10 +69,7 @@ def main(is_cluster=False, search_all=False):
     :return:
     """
     if is_cluster:  # 若需要进行聚类
-        function_to_medicine_dict = cluster()
-        with open(function_to_medicine_path, "wb") as f:
-            pickle.dump(function_to_medicine_dict, f)    # 将聚类结果保存
-
+        cluster()
     else:   # 若需要进行相似药物寻找
         with open(function_to_medicine_path, 'rb') as f:
             function_to_medicine_dict = pickle.load(f)   # 加载聚类结果

@@ -185,6 +185,7 @@ def data_labeled_to_csv(clusters, data_treat, filename, filename_taste):
     # print("Right!" if length==length_test else "Error!")
     for i in range(length):
         data["Label"][i] = clusters[i]
+    print(data)
     data = data.sort_values(by='Label', ascending=True)  # 这里要注意sort_value是返回一个已排序的对象，而不是原地进行修改
     data.to_csv(filename, index=False, encoding="utf-8")
     # data_taste = pd.concat([data["Label"], data["名称"], data["Taste", data["Type"]]], axis=1)
