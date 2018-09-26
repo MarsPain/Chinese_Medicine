@@ -11,8 +11,8 @@ from medicine_similarity.cluster import duplicate_removal, del_by_correlation, c
 medicine_path = 'data/data_labeld_kmodes.csv'    # 药物数据的路径（该药物数据已根据性味归经的聚类结果打上标签）
 thesaurus_path = "../data/function_tongyici.txt"  # 功效同义词字典的路径
 correlation_path = 'data/correlation.csv'   # 保存互信息的文件路径
-max_relatives_nums = 15  # 最大的亲友团数量
-min_relatives_nums = 11  # 最小的亲友团数量
+max_relatives_nums = 21  # 最大的亲友团数量
+min_relatives_nums = 20  # 最小的亲友团数量
 group_all_path = "data/group_all.csv"
 group_best_path = "data/group_best.csv"
 function_to_medicine_path = "data/function_to_medicine.pkl"  # 保存功效团到相似药物的映射
@@ -121,6 +121,8 @@ class ClusterEntropy:
         print("list_qyt:", list_qyt)
         write_qyt(list_qyt, self.root_name)
         list_index = word_2_index(self.root_name, list_qyt)  # 使用索引代替列表中的项
+        best_info_value = 0
+        best_group_num = 0
         for group_num in range(min_relatives_nums, max_relatives_nums+1):   # 限制亲友团的数量，根据不同的亲友团数量进行聚类
             new_list = cut_by_num(list_index, group_num)    # 对亲友团进行裁剪
             list_index_2 = del_by_correlation(new_list)    # 删除弱相关项，留下强相关的两两组合
@@ -130,7 +132,12 @@ class ClusterEntropy:
             # 进行团合并操作，一直到无法继续合并
             max_num, best_set = merge_loop(double_set, self.root_name, 'data/group' + str(group_num) + '.csv')
             # 计算信息利用率
-            print(max_num, '/', group_num, '=', max_num / group_num)
+            info_value = max_num / group_num
+            print(max_num, '/', group_num, '=', info_value)
+            if info_value > best_info_value:
+                best_info_value = info_value
+                best_group_num = group_num
+        print("最佳信息利用率：", best_info_value, "最佳亲友团个数：", best_group_num)
 
     def group_all(self):
         """
@@ -157,7 +164,7 @@ class ClusterEntropy:
         # 人工审核找到信息利用率最高的亲友团数量，即最佳的亲友团数量，然后以该亲友团数量下的结果作为最佳结果
         group_best_name = []
         group_best = []
-        for i in range(12, 13):
+        for i in range(21, 22):
             group_path = os.path.join("data", "group"+str(i)+".csv.pkl")
             group_best_name.append("group"+str(i))
             group_best.append(group_clean(group_path))
