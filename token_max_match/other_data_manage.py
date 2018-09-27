@@ -46,7 +46,7 @@ def concat():
         string_test += string_test_temp
         with open(path_test_data, "w", encoding="utf-8") as f:
             f.write(string_test)
-concat()
+# concat()
 
 # 删除标注数据中对空白字符进行O标注的行
 def delete_zero():
@@ -63,4 +63,27 @@ def delete_zero():
             else:
                 with open(path_new, "a", encoding="utf-8") as f_new:
                     f_new.write("\n")
-delete_zero()
+# delete_zero()
+
+# 将训练集词库和测试集词库合并在一起
+def add_dict():
+    dir_name = "dic_all"
+    name_list = ['diseases', 'pattern', 'treat', 'symptom']
+    for name in name_list:
+        set_all = set()
+        path_trian = os.path.join(dir_name, name+"_train.txt")
+        path_test = os.path.join(dir_name, name+"_test.txt")
+        with open(path_trian, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            set_train = set(lines)
+        print(set_train)
+        with open(path_test, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            set_test = set(lines)
+        set_all = set_train & set_test
+        path_all = os.path.join(dir_name, name+"_all.txt")
+        with open(path_all, "w", encoding="utf-8") as f:
+            list_all = list(set_all)
+            list_all.sort(reverse=True, key=len)
+            f.write("".join(list_all))
+# add_dict()
