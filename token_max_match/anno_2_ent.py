@@ -59,7 +59,7 @@ if __name__ == '__main__':
     tags = []
     name_list=['diseases','pattern','treat','symptom']
     for i in [0,1,2,3]: #0：symptom,1:disease,2:pattern,3:treat
-        with open('dic_all/'+name_list[i] + '_train.txt', 'r', encoding='utf8') as file_0:
+        with open('dic_all/'+name_list[i] + '_all.txt', 'r', encoding='utf8') as file_0:
             dic_0 = file_0.readlines()
             dic_0 = [item.strip('\n') for item in dic_0]
             dic_0 = sorted(dic_0,key=len,reverse=True)
@@ -69,7 +69,7 @@ if __name__ == '__main__':
         tags.append('I-' + str(i))
         tags.append('S-' + str(i))
 
-    for num in range(1, 71):
+    for num in range(1, 113):
         fi = str(num) + ".txt"
         print(fi)
         with open('data_all/'+fi,'r',encoding='utf8') as f:
