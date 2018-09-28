@@ -50,8 +50,8 @@ def concat():
 
 # 删除标注数据中对空白字符进行O标注的行
 def delete_zero():
-    path = "function_all_token/dev.dev"
-    path_new = "function_all_token_new/dev.dev"
+    path = "function_all_token/7000.train"
+    path_new = "function_all_token_new/7000.train"
     with open(path, "r", encoding="utf-8") as f:
         for line in f.readlines():
             # print(line)
