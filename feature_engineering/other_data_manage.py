@@ -389,4 +389,4 @@ def add_character():
                 f.write(char + "\t" + character_list[index] + "\t" + tag_list[index] + "\n")
             else:
                 f.write("\n")
-add_character()
+# add_character()
