@@ -209,6 +209,7 @@ class ClusterEntropy:
         function_group_list = []    # 功效团列表
         medicines_list = []  # 功效团拥有的药物列表
         for function_medicine in function_to_medicine_sort:
+            print("功效团及其所包含的药物数量：", function_medicine[0], len(function_medicine[1]))
             function_group_list.append(function_medicine[0])
             medicines_list.append(function_to_medicine[function_medicine[0]])
         # 获取拥有最多药物的功效团以及其具体拥有的药物
